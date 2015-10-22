@@ -18,7 +18,7 @@ public class DataSetNoisySin extends DataSet {
 		float increment = (end - start) / pointsCount;
 
 		for (float f = start; f < end; f += increment) {
-			addNoisySinDataMappingToTrainingSet(f, (float) (Math.sin(f) + Math.random() * 0.1));
+			addNoisySinDataMappingToTrainingSet(f, (float) (Math.sin(f) + Math.random() * 0.2));
 		}
 	}
 

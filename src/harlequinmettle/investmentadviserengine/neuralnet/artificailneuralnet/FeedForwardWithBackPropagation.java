@@ -62,12 +62,8 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 			epochCounter++;
 			for (int i = 0; i < dataSet.numberDataSets; i++) {
 				trainPattern(i);
-				storeEpochError(i);
 			}
-			// ArtificialNeuron.learningRate *= 0.999;
 			checkTotalError();
-			// if (epochCounter > 15000000)
-			// return;
 
 		}
 	}
@@ -117,6 +113,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 		feedforward(inputPattern);
 
+		storeEpochError(i);
 		dataSet.outputs.put(i, getCurrentOutputArray());
 		trainNetwork(targetOutput);
 
