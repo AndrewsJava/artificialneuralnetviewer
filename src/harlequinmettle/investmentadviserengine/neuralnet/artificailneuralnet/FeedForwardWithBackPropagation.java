@@ -79,13 +79,14 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	public void checkTotalError() {
 		// Oct 19, 2015 11:56:12 AM
+		System.out.println("checking sum sq: " + epochError.values());
 		float totalError = new SumSquare().calculateSumSquare(epochError.values());
 		dataSet.ssqError = totalError;
 		minError.checkMinError(totalError);
 		if (minError.wasLastCheckMinError) {
 			display(totalError);
 		}
-		errorIsTooLargeToStop = totalError > 0.0000001f;
+		errorIsTooLargeToStop = totalError > 0.0000001f || epochCounter < 2;
 	}
 
 	private void display(float totalError) {
