@@ -5,6 +5,7 @@ import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetConn
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetLayer;
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
+import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetXOR;
 import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.investmentadviserengine.util.TimeDateTool;
 
@@ -17,20 +18,20 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	private static final long serialVersionUID = 2712275468608016163L;
 
 	public static void main(String[] args) {
-		defaultHiddenLayerNeuronCount = 14;
+		defaultHiddenLayerNeuronCount = 114;
 		DataSet testData = null;
-		// testData = new DataSetXOR();
+		testData = new DataSetXOR();
 		testData = new DataSetNoisySin();
 		System.out.println(testData);
 		FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData);
 		nn.trainNN();
 	}
 
-	TreeMap<Integer, Float> epochError = new TreeMap<Integer, Float>();
+	TreeMap<Integer, float[]> currentOutputErrors = new TreeMap<Integer, float[]>();
 
 	boolean errorIsTooLargeToStop = true;
 
-	private int epochCounter = 0;
+	private int fullDataSetTrainingIterations = 0;
 
 	public int trainingSpeedDamper = 1;
 
@@ -59,7 +60,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	public void trainArtificialNeuralNet() {
 		while (checkError()) {
-			epochCounter++;
+			fullDataSetTrainingIterations++;
 			for (int i = 0; i < dataSet.numberDataSets; i++) {
 				trainPattern(i);
 			}
@@ -71,22 +72,27 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	private void storeEpochError(int i) {
 		// Oct 19, 2015 11:56:19 AM
 
-		float outputLayerError = 0f;
+		// float outputLayerError = 0f;
+		int j = 0;
+		float[] outputErrors = new float[outputLayer.neuronsInLayer.size()];
 		for (ArtificialNeuron ouput : outputLayer.neuronsInLayer)
-			outputLayerError += ouput.getError();
-		epochError.put(i, outputLayerError);
+			outputErrors[j++] = ouput.getError();
+		currentOutputErrors.put(i, outputErrors);
 	}
 
 	public void checkTotalError() {
 		// Oct 19, 2015 11:56:12 AM
-		System.out.println("checking sum sq: " + epochError.values());
-		float totalError = new SumSquare().calculateSumSquare(epochError.values());
+		// for (Entry<Integer, float[]> f : currentOutputErrors.entrySet())
+		// System.out.println("checking sum sq: " + f.getKey() + "  " +
+		// Arrays.toString(f.getValue()));
+
+		float totalError = new SumSquare().calculateSumSquare(currentOutputErrors.values());
 		dataSet.ssqError = totalError;
 		minError.checkMinError(totalError);
 		if (minError.wasLastCheckMinError) {
 			display(totalError);
 		}
-		errorIsTooLargeToStop = totalError > 0.0000001f || epochCounter < 2;
+		errorIsTooLargeToStop = totalError > 0.0000001f || fullDataSetTrainingIterations < 2;
 	}
 
 	private void display(float totalError) {
@@ -102,8 +108,8 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 			System.out.println("actual: " + Arrays.toString(actualOutput));
 		}
 		System.out.println("TOTAL ERROR: " + totalError);
-		System.out.println("errors: " + epochError);
-		System.out.println(epochCounter + "\n----------------\n ");
+		System.out.println("errors: " + currentOutputErrors);
+		System.out.println(fullDataSetTrainingIterations + "\n----------------\n ");
 
 	}
 
@@ -111,12 +117,12 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	private void trainPattern(int i) {
 		float[] inputPattern = dataSet.inputs.get(i);
 		float[] targetOutput = dataSet.targets.get(i);
-
+		// set inputs and establish outputs
 		feedforward(inputPattern);
-
 		storeEpochError(i);
 		dataSet.outputs.put(i, getCurrentOutputArray());
-		trainNetwork(targetOutput);
+		backProagate(targetOutput);
+		applyWeightChanges();
 
 	}
 
@@ -130,10 +136,9 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	}
 
 	// Oct 18, 2015 11:49:32 AM
-	public void trainNetwork(float[] targets) {
+	public void backProagate(float[] targets) {
 		backpropagateOutoputLayer(targets);
 		backpropagateHidden();
-		applyWeightChanges();
 
 	}
 

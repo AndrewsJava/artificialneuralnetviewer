@@ -23,6 +23,8 @@ public class ArtificialNeuron implements Serializable {
 	private float error = Float.NaN;
 
 	public float getError() {
+		if (error != error)
+			return Float.POSITIVE_INFINITY;
 		return error;
 	}
 
