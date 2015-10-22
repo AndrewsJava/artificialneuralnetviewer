@@ -90,7 +90,8 @@ public class NeuralNetViewer {
 
 	// Oct 21, 2015 11:48:20 AM
 	private void showGui() {
-		JFrame fullScreen = JFrameFactory.displayFullScreenJFrame(appTitle);
+		// JFrame fullScreen = JFrameFactory.displayFullScreenJFrame(appTitle);
+		JFrame fullScreen = JFrameFactory.displayFullScreenPrimaryApplicationJFrame(appTitle);
 		dataDisplayer = new DataGrapher();
 		fullScreen.add(dataDisplayer);
 	}
