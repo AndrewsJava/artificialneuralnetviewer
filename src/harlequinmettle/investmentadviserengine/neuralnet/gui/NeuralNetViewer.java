@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
 public class NeuralNetViewer {
 	private String appTitle = "Neural Net Training";
 
-	int defaultHiddenLayerNeuronCount = 18;
+	int defaultHiddenLayerNeuronCount = 28;
 	// DataSettestData = new DataSetXOR();
 	DataSet testData = new DataSetNoisySin();
 	FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData, defaultHiddenLayerNeuronCount);
@@ -47,8 +47,8 @@ public class NeuralNetViewer {
 		String targetTitle = "target";
 		ArrayList<Float> inputs = getInputPointsAsArray();
 		ArrayList<Float> targets = getTargetPointsAsArray();
-		if (dataDisplayer == null)
-			SystemTool.takeABreak(2500);
+		while (dataDisplayer == null)
+			SystemTool.takeABreak(100);
 		dataDisplayer.addData(targetTitle, inputs, targets);
 		while (true) {
 			SystemTool.takeABreak(300);
@@ -57,8 +57,10 @@ public class NeuralNetViewer {
 			if (dataDisplayer == null)
 				SystemTool.takeABreak(500);
 			dataDisplayer.addData(outputTitle, inputs, output);
-
+			// if (testData.ssqError == testData.ssqError)
+			// dataDisplayer.addErrorPoint(testData.ssqError);
 			dataDisplayer.repaint();
+			// System.exit(0);
 		}
 	}
 

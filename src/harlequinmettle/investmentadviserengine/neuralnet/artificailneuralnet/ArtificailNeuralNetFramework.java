@@ -49,11 +49,11 @@ public class ArtificailNeuralNetFramework implements Serializable {
 	// Oct 18, 2015 10:05:24 AM
 	private void buildBiasNeuronConnectionsToAllNeurons() {
 		for (ArtificialNeuralNetLayer layer : hiddenLayers)
-			connectBiasToNeuronsInLayer(biasNeuron, layer);
-		connectBiasToNeuronsInLayer(biasNeuron, outputLayer);
+			connectBiasToNeuronsInLayer(layer);
+		connectBiasToNeuronsInLayer(outputLayer);
 	}
 
-	private void connectBiasToNeuronsInLayer(ArtificialNeuron biasNeuron, ArtificialNeuralNetLayer layer) {
+	private void connectBiasToNeuronsInLayer(ArtificialNeuralNetLayer layer) {
 		// Oct 18, 2015 10:17:59 AM
 
 		for (ArtificialNeuron toNeuron : layer.neuronsInLayer) {
