@@ -9,13 +9,14 @@ public class SumSquare implements Serializable {
 	private static final long serialVersionUID = 2512147865632939704L;
 
 	public float calculateSumSquare(Collection<float[]> values) {
-		System.out.println("calculating sum square......\n");
+		// System.out.println("calculating sum square......\n");
 		// Oct 19, 2015 11:59:32 AM
 		float sumsq = 0;
 		for (float[] fa : values)
 			for (float f : fa) {
 				sumsq += f * f;
-				System.out.println("f=" + f + "    f*f=" + (f * f) + "     sum=" + sumsq);
+				// System.out.println("f=" + f + "    f*f=" + (f * f) +
+				// "     sum=" + sumsq);
 			}
 		return sumsq / 2;
 	}

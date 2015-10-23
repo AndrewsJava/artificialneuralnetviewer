@@ -6,7 +6,8 @@ import java.io.Serializable;
 public class SigmoidTransferFunction implements Serializable {
 
 	private static final long serialVersionUID = 310723662430627233L;
-	float forwardPassNeuronResultCache = Float.NaN;
+
+	// float forwardPassNeuronResultCache = Float.NaN;
 
 	// float slope;
 
@@ -19,15 +20,15 @@ public class SigmoidTransferFunction implements Serializable {
 		}
 		// float den = (float) (1 + Math.exp(-this.slope * value));
 		float denominator = (float) (1 + Math.exp(-value));
-		forwardPassNeuronResultCache = (1 / denominator) - 0.5f;
+		float forwardPassNeuronResultCache = (1 / denominator) - 0.5f;
 
 		return forwardPassNeuronResultCache;
 	}
 
-	public float getDerivative() {
+	public float getDerivative(float output) {
 		// float derivative = this.slope * this.output * (1 - this.output) +
 		// 0.1f;
-		float derivative = forwardPassNeuronResultCache * (1 - forwardPassNeuronResultCache) + 0.1f;
+		float derivative = output * (1 - output) + 0.1f;
 		return derivative;
 	}
 }

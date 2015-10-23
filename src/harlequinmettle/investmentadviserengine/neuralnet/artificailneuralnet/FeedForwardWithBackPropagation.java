@@ -18,10 +18,10 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	private static final long serialVersionUID = 2712275468608016163L;
 
 	public static void main(String[] args) {
-		defaultHiddenLayerNeuronCount = 114;
+		defaultHiddenLayerNeuronCount = 14;
 		DataSet testData = null;
 		testData = new DataSetXOR();
-		testData = new DataSetNoisySin();
+		// testData = new DataSetNoisySin();
 		System.out.println(testData);
 		FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData);
 		nn.trainNN();
