@@ -1,6 +1,9 @@
 // Oct 16, 2015 9:45:32 AM
 package harlequinmettle.investmentadviserengine.neuralnet;
 
+import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.ArtificailNeuralNet;
+import harlequinmettle.utils.reflection.RuntimeDetails;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -47,6 +50,8 @@ public class ArtificialNeuron implements Serializable {
 			buildNeuronAsBias();
 		if (neuronBuildType == INPUT_NEURON_BUILDER_ID)
 			isInputNeuron = true;
+		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
+			RuntimeDetails.getPrintClassInfo(this);
 	}
 
 	private void buildNeuronAsBias() {
@@ -58,13 +63,17 @@ public class ArtificialNeuron implements Serializable {
 
 	// Oct 17, 2015 9:57:09 AM
 	public float getEstablishedOutputValue() {
+		if (ArtificailNeuralNet.debugMethodsWithReflection)
+			RuntimeDetails.getPrintMethodInfo();
 		return output;
 	}
 
 	// Oct 17, 2015 10:54:18 AM
 	public float establishNeuronOutputFromConnections() {
 
-		if (isInputNeuron()) {
+		if (ArtificailNeuralNet.debugMethodsWithReflection)
+			RuntimeDetails.getPrintMethodInfo();
+		if (isInputNeuron) {
 			output = input;// move to initialization
 			derivative = 1;// FIND OUT WHAT DERIVATIVE IS FOR INPUT NEURON
 			return output;
@@ -98,12 +107,16 @@ public class ArtificialNeuron implements Serializable {
 
 	// Oct 18, 2015 12:20:05 PM
 	public void establishOutputNeuronError(float target) {
+		if (ArtificailNeuralNet.debugMethodsWithReflection)
+			RuntimeDetails.getPrintMethodInfo();
 		// (target - output) * output * (1 - output)
 		error = derivative * (target - output);
 	}
 
 	// Oct 18, 2015 12:26:29 PM
 	public void establishWeightChangesByErrorBackpropagation() {
+		if (ArtificailNeuralNet.debugMethodsWithReflection)
+			RuntimeDetails.getPrintMethodInfo();
 		for (ArtificialNeuralNetConnection connection : inputConnections) {
 			float incommingSignal = connection.fromNeuron.getEstablishedOutputValue();
 			float weightChange = incommingSignal * error * learningRate;
@@ -116,6 +129,8 @@ public class ArtificialNeuron implements Serializable {
 	// ERRORoutC W_hiddenConnectOUTC)
 	// Oct 18, 2015 2:12:13 PM
 	public void establishHiddenNeuronError() {
+		if (ArtificailNeuralNet.debugMethodsWithReflection)
+			RuntimeDetails.getPrintMethodInfo();
 		float differenceExtrapolation = 0f;
 		for (ArtificialNeuralNetConnection connection : outputConnections) {
 			differenceExtrapolation += connection.toNeuron.error * connection.weight.weight;

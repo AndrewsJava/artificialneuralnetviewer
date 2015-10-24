@@ -1,6 +1,9 @@
 // Oct 17, 2015 11:00:58 AM
 package harlequinmettle.investmentadviserengine.neuralnet;
 
+import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.ArtificailNeuralNet;
+import harlequinmettle.utils.reflection.RuntimeDetails;
+
 import java.io.Serializable;
 
 public class SigmoidTransferFunction implements Serializable {
@@ -13,6 +16,8 @@ public class SigmoidTransferFunction implements Serializable {
 
 	// Oct 17, 2015 11:02:19 AM
 	public float calculateSigmoidalOutput(float value) {
+		if (ArtificailNeuralNet.debugMethodsWithReflection)
+			RuntimeDetails.getPrintMethodInfo();
 		if (value > 100) {
 			return 1.0f;
 		} else if (value < -100) {

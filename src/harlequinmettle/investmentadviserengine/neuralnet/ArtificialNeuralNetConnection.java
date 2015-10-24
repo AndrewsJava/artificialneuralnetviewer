@@ -1,6 +1,9 @@
 // Oct 16, 2015 9:48:09 AM
 package harlequinmettle.investmentadviserengine.neuralnet;
 
+import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.ArtificailNeuralNet;
+import harlequinmettle.utils.reflection.RuntimeDetails;
+
 import java.io.Serializable;
 
 public class ArtificialNeuralNetConnection extends ArtificialNeuralNetConnectionModel implements Serializable {
@@ -9,6 +12,8 @@ public class ArtificialNeuralNetConnection extends ArtificialNeuralNetConnection
 
 	public ArtificialNeuralNetConnection(ArtificialNeuron fromNeuron, ArtificialNeuron toNeuron) {
 		super(fromNeuron, toNeuron);
+		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
+			RuntimeDetails.getPrintClassInfo(this);
 	}
 
 	public ArtificialNeuralNetConnection(ArtificialNeuron fromNeuron, ArtificialNeuron toNeuron, float wt) {
@@ -20,6 +25,8 @@ public class ArtificialNeuralNetConnection extends ArtificialNeuralNetConnection
 	}
 
 	public float getWeightedInput() {
+		if (ArtificailNeuralNet.debugMethodsWithReflection)
+			RuntimeDetails.getPrintMethodInfo();
 		return this.fromNeuron.getEstablishedOutputValue() * weight.weight;
 	}
 

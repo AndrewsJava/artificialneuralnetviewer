@@ -1,9 +1,9 @@
 // Oct 21, 2015 10:56:51 AM
 package harlequinmettle.investmentadviserengine.neuralnet.gui;
 
-import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.DataSetNoisySin;
 import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.FeedForwardWithBackPropagation;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
+import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetNoisySin;
 import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.utils.guitools.DataGrapher;
 import harlequinmettle.utils.guitools.JFrameFactory;
