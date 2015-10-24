@@ -11,8 +11,9 @@ import java.io.Serializable;
 public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements Serializable {
 
 	private static final long serialVersionUID = -490681777238384428L;
-	public static boolean debugMethodsWithReflection = true;
+	public static boolean debugMethodsWithReflection = false;
 	public static boolean debugObjectConstructionWithReflection = true;
+	protected boolean overrideOutput = true;
 	MinError minError = new MinError();
 
 	// Oct 17, 2015 10:24:51 AM
@@ -50,10 +51,11 @@ public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements
 		}
 	}
 
+	// Oct 17, 2015 11:57:49 AM
 	private float[] establishOutput() {
-		// Oct 17, 2015 11:57:49 AM
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
+
 		float[] output = new float[outputLayer.neuronsInLayer.size()];
 		for (ArtificialNeuron neuron : inputLayer.neuronsInLayer) {
 			neuron.establishNeuronOutputFromConnections();

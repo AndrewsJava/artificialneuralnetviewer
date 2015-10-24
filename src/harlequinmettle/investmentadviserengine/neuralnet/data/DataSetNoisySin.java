@@ -15,9 +15,9 @@ public class DataSetNoisySin extends DataSet {
 
 	private void buildNoisySinTrainingSet() {
 		// Oct 21, 2015 9:04:31 AM
-		float start = -3;
-		float end = 3;
-		float pointsCount = 30;
+		float start = -4;
+		float end = 4;
+		float pointsCount = 60;
 		float increment = (end - start) / pointsCount;
 
 		for (float f = start; f < end; f += increment) {

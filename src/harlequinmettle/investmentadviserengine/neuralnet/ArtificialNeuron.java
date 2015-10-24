@@ -75,7 +75,6 @@ public class ArtificialNeuron implements Serializable {
 			RuntimeDetails.getPrintMethodInfo();
 		if (isInputNeuron) {
 			output = input;// move to initialization
-			derivative = 1;// FIND OUT WHAT DERIVATIVE IS FOR INPUT NEURON
 			return output;
 		}
 
@@ -94,11 +93,6 @@ public class ArtificialNeuron implements Serializable {
 		return output;
 	}
 
-	// Oct 17, 2015 12:53:29 PM
-	private boolean isInputNeuron() {
-		return isInputNeuron;
-	}
-
 	// Oct 17, 2015 10:54:18 AM
 	public void setInput(float input) {
 		this.input = input;
@@ -109,8 +103,8 @@ public class ArtificialNeuron implements Serializable {
 	public void establishOutputNeuronError(float target) {
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
-		// (target - output) * output * (1 - output)
 		error = derivative * (target - output);
+		error = derivative * (output - target);
 	}
 
 	// Oct 18, 2015 12:26:29 PM

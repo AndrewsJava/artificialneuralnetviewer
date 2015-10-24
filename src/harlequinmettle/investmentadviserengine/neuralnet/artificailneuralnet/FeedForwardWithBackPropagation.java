@@ -36,8 +36,6 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	public int trainingSpeedDamper = 1;
 
-	private boolean overrideOutput = false;
-
 	public FeedForwardWithBackPropagation(DataSet data, int... hiddenLayerNeuronCounts) {
 		super(data, hiddenLayerNeuronCounts);
 		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
@@ -105,13 +103,18 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		if (minError.wasLastCheckMinError) {
 			display(totalError);
 		}
+		// if (totalError < 0.1 && totalError > 0.02)
+		// ArtificialNeuron.learningRate *= 0.995;
 		errorIsTooLargeToStop = totalError > 0.0000001f || fullDataSetTrainingIterations < 2;
 	}
 
 	private void display(float totalError) {
 		// Oct 19, 2015 1:11:58 PM
-		if (overrideOutput)
+		if (overrideOutput) {
+			System.out.println("TOTAL ERROR: " + totalError);
+			System.out.println(fullDataSetTrainingIterations + "\n----------------\n ");
 			return;
+		}
 		for (int i = 0; i < dataSet.numberDataSets; i++) {
 			float[] inputPattern = dataSet.inputs.get(i);
 			float[] targetOutput = dataSet.targets.get(i);
@@ -141,10 +144,12 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	}
 
+	// Oct 19, 2015 1:23:56 PM
 	private float[] getCurrentOutputArray() {
-		// Oct 19, 2015 1:23:56 PM
+
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
+
 		float[] currentOutput = new float[outputLayer.neuronsInLayer.size()];
 		int i = 0;
 		for (ArtificialNeuron neuron : outputLayer.neuronsInLayer)
@@ -156,6 +161,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	public void backProagate(float[] targets) {
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
+
 		backpropagateOutoputLayer(targets);
 		backpropagateHidden();
 
