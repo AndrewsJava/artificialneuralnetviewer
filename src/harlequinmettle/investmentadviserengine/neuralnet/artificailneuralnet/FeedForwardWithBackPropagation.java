@@ -5,6 +5,7 @@ import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetConn
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetLayer;
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
+import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetNoisySin;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetXOR;
 import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.investmentadviserengine.util.TimeDateTool;
@@ -24,7 +25,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		DataSet testData = null;
 		testData = new DataSetXOR();
 		overrideOutput = false;
-		// testData = new DataSetNoisySin();
+		testData = new DataSetNoisySin();
 		System.out.println(testData);
 		FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData);
 		System.out.println("------------------ -ARTIFICIAL NEURAL NET ----------------------");
@@ -123,9 +124,14 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 			float[] inputPattern = dataSet.inputs.get(i);
 			float[] targetOutput = dataSet.targets.get(i);
 			float[] actualOutput = dataSet.outputs.get(i);
+			String STRING_NUMBER_FORMAT = "%1$-15s|  %2$-10.2f\n ";
+			// for (float f : inputPattern)
+			// System.out.format(STRING_NUMBER_FORMAT, "input: ", f);
 			System.out.println("input: " + Arrays.toString(inputPattern));
-			System.out.println("target: " + Arrays.toString(targetOutput));
-			System.out.println("actual: " + Arrays.toString(actualOutput));
+			for (float f : targetOutput)
+				System.out.format(STRING_NUMBER_FORMAT, "target:                                    ", f);
+			for (float f : actualOutput)
+				System.out.format(STRING_NUMBER_FORMAT, "actual:                                    ", f);
 		}
 		System.out.println("TOTAL ERROR: " + totalError);
 		System.out.println("errors: " + currentOutputErrors);

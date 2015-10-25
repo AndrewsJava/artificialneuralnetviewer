@@ -24,7 +24,9 @@ public class ArtificialNeuron implements Serializable {
 	// public ArrayList<ArtificialNeuralNetConnection> biasConnections = new
 	// ArrayList<ArtificialNeuralNetConnection>();
 	private ArtificialNeuralNetWeight biasNeuronWeight;
-	private SigmoidTransferFunction sigmoidTransferFunction = new SigmoidTransferFunction();
+	// private SigmoidTransferFunction sigmoidTransferFunction = new
+	// SigmoidTransferFunction();
+	private TanHTransferFunction neuronTransferFunction = new TanHTransferFunction();
 
 	private float input = Float.NaN;
 	private float output = Float.NaN;
@@ -35,6 +37,7 @@ public class ArtificialNeuron implements Serializable {
 
 	@Override
 	public String toString() {
+
 		return "  {(" + inputConnections.size() + ") " + artificialNeuralNetComponentLabel + " (" + outputConnections.size() + ")} ";
 	}
 
@@ -107,9 +110,9 @@ public class ArtificialNeuron implements Serializable {
 			sum += connection.getWeightedInput();
 		}
 
-		output = sigmoidTransferFunction.calculateSigmoidalOutput(sum);
-		derivative = sigmoidTransferFunction.getDerivative(sum);
-		derivative = sigmoidTransferFunction.getDerivative(output);
+		output = neuronTransferFunction.calculateSigmoidalOutput(sum);
+		derivative = neuronTransferFunction.getDerivative(sum);
+		// derivative = sigmoidTransferFunction.getDerivative(output);
 		return output;
 	}
 
