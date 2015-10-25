@@ -9,7 +9,8 @@ import java.util.ArrayList;
 
 // Oct 16, 2015 9:45:32 AM
 public class ArtificialNeuron implements Serializable {
-
+	String artificialNeuralNetComponentLabel = "ArtificialNeuron_";
+	static int neuronCounter = 0;
 	private static final long serialVersionUID = -5609553171004488643L;
 	public static float learningRate = 0.1F;
 	public static final int INPUT_NEURON_BUILDER_ID = 1005002;
@@ -46,6 +47,8 @@ public class ArtificialNeuron implements Serializable {
 
 	// Oct 17, 2015 12:48:16 PM
 	public ArtificialNeuron(int neuronBuildType) {
+		neuronCounter++;
+		artificialNeuralNetComponentLabel += neuronCounter;
 		if (neuronBuildType == BIAS_NEURON_BUILDER_ID)
 			buildNeuronAsBias();
 		if (neuronBuildType == INPUT_NEURON_BUILDER_ID)
@@ -106,7 +109,7 @@ public class ArtificialNeuron implements Serializable {
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
 		error = derivative * (target - output);
-		error = derivative * (output - target);
+		// error = derivative * (output - target);
 	}
 
 	// Oct 18, 2015 12:26:29 PM

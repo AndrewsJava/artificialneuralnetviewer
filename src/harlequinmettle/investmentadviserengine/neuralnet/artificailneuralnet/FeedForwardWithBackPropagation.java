@@ -12,6 +12,7 @@ import harlequinmettle.utils.reflection.RuntimeDetails;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.TreeMap;
 
 public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implements Serializable {
 
@@ -29,14 +30,13 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		nn.trainNN();
 	}
 
-	// TreeMap<Integer, float[]> currentOutputErrors = new TreeMap<Integer,
-	// float[]>();
+	TreeMap<Integer, float[]> currentOutputErrors = new TreeMap<Integer, float[]>();
 
 	boolean errorIsTooLargeToStop = true;
 
 	private int fullDataSetTrainingIterations = 0;
 
-	public int trainingSpeedDamper = 1;
+	public int trainingSpeedDamper = 1000;
 
 	public FeedForwardWithBackPropagation(DataSet data, int... hiddenLayerNeuronCounts) {
 		super(data, hiddenLayerNeuronCounts);
@@ -81,8 +81,8 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		}
 	}
 
+	// Oct 19, 2015 11:56:19 AM
 	private void storeEpochError(int i) {
-		// Oct 19, 2015 11:56:19 AM
 
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
