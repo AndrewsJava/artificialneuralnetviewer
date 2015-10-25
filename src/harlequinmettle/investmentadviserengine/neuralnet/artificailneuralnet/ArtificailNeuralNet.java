@@ -13,7 +13,7 @@ public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements
 	private static final long serialVersionUID = -490681777238384428L;
 	public static boolean debugMethodsWithReflection = false;
 	public static boolean debugObjectConstructionWithReflection = true;
-	protected boolean overrideOutput = true;
+	protected static boolean overrideOutput = false;
 	MinError minError = new MinError();
 
 	// Oct 17, 2015 10:24:51 AM

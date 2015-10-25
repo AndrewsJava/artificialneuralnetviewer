@@ -82,6 +82,7 @@ public class ArtificialNeuron implements Serializable {
 			derivative = 1;// FIND OUT WHAT DERIVATIVE IS FOR BIAS NEURON
 			return one * biasNeuronWeight.weight;
 		}
+
 		float sum = 0;
 
 		for (ArtificialNeuralNetConnection connection : inputConnections) {
@@ -89,7 +90,8 @@ public class ArtificialNeuron implements Serializable {
 		}
 
 		output = sigmoidTransferFunction.calculateSigmoidalOutput(sum);
-		derivative = sigmoidTransferFunction.getDerivative(output);
+		derivative = sigmoidTransferFunction.getDerivative(sum);
+		// derivative = sigmoidTransferFunction.getDerivative(output);
 		return output;
 	}
 

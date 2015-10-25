@@ -11,12 +11,13 @@ import harlequinmettle.utils.guitools.JFrameFactory;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 public class NeuralNetViewer {
 	private String appTitle = "Neural Net Training";
 
-	int defaultHiddenLayerNeuronCount = 15;
+	int defaultHiddenLayerNeuronCount = 12;
 	// DataSettestData = new DataSetXOR();
 	DataSet testData = new DataSetNoisySin();
 	FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData, defaultHiddenLayerNeuronCount);
@@ -94,8 +95,11 @@ public class NeuralNetViewer {
 	private void showGui() {
 		// JFrame fullScreen = JFrameFactory.displayFullScreenJFrame(appTitle);
 		JFrame fullScreen = JFrameFactory.displayFullScreenPrimaryApplicationJFrame(appTitle);
+		JTabbedPane tabs = new JTabbedPane();
 		dataDisplayer = new DataGrapher();
-		fullScreen.add(dataDisplayer);
+		tabs.addTab("ANN Output", dataDisplayer);
+		tabs.addTab("ANN Builder", new ArtificialneuralNetBuilderPanel(this));
+		fullScreen.add(tabs);
 	}
 
 	public static void main(String[] args) {

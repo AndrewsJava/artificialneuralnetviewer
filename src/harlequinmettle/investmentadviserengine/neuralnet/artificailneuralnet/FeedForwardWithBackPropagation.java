@@ -12,23 +12,25 @@ import harlequinmettle.utils.reflection.RuntimeDetails;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.TreeMap;
 
 public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implements Serializable {
 
 	private static final long serialVersionUID = 2712275468608016163L;
+	boolean stopRequested = false;
 
 	public static void main(String[] args) {
 		defaultHiddenLayerNeuronCount = 14;
 		DataSet testData = null;
 		testData = new DataSetXOR();
+		overrideOutput = false;
 		// testData = new DataSetNoisySin();
 		System.out.println(testData);
 		FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData);
 		nn.trainNN();
 	}
 
-	TreeMap<Integer, float[]> currentOutputErrors = new TreeMap<Integer, float[]>();
+	// TreeMap<Integer, float[]> currentOutputErrors = new TreeMap<Integer,
+	// float[]>();
 
 	boolean errorIsTooLargeToStop = true;
 
@@ -66,7 +68,10 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	public void trainArtificialNeuralNet() {
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
-		while (checkError()) {
+		while (errorIsTooLargeToStop) {
+			if (stopRequested)
+				break;
+			SystemTool.takeABreak(trainingSpeedDamper);
 			fullDataSetTrainingIterations++;
 			for (int i = 0; i < dataSet.numberDataSets; i++) {
 				trainPattern(i);
@@ -215,14 +220,6 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 				}
 			}
 		}
-	}
-
-	private boolean checkError() {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
-		// Oct 17, 2015 10:47:08 AM
-		SystemTool.takeABreak(trainingSpeedDamper);
-		return errorIsTooLargeToStop;
 	}
 
 }
