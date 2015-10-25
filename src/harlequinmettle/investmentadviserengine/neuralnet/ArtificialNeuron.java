@@ -5,21 +5,22 @@ import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.Art
 import harlequinmettle.utils.reflection.RuntimeDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 // Oct 16, 2015 9:45:32 AM
 public class ArtificialNeuron implements Serializable {
 	String artificialNeuralNetComponentLabel = "ArtificialNeuron_";
-	static int neuronCounter = 0;
+	static AtomicInteger neuronCounter = new AtomicInteger(100000);
 	private static final long serialVersionUID = -5609553171004488643L;
-	public static float learningRate = 0.1F;
+	public static float learningRate = 0.51F;
 	public static final int INPUT_NEURON_BUILDER_ID = 1005002;
 	public static final int BIAS_NEURON_BUILDER_ID = 2002008;
 	public boolean isBiasNeuron = false;
 	public boolean isInputNeuron = false;
 	// includes BIAS CONNECTION
-	public ArrayList<ArtificialNeuralNetConnection> inputConnections = new ArrayList<ArtificialNeuralNetConnection>();
-	public ArrayList<ArtificialNeuralNetConnection> outputConnections = new ArrayList<ArtificialNeuralNetConnection>();
+	public CopyOnWriteArrayList<ArtificialNeuralNetConnection> inputConnections = new CopyOnWriteArrayList<ArtificialNeuralNetConnection>();
+	public CopyOnWriteArrayList<ArtificialNeuralNetConnection> outputConnections = new CopyOnWriteArrayList<ArtificialNeuralNetConnection>();
 	// public ArrayList<ArtificialNeuralNetConnection> biasConnections = new
 	// ArrayList<ArtificialNeuralNetConnection>();
 	private ArtificialNeuralNetWeight biasNeuronWeight;
@@ -32,6 +33,11 @@ public class ArtificialNeuron implements Serializable {
 
 	private static final float one = 1f;
 
+	@Override
+	public String toString() {
+		return "  {(" + inputConnections.size() + ") " + artificialNeuralNetComponentLabel + " (" + outputConnections.size() + ")} ";
+	}
+
 	public float getError() {
 		if (error != error)
 			return Float.POSITIVE_INFINITY;
@@ -43,18 +49,25 @@ public class ArtificialNeuron implements Serializable {
 	}
 
 	public ArtificialNeuron() {
+		artificialNeuralNetComponentLabel += neuronCounter.addAndGet(1);
 	}
 
 	// Oct 17, 2015 12:48:16 PM
 	public ArtificialNeuron(int neuronBuildType) {
-		neuronCounter++;
-		artificialNeuralNetComponentLabel += neuronCounter;
+
 		if (neuronBuildType == BIAS_NEURON_BUILDER_ID)
 			buildNeuronAsBias();
 		if (neuronBuildType == INPUT_NEURON_BUILDER_ID)
-			isInputNeuron = true;
+			buildNeuronAsInput();
+		artificialNeuralNetComponentLabel += neuronCounter.addAndGet(1);
 		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
 			RuntimeDetails.getPrintClassInfo(this);
+	}
+
+	private void buildNeuronAsInput() {
+		// Oct 25, 2015 11:45:47 AM
+		isInputNeuron = true;
+		artificialNeuralNetComponentLabel += "input_";
 	}
 
 	private void buildNeuronAsBias() {
@@ -62,6 +75,8 @@ public class ArtificialNeuron implements Serializable {
 		output = one;
 		isBiasNeuron = true;
 		this.biasNeuronWeight = new ArtificialNeuralNetWeight();
+
+		artificialNeuralNetComponentLabel += "bias_";
 	}
 
 	// Oct 17, 2015 9:57:09 AM
@@ -94,7 +109,7 @@ public class ArtificialNeuron implements Serializable {
 
 		output = sigmoidTransferFunction.calculateSigmoidalOutput(sum);
 		derivative = sigmoidTransferFunction.getDerivative(sum);
-		// derivative = sigmoidTransferFunction.getDerivative(output);
+		derivative = sigmoidTransferFunction.getDerivative(output);
 		return output;
 	}
 

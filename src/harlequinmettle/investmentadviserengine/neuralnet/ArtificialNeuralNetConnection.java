@@ -8,6 +8,12 @@ import java.io.Serializable;
 
 public class ArtificialNeuralNetConnection extends ArtificialNeuralNetConnectionModel implements Serializable {
 
+	// Oct 25, 2015 12:03:44 PM
+	@Override
+	public String toString() {
+		return "     connection " + fromNeuron + " ------> " + "(" + weight.weight + ") " + "------->" + toNeuron;
+	}
+
 	private static final long serialVersionUID = 9183327806552530385L;
 
 	public ArtificialNeuralNetConnection(ArtificialNeuron fromNeuron, ArtificialNeuron toNeuron) {

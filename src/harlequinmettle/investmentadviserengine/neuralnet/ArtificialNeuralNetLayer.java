@@ -5,13 +5,25 @@ import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.Art
 import harlequinmettle.utils.reflection.RuntimeDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ArtificialNeuralNetLayer implements Serializable {
 
+	@Override
+	public String toString() {
+		String layer = " ArtificialNeuralNetLayer " + System.lineSeparator();
+		for (ArtificialNeuron n : neuronsInLayer) {
+			layer += "       " + n.artificialNeuralNetComponentLabel + System.lineSeparator();
+			for (ArtificialNeuralNetConnection c : n.outputConnections) {
+				layer += "           " + c.toString() + System.lineSeparator();
+			}
+		}
+		return layer;
+	}
+
 	private static final long serialVersionUID = -5932295326600667274L;
 	// Oct 16, 2015 9:44:43 AM
-	public ArrayList<ArtificialNeuron> neuronsInLayer = new ArrayList<ArtificialNeuron>();
+	public CopyOnWriteArrayList<ArtificialNeuron> neuronsInLayer = new CopyOnWriteArrayList<ArtificialNeuron>();
 
 	public ArtificialNeuralNetLayer(int initialHiddenLayerNeuronCount, boolean isInputNeuron) {
 		for (int i = 0; i < initialHiddenLayerNeuronCount; i++)

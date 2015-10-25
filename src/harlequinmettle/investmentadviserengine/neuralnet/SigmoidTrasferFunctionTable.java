@@ -1,12 +1,12 @@
 // Oct 25, 2015 8:56:43 AM
 package harlequinmettle.investmentadviserengine.neuralnet;
 
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public class SigmoidTrasferFunctionTable extends SigmoidTransferFunction {
 
-	TreeMap<Float, Float> sigmoidFunctionTable = new TreeMap<Float, Float>();
-	TreeMap<Float, Float> sigmoidDerivativeFunctionTable = new TreeMap<Float, Float>();
+	ConcurrentSkipListMap<Float, Float> sigmoidFunctionTable = new ConcurrentSkipListMap<Float, Float>();
+	ConcurrentSkipListMap<Float, Float> sigmoidDerivativeFunctionTable = new ConcurrentSkipListMap<Float, Float>();
 
 	// Oct 25, 2015 8:57:58 AM
 	public SigmoidTrasferFunctionTable() {

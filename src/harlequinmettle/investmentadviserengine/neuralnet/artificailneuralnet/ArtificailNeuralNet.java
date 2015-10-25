@@ -12,9 +12,24 @@ public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements
 
 	private static final long serialVersionUID = -490681777238384428L;
 	public static boolean debugMethodsWithReflection = false;
-	public static boolean debugObjectConstructionWithReflection = true;
-	protected static boolean overrideOutput = false;
+	public static boolean debugObjectConstructionWithReflection = false;
+	protected static boolean overrideOutput = true;
 	MinError minError = new MinError();
+
+	@Override
+	public String toString() {
+		String net = "                                                           ArtificailNeuralNet :" + System.lineSeparator();
+		net += " input layer: " + System.lineSeparator();
+		net += inputLayer.toString() + System.lineSeparator();
+		int counter = 1;
+		for (ArtificialNeuralNetLayer hidden : hiddenLayers) {
+			net += "  hidden layer " + counter++ + System.lineSeparator();
+			net += hidden.toString() + System.lineSeparator();
+
+		}
+		net += " output layer: " + System.lineSeparator();
+		return net + outputLayer.toString() + System.lineSeparator();
+	}
 
 	// Oct 17, 2015 10:24:51 AM
 	public ArtificailNeuralNet(DataSet data) {

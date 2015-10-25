@@ -7,7 +7,7 @@ import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ArtificailNeuralNetFramework implements Serializable {
 	// Oct 17, 2015 10:19:37 AM
@@ -16,7 +16,7 @@ public class ArtificailNeuralNetFramework implements Serializable {
 	ArtificialNeuron biasNeuron;
 	ArtificialNeuralNetLayer inputLayer;
 	ArtificialNeuralNetLayer outputLayer;
-	ArrayList<ArtificialNeuralNetLayer> hiddenLayers = new ArrayList<ArtificialNeuralNetLayer>();
+	CopyOnWriteArrayList<ArtificialNeuralNetLayer> hiddenLayers = new CopyOnWriteArrayList<ArtificialNeuralNetLayer>();
 	public static final boolean MAKE_INPUT_LAYER = true;
 	protected static int defaultHiddenLayerNeuronCount = 4;
 	protected DataSet dataSet;

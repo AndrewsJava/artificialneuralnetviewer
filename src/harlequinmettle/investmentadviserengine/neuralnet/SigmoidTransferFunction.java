@@ -22,7 +22,8 @@ public class SigmoidTransferFunction implements Serializable {
 		// float den = (float) (1 + Math.exp(-this.slope * value));
 		// float denominator = (float) (1 + Math.exp(-value));
 		// float forwardPassNeuronResultCache = (1 / denominator) - 0.5f;
-		float result = (float) (1 / (1 + Math.exp(-value))) - 0.5f;
+		// float result = (float) (1 / (1 + Math.exp(-value))) - 0.5f;
+		float result = (float) (1 / (1 + Math.exp(-value)));
 		return result;
 	}
 

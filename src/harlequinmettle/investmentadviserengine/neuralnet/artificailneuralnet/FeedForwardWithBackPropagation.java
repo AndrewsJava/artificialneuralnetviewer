@@ -12,7 +12,7 @@ import harlequinmettle.utils.reflection.RuntimeDetails;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implements Serializable {
 
@@ -20,23 +20,36 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	boolean stopRequested = false;
 
 	public static void main(String[] args) {
-		defaultHiddenLayerNeuronCount = 14;
+		defaultHiddenLayerNeuronCount = 6;
 		DataSet testData = null;
 		testData = new DataSetXOR();
 		overrideOutput = false;
 		// testData = new DataSetNoisySin();
 		System.out.println(testData);
 		FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData);
-		nn.trainNN();
+		System.out.println("------------------ -ARTIFICIAL NEURAL NET ----------------------");
+		System.out.println(nn.toString());
+		System.out.println("------------------------------------");
+		nn.nnTrainingThread.start();
 	}
 
-	TreeMap<Integer, float[]> currentOutputErrors = new TreeMap<Integer, float[]>();
+	ConcurrentSkipListMap<Integer, float[]> currentOutputErrors = new ConcurrentSkipListMap<Integer, float[]>();
 
 	boolean errorIsTooLargeToStop = true;
 
 	private int fullDataSetTrainingIterations = 0;
 
-	public int trainingSpeedDamper = 1000;
+	public int trainingSpeedDamper = 1;
+
+	public Thread nnTrainingThread = new Thread(new Runnable() {
+		@Override
+		public void run() {
+			// Oct 17, 2015 10:34:49 AM
+			long time = System.currentTimeMillis();
+			trainArtificialNeuralNet();
+			System.out.println(TimeDateTool.timeSince(time));
+		}
+	});
 
 	public FeedForwardWithBackPropagation(DataSet data, int... hiddenLayerNeuronCounts) {
 		super(data, hiddenLayerNeuronCounts);
@@ -50,28 +63,16 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 			RuntimeDetails.getPrintClassInfo(this);
 	}
 
-	// Oct 16, 2015 11:57:00 AM
-	public void trainNN() {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// Oct 17, 2015 10:34:49 AM
-				long time = System.currentTimeMillis();
-				trainArtificialNeuralNet();
-				System.out.println(TimeDateTool.timeSince(time));
-			}
-		}).start();
-	}
-
 	public void trainArtificialNeuralNet() {
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
+
 		while (errorIsTooLargeToStop) {
+
 			if (stopRequested)
 				break;
 			SystemTool.takeABreak(trainingSpeedDamper);
+
 			fullDataSetTrainingIterations++;
 			for (int i = 0; i < dataSet.numberDataSets; i++) {
 				trainPattern(i);
@@ -82,7 +83,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	}
 
 	// Oct 19, 2015 11:56:19 AM
-	private void storeEpochError(int i) {
+	private void storeCurrentOutputErrorAllOutputNeuronSum(int i) {
 
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
@@ -94,23 +95,21 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		currentOutputErrors.put(i, outputErrors);
 	}
 
+	// Oct 19, 2015 11:56:12 AM
 	public void checkTotalError() {
-		// Oct 19, 2015 11:56:12 AM
-		// for (Entry<Integer, float[]> f : currentOutputErrors.entrySet())
-		// System.out.println("checking sum sq: " + f.getKey() + "  " +
-		// Arrays.toString(f.getValue()));
 
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
 		float totalError = new SumSquare().calculateSumSquare(currentOutputErrors.values());
 		dataSet.ssqError = totalError;
-		minError.checkMinError(totalError);
+		float avgError = totalError / currentOutputErrors.size();
+		minError.checkMinError(avgError);
 		if (minError.wasLastCheckMinError) {
-			display(totalError);
+			display(avgError);
 		}
 		// if (totalError < 0.1 && totalError > 0.02)
 		// ArtificialNeuron.learningRate *= 0.995;
-		errorIsTooLargeToStop = totalError > 0.0000001f || fullDataSetTrainingIterations < 2;
+		errorIsTooLargeToStop = avgError > 0.0000001f || fullDataSetTrainingIterations < 2;
 	}
 
 	private void display(float totalError) {
@@ -144,7 +143,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		feedforward(inputPattern);
 		dataSet.outputs.put(i, getCurrentOutputArray());
 		backProagate(targetOutput);
-		storeEpochError(i);
+		storeCurrentOutputErrorAllOutputNeuronSum(i);
 		applyWeightChanges();
 
 	}

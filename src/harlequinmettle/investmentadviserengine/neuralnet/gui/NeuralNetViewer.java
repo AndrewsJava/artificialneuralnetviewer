@@ -30,7 +30,7 @@ public class NeuralNetViewer {
 			}
 		});
 		startGuiThread();
-		nn.trainNN();
+		nn.nnTrainingThread.start();
 	}
 
 	// Oct 21, 2015 12:07:07 PM

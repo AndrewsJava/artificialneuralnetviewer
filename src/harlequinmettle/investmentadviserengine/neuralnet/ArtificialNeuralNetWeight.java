@@ -17,6 +17,7 @@ public class ArtificialNeuralNetWeight implements Serializable {
 
 	public ArtificialNeuralNetWeight() {
 		randomizeToPositive();
+		randomize();
 		this.weightChange = 0;
 		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
 			RuntimeDetails.getPrintClassInfo(this);
