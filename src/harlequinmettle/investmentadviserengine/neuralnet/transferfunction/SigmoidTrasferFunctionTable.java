@@ -1,5 +1,5 @@
 // Oct 25, 2015 8:56:43 AM
-package harlequinmettle.investmentadviserengine.neuralnet;
+package harlequinmettle.investmentadviserengine.neuralnet.transferfunction;
 
 import java.util.concurrent.ConcurrentSkipListMap;
 

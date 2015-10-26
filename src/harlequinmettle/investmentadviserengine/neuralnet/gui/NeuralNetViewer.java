@@ -17,7 +17,7 @@ import javax.swing.SwingUtilities;
 public class NeuralNetViewer {
 	private String appTitle = "Neural Net Training";
 
-	int defaultHiddenLayerNeuronCount = 12;
+	int defaultHiddenLayerNeuronCount = 7;
 	// DataSettestData = new DataSetXOR();
 	DataSet testData = new DataSetNoisySin();
 	FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData, defaultHiddenLayerNeuronCount);
@@ -29,6 +29,7 @@ public class NeuralNetViewer {
 				showGui();
 			}
 		});
+		nn.learningDamper = 0.999f;
 		startGuiThread();
 		nn.nnTrainingThread.start();
 	}

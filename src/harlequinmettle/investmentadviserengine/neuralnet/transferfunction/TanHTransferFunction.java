@@ -1,5 +1,5 @@
 // Oct 25, 2015 1:33:53 PM
-package harlequinmettle.investmentadviserengine.neuralnet;
+package harlequinmettle.investmentadviserengine.neuralnet.transferfunction;
 
 public class TanHTransferFunction {
 	float tanh = Float.NaN;

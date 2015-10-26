@@ -1,5 +1,5 @@
 // Oct 17, 2015 11:00:58 AM
-package harlequinmettle.investmentadviserengine.neuralnet;
+package harlequinmettle.investmentadviserengine.neuralnet.transferfunction;
 
 import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.ArtificailNeuralNet;
 import harlequinmettle.utils.reflection.RuntimeDetails;

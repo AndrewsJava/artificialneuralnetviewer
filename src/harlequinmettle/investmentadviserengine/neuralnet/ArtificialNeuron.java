@@ -2,6 +2,7 @@
 package harlequinmettle.investmentadviserengine.neuralnet;
 
 import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.ArtificailNeuralNet;
+import harlequinmettle.investmentadviserengine.neuralnet.transferfunction.TanHTransferFunction;
 import harlequinmettle.utils.reflection.RuntimeDetails;
 
 import java.io.Serializable;

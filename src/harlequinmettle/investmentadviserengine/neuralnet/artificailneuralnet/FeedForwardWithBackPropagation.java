@@ -5,7 +5,6 @@ import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetConn
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetLayer;
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
-import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetNoisySin;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetXOR;
 import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.investmentadviserengine.util.TimeDateTool;
@@ -25,7 +24,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		DataSet testData = null;
 		testData = new DataSetXOR();
 		overrideOutput = false;
-		testData = new DataSetNoisySin();
+		// testData = new DataSetNoisySin();
 		System.out.println(testData);
 		FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData);
 		System.out.println("------------------ -ARTIFICIAL NEURAL NET ----------------------");
@@ -40,7 +39,9 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	private int fullDataSetTrainingIterations = 0;
 
-	public int trainingSpeedDamper = 1;
+	public int trainingSleepMilliseconds = 1;
+
+	public float learningDamper = 1;
 
 	public Thread nnTrainingThread = new Thread(new Runnable() {
 		@Override
@@ -72,12 +73,13 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 			if (stopRequested)
 				break;
-			SystemTool.takeABreak(trainingSpeedDamper);
+			SystemTool.takeABreak(trainingSleepMilliseconds);
 
 			fullDataSetTrainingIterations++;
 			for (int i = 0; i < dataSet.numberDataSets; i++) {
 				trainPattern(i);
 			}
+			ArtificialNeuron.learningRate *= learningDamper;
 			checkTotalError();
 
 		}
@@ -113,10 +115,10 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		errorIsTooLargeToStop = avgError > 0.0000001f || fullDataSetTrainingIterations < 2;
 	}
 
-	private void display(float totalError) {
+	private void display(float error) {
 		// Oct 19, 2015 1:11:58 PM
 		if (overrideOutput) {
-			System.out.println("TOTAL ERROR: " + totalError);
+			System.out.println("AVG ERROR: " + error);
 			System.out.println(fullDataSetTrainingIterations + "\n----------------\n ");
 			return;
 		}
@@ -133,8 +135,11 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 			for (float f : actualOutput)
 				System.out.format(STRING_NUMBER_FORMAT, "actual:                                    ", f);
 		}
-		System.out.println("TOTAL ERROR: " + totalError);
-		System.out.println("errors: " + currentOutputErrors);
+		System.out.println("AVG ERROR: " + error);
+		System.out.println("errors: ");
+		for (float[] errors : currentOutputErrors.values())
+			System.out.print(" : " + Arrays.toString(errors));
+		System.out.println();
 		System.out.println(fullDataSetTrainingIterations + "\n----------------\n ");
 
 	}
