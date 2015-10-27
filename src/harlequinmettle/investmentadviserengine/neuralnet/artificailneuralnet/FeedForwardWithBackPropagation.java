@@ -214,6 +214,23 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		}
 	}
 
+	public void randomizeAllWeights() {
+		errorIsTooLargeToStop = true;
+		for (ArtificialNeuron neuron : outputLayer.neuronsInLayer) {
+			for (ArtificialNeuralNetConnection connection : neuron.inputConnections) {
+				connection.weight.randomize();
+			}
+		}
+
+		for (ArtificialNeuralNetLayer layer : hiddenLayers) {
+			for (ArtificialNeuron neuron : layer.neuronsInLayer) {
+				for (ArtificialNeuralNetConnection connection : neuron.inputConnections) {
+					connection.weight.randomize();
+				}
+			}
+		}
+	}
+
 	// Oct 18, 2015 1:49:53 PM
 	private void applyWeightChanges() {
 		if (ArtificailNeuralNet.debugMethodsWithReflection)

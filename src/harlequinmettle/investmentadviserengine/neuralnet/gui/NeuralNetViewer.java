@@ -3,7 +3,7 @@ package harlequinmettle.investmentadviserengine.neuralnet.gui;
 
 import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.FeedForwardWithBackPropagation;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
-import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetNoisySin;
+import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetNoisyTargetsSin;
 import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.utils.guitools.DataGrapher;
 import harlequinmettle.utils.guitools.JFrameFactory;
@@ -19,9 +19,10 @@ import javax.swing.SwingUtilities;
 public class NeuralNetViewer {
 	private String appTitle = "Neural Net Training";
 
-	int defaultHiddenLayerNeuronCount = 7;
+	int defaultHiddenLayerNeuronCount = 6;
 	// DataSettestData = new DataSetXOR();
-	DataSet testData = new DataSetNoisySin();
+	DataSet testData = new DataSetNoisyTargetsSin();
+	// DataSet testData = new DataSetNoisyInputsNoisyTargetsSin();
 	FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData, defaultHiddenLayerNeuronCount);
 	DataGrapher dataDisplayer;
 
@@ -36,7 +37,6 @@ public class NeuralNetViewer {
 		});
 		nn.learningDamper = 0.9999f;
 		startGuiThread();
-		nn.nnTrainingThread.start();
 	}
 
 	// Oct 21, 2015 12:07:07 PM

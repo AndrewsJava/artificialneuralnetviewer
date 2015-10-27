@@ -14,7 +14,7 @@ public class ArtificialNeuron implements Serializable {
 	String artificialNeuralNetComponentLabel = "ArtificialNeuron_";
 	static AtomicInteger neuronCounter = new AtomicInteger(100000);
 	private static final long serialVersionUID = -5609553171004488643L;
-	public static float learningRate = 0.51F;
+	volatile public static float learningRate = 0.51F;
 	public static final int INPUT_NEURON_BUILDER_ID = 1005002;
 	public static final int BIAS_NEURON_BUILDER_ID = 2002008;
 	public boolean isBiasNeuron = false;

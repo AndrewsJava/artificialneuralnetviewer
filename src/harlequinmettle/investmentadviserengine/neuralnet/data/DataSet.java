@@ -23,4 +23,12 @@ public class DataSet {
 		return response;
 	}
 
+	protected void addTargetOutputWithOptionalNumberInputs(Float out, float... in) {
+		float[] input = in;
+		float[] output = { out };
+		inputs.add(input);
+		targets.add(output);
+		numberDataSets++;
+	}
+
 }
