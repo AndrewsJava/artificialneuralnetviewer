@@ -63,8 +63,8 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				// Oct 27, 2015 12:13:00 PM
-				nn.stopRequested = false;
-				nn.nnTrainingThread.start();
+				if (nn.stopRequested.getAndSet(false))
+					nn.nnTrainingThread.start();
 			}
 
 		};
@@ -77,7 +77,8 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				// Oct 27, 2015 12:13:00 PM
-				nn.stopRequested = true;
+				nn.stopRequested.set(true);
+				;
 			}
 
 		};

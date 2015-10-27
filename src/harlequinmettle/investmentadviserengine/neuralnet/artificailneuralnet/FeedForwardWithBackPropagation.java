@@ -13,11 +13,12 @@ import harlequinmettle.utils.reflection.RuntimeDetails;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implements Serializable {
 
 	private static final long serialVersionUID = 2712275468608016163L;
-	public volatile boolean stopRequested = false;
+	public AtomicBoolean stopRequested = new AtomicBoolean(false);
 
 	public static void main(String[] args) {
 		defaultHiddenLayerNeuronCount = 6;
@@ -71,7 +72,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 		while (errorIsTooLargeToStop) {
 
-			if (stopRequested)
+			if (stopRequested.get())
 				break;
 			SystemTool.takeABreak(trainingSleepMilliseconds);
 
