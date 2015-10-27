@@ -1,22 +1,23 @@
-// Oct 25, 2015 8:56:43 AM
+// Oct 27, 2015 11:15:15 AM
 package harlequinmettle.investmentadviserengine.neuralnet.transferfunction;
 
 import java.util.concurrent.ConcurrentSkipListMap;
 
-public class SigmoidTrasferFunctionTable extends SigmoidTransferFunction {
+public class TanHTransferFunctionTable extends TanHTransferFunction {
+	// Oct 27, 2015 11:15:15 AM
 
-	private static final ConcurrentSkipListMap<Float, Float> sigmoidFunctionTable = new ConcurrentSkipListMap<Float, Float>();
-	private static final ConcurrentSkipListMap<Float, Float> sigmoidDerivativeFunctionTable = new ConcurrentSkipListMap<Float, Float>();
+	private static final ConcurrentSkipListMap<Float, Float> tanhFunctionTable = new ConcurrentSkipListMap<Float, Float>();
+	private static final ConcurrentSkipListMap<Float, Float> tanhDerivativeFunctionTable = new ConcurrentSkipListMap<Float, Float>();
 
 	// Oct 25, 2015 8:57:58 AM
-	public SigmoidTrasferFunctionTable() {
+	public TanHTransferFunctionTable() {
 		float min = -100;
 		float max = 100;
 		float tableSize = 5000;
 		float increment = (max - min) / tableSize;
 		for (float input = min; input < max; input += increment) {
-			sigmoidFunctionTable.put(input, calculateOutput(input));
-			sigmoidDerivativeFunctionTable.put(input, super.getDerivative(input));
+			tanhFunctionTable.put(input, calculateOutput(input));
+			tanhDerivativeFunctionTable.put(input, super.getDerivative(input));
 		}
 	}
 
@@ -26,8 +27,8 @@ public class SigmoidTrasferFunctionTable extends SigmoidTransferFunction {
 		} else if (input < -100) {
 			return 0.0f;
 		}
-		Float over = sigmoidFunctionTable.ceilingKey(input);
-		Float under = sigmoidFunctionTable.floorKey(input);
+		Float over = tanhFunctionTable.ceilingKey(input);
+		Float under = tanhFunctionTable.floorKey(input);
 		if (over == null && under == null)
 			return Float.NaN;
 		if (over == null)
@@ -39,8 +40,8 @@ public class SigmoidTrasferFunctionTable extends SigmoidTransferFunction {
 
 	public float getDerivative(float input) {
 
-		Float over = sigmoidDerivativeFunctionTable.ceilingKey(input);
-		Float under = sigmoidDerivativeFunctionTable.floorKey(input);
+		Float over = tanhDerivativeFunctionTable.ceilingKey(input);
+		Float under = tanhDerivativeFunctionTable.floorKey(input);
 		if (over == null && under == null)
 			return Float.NaN;
 		if (over == null)

@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implements Serializable {
 
 	private static final long serialVersionUID = 2712275468608016163L;
-	boolean stopRequested = false;
+	public volatile boolean stopRequested = false;
 
 	public static void main(String[] args) {
 		defaultHiddenLayerNeuronCount = 6;

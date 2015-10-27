@@ -24,11 +24,12 @@ public class DataSetNoisySin extends DataSet {
 			// addNoisySinDataMappingToTrainingSet(f, (float) (Math.sin(f) +
 			// Math.random() * 0.2));
 
-			addNoisySinDataMappingToTrainingSet(f, (float) (4 * Math.random()), (float) (Math.sin(f) + Math.random() * 0.2));
+			addNoisySinDataMappingToTrainingSet((float) (Math.sin(f) + Math.random() * 0.2), f, (float) (Math.random()), (float) (Math.random()),
+					(float) (Math.random()), (float) (Math.cos(f)));
 		}
 	}
 
-	private void addNoisySinDataMappingToTrainingSet(float in1, float inNoise, float out) {
+	private void addNoisySinDataMappingToTrainingSet(float out, float in1, float inNoise) {
 		float[] input = { in1, inNoise };
 		float[] output = { out };
 		inputs.add(input);

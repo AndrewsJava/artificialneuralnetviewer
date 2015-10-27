@@ -2,20 +2,24 @@
 package harlequinmettle.investmentadviserengine.neuralnet.transferfunction;
 
 public class TanHTransferFunction {
-	float tanh = Float.NaN;
+	private float lastInput = Float.NaN;
+	private float tanhCache = Float.NaN;
 
-	public float calculateSigmoidalOutput(float sum) {
+	public float calculateOutput(float sum) {
 		// Oct 25, 2015 1:34:17 PM
-		tanh = (float) Math.tanh(sum);
-		return tanh;
+		lastInput = sum;
+		tanhCache = (float) Math.tanh(sum);
+		return tanhCache;
 	}
 
 	// Oct 25, 2015 1:33:53 PM
 
 	public float getDerivative(float sum) {
+		if (sum != lastInput)
+			tanhCache = (float) Math.tanh(sum);
 		// Oct 25, 2015 1:34:23 PM
-		float derivativeTanh = 1 - tanh * tanh;
-		tanh = Float.NaN;
+		float derivativeTanh = 1 - tanhCache * tanhCache;
+		tanhCache = Float.NaN;
 		return derivativeTanh;
 	}
 }

@@ -11,7 +11,7 @@ public class SigmoidTransferFunction implements Serializable {
 	private static final long serialVersionUID = 310723662430627233L;
 
 	// Oct 17, 2015 11:02:19 AM
-	public float calculateSigmoidalOutput(float value) {
+	public float calculateOutput(float value) {
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
 		// if (value > 100) {

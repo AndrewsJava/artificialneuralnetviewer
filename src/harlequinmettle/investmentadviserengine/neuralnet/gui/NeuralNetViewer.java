@@ -8,9 +8,11 @@ import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.utils.guitools.DataGrapher;
 import harlequinmettle.utils.guitools.JFrameFactory;
 
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
@@ -23,13 +25,16 @@ public class NeuralNetViewer {
 	FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData, defaultHiddenLayerNeuronCount);
 	DataGrapher dataDisplayer;
 
+	// ConcurrentSkipListMap<JPanel, JPanel> application = new
+	// ConcurrentSkipListMap<JPanel, JPanel>();
+
 	public NeuralNetViewer() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				showGui();
 			}
 		});
-		nn.learningDamper = 0.999f;
+		nn.learningDamper = 0.9999f;
 		startGuiThread();
 		nn.nnTrainingThread.start();
 	}
@@ -98,9 +103,22 @@ public class NeuralNetViewer {
 		JFrame fullScreen = JFrameFactory.displayFullScreenPrimaryApplicationJFrame(appTitle);
 		JTabbedPane tabs = new JTabbedPane();
 		dataDisplayer = new DataGrapher();
-		tabs.addTab("ANN Output", dataDisplayer);
-		tabs.addTab("ANN Builder", new ArtificialneuralNetBuilderPanel(this));
+		JPanel annRunner = new JPanel(new BorderLayout());
+		annRunner.add(dataDisplayer, BorderLayout.CENTER);
+		annRunner.add(generateAnnRunnerPanel(), BorderLayout.WEST);
+		tabs.addTab("ANN Runner", annRunner);
+		ArtificialneuralNetBuilderPanel annControlTab = new ArtificialneuralNetBuilderPanel(this);
+		// tabs.setTabPlacement(JTabbedPane.RIGHT);
+		tabs.addTab("ANN Builder", annControlTab);
 		fullScreen.add(tabs);
+		fullScreen.pack();
+	}
+
+	private JPanel generateAnnRunnerPanel() {
+		// Oct 27, 2015 10:45:39 AM
+		JPanel annRunnerControlsPanel = new AnnRunnerControlsPanel(nn);
+
+		return annRunnerControlsPanel;
 	}
 
 	public static void main(String[] args) {

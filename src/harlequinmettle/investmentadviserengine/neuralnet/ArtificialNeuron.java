@@ -28,6 +28,8 @@ public class ArtificialNeuron implements Serializable {
 	// private SigmoidTransferFunction sigmoidTransferFunction = new
 	// SigmoidTransferFunction();
 	private TanHTransferFunction neuronTransferFunction = new TanHTransferFunction();
+	// private TanHTransferFunction neuronTransferFunction = new
+	// TanHTransferFunctionTable();
 
 	private float input = Float.NaN;
 	private float output = Float.NaN;
@@ -111,7 +113,7 @@ public class ArtificialNeuron implements Serializable {
 			sum += connection.getWeightedInput();
 		}
 
-		output = neuronTransferFunction.calculateSigmoidalOutput(sum);
+		output = neuronTransferFunction.calculateOutput(sum);
 		derivative = neuronTransferFunction.getDerivative(sum);
 		// derivative = sigmoidTransferFunction.getDerivative(output);
 		return output;
