@@ -67,7 +67,7 @@ public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements
 	}
 
 	// Oct 17, 2015 11:57:49 AM
-	private float[] establishOutput() {
+	public float[] establishOutput() {
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
 

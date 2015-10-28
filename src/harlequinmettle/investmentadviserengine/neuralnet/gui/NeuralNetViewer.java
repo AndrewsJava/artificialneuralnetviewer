@@ -3,7 +3,7 @@ package harlequinmettle.investmentadviserengine.neuralnet.gui;
 
 import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.FeedForwardWithBackPropagation;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
-import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetNoisyTargetsSin;
+import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetNoisyInputsNoisyTargetsSin;
 import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.utils.guitools.DataGrapher;
 import harlequinmettle.utils.guitools.JFrameFactory;
@@ -19,10 +19,10 @@ import javax.swing.SwingUtilities;
 public class NeuralNetViewer {
 	private String appTitle = "Neural Net Training";
 
-	int defaultHiddenLayerNeuronCount = 6;
+	int defaultHiddenLayerNeuronCount = 4;
 	// DataSettestData = new DataSetXOR();
-	DataSet testData = new DataSetNoisyTargetsSin();
-	// DataSet testData = new DataSetNoisyInputsNoisyTargetsSin();
+	// DataSet testData = new DataSetNoisyTargetsSin();
+	DataSet testData = new DataSetNoisyInputsNoisyTargetsSin();
 	FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData, defaultHiddenLayerNeuronCount);
 	DataGrapher dataDisplayer;
 
@@ -35,8 +35,18 @@ public class NeuralNetViewer {
 				showGui();
 			}
 		});
+		nn.establishOutput();
+		setEstablishedOutputInDataSet();
 		nn.learningDamper = 0.9999f;
 		startGuiThread();
+	}
+
+	// Oct 28, 2015 10:55:47 AM
+	private void setEstablishedOutputInDataSet() {
+		for (int i = 0; i < testData.numberDataSets; i++) {
+
+			testData.outputs.put(i, nn.getCurrentOutputArray());
+		}
 	}
 
 	// Oct 21, 2015 12:07:07 PM
@@ -61,11 +71,11 @@ public class NeuralNetViewer {
 			SystemTool.takeABreak(300);
 			String outputTitle = "output";
 			ArrayList<Float> output = getOutputPointsAsArray();
-			if (dataDisplayer == null)
-				SystemTool.takeABreak(500);
+			// if (dataDisplayer == null)
+			// SystemTool.takeABreak(500);
 			dataDisplayer.addData(outputTitle, inputs, output);
-			// if (testData.ssqError == testData.ssqError)
-			// dataDisplayer.addErrorPoint(testData.ssqError);
+			if (testData.ssqError == testData.ssqError)
+				dataDisplayer.addErrorPoint(testData.ssqError);
 			dataDisplayer.repaint();
 			// System.exit(0);
 		}
@@ -116,7 +126,7 @@ public class NeuralNetViewer {
 
 	private JPanel generateAnnRunnerPanel() {
 		// Oct 27, 2015 10:45:39 AM
-		JPanel annRunnerControlsPanel = new AnnRunnerControlsPanel(nn);
+		JPanel annRunnerControlsPanel = new AnnRunnerControlsPanel(this);
 
 		return annRunnerControlsPanel;
 	}
@@ -125,5 +135,14 @@ public class NeuralNetViewer {
 		// Oct 21, 2015 10:56:51 AM
 		NeuralNetViewer view = new NeuralNetViewer();
 	}
+
 	// Oct 21, 2015 10:56:51 AM
+
+	public void resetNN() {
+		testData = new DataSetNoisyInputsNoisyTargetsSin();
+		nn = new FeedForwardWithBackPropagation(testData, defaultHiddenLayerNeuronCount);
+
+		nn.establishOutput();
+		setEstablishedOutputInDataSet();
+	}
 }

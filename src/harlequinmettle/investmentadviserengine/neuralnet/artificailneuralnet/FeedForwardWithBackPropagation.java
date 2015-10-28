@@ -18,10 +18,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implements Serializable {
 
 	private static final long serialVersionUID = 2712275468608016163L;
-	public AtomicBoolean stopRequested = new AtomicBoolean(false);
+	public AtomicBoolean stopRequested = new AtomicBoolean(true);
 
 	public static void main(String[] args) {
-		defaultHiddenLayerNeuronCount = 6;
+		defaultHiddenLayerNeuronCount = 2;
 		DataSet testData = null;
 		testData = new DataSetXOR();
 		overrideOutput = false;
@@ -31,7 +31,8 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		System.out.println("------------------ -ARTIFICIAL NEURAL NET ----------------------");
 		System.out.println(nn.toString());
 		System.out.println("------------------------------------");
-		nn.nnTrainingThread.start();
+
+		nn.startNNTrainingThread();
 	}
 
 	ConcurrentSkipListMap<Integer, float[]> currentOutputErrors = new ConcurrentSkipListMap<Integer, float[]>();
@@ -44,15 +45,9 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	public float learningDamper = 1;
 
-	public Thread nnTrainingThread = new Thread(new Runnable() {
-		@Override
-		public void run() {
-			// Oct 17, 2015 10:34:49 AM
-			long time = System.currentTimeMillis();
-			trainArtificialNeuralNet();
-			System.out.println(TimeDateTool.timeSince(time));
-		}
-	});
+	private float acceptibleAverageError = 0.00001f;
+
+	public Thread nnTrainingThread;
 
 	public FeedForwardWithBackPropagation(DataSet data, int... hiddenLayerNeuronCounts) {
 		super(data, hiddenLayerNeuronCounts);
@@ -67,6 +62,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	}
 
 	public void trainArtificialNeuralNet() {
+
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
 
@@ -74,15 +70,21 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 			if (stopRequested.get())
 				break;
+
 			SystemTool.takeABreak(trainingSleepMilliseconds);
 
 			fullDataSetTrainingIterations++;
-			for (int i = 0; i < dataSet.numberDataSets; i++) {
-				trainPattern(i);
-			}
+			trainOneFullIteration();
 			ArtificialNeuron.learningRate *= learningDamper;
 			checkTotalError();
 
+		}
+	}
+
+	public void trainOneFullIteration() {
+		// Oct 28, 2015 10:39:49 AM
+		for (int i = 0; i < dataSet.numberDataSets; i++) {
+			trainPattern(i);
 		}
 	}
 
@@ -99,6 +101,26 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		currentOutputErrors.put(i, outputErrors);
 	}
 
+	public void startNNTrainingThread() {
+		stopRequested.set(true);
+		try {
+			nnTrainingThread.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		stopRequested.set(false);
+		nnTrainingThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// Oct 17, 2015 10:34:49 AM
+				long time = System.currentTimeMillis();
+				trainArtificialNeuralNet();
+				System.out.println(TimeDateTool.timeSince(time));
+			}
+		});
+		nnTrainingThread.start();
+	}
+
 	// Oct 19, 2015 11:56:12 AM
 	public void checkTotalError() {
 
@@ -113,7 +135,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		}
 		// if (totalError < 0.1 && totalError > 0.02)
 		// ArtificialNeuron.learningRate *= 0.995;
-		errorIsTooLargeToStop = avgError > 0.0000001f || fullDataSetTrainingIterations < 2;
+		errorIsTooLargeToStop = avgError > acceptibleAverageError || fullDataSetTrainingIterations < 2;
 	}
 
 	private void display(float error) {
@@ -161,7 +183,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	}
 
 	// Oct 19, 2015 1:23:56 PM
-	private float[] getCurrentOutputArray() {
+	public float[] getCurrentOutputArray() {
 
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
@@ -248,6 +270,13 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 				}
 			}
 		}
+	}
+
+	public ConcurrentSkipListMap<String, String> getState() {
+		// Oct 28, 2015 11:15:58 AM
+		ConcurrentSkipListMap<String, String> nnState = new ConcurrentSkipListMap<String, String>();
+		nnState.put("asdf", " " + asdf);
+		return nnState;
 	}
 
 }
