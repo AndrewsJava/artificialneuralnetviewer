@@ -37,6 +37,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	ConcurrentSkipListMap<Integer, float[]> currentOutputErrors = new ConcurrentSkipListMap<Integer, float[]>();
 
+	public ConcurrentSkipListMap<String, String> nnState = new ConcurrentSkipListMap<String, String>();
 	boolean errorIsTooLargeToStop = true;
 
 	private int fullDataSetTrainingIterations = 0;
@@ -179,7 +180,14 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		backProagate(targetOutput);
 		storeCurrentOutputErrorAllOutputNeuronSum(i);
 		applyWeightChanges();
+		setCurrentNNState();
+	}
 
+	private void setCurrentNNState() {
+		// Oct 28, 2015 11:22:30 AM
+
+		float avgError = dataSet.ssqError / currentOutputErrors.size();
+		nnState.put("avgError", "" + avgError);
 	}
 
 	// Oct 19, 2015 1:23:56 PM
@@ -274,8 +282,6 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	public ConcurrentSkipListMap<String, String> getState() {
 		// Oct 28, 2015 11:15:58 AM
-		ConcurrentSkipListMap<String, String> nnState = new ConcurrentSkipListMap<String, String>();
-		nnState.put("asdf", " " + asdf);
 		return nnState;
 	}
 

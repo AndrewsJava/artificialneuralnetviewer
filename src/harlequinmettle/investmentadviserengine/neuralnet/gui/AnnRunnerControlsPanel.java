@@ -8,6 +8,7 @@ import harlequinmettle.utils.guitools.VerticalJPanel;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import javax.swing.JButton;
@@ -25,8 +26,24 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		add(generateLearningRateBumperButton());
 		add(generateRandomizeWeightsButton());
 		add(generatePrintNNButton());
-		ConcurrentSkipListMap<String, String> nnState = nnView.nn.getState();
-		add(JLabelFactory.doBluishJLabel("label1"));
+		// startStateLabelUpdateThread();
+	}
+
+	private void startStateLabelUpdateThread() {
+		// Oct 28, 2015 11:24:41 AM
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// Oct 28, 2015 11:25:27 AM
+
+				ConcurrentSkipListMap<String, String> nnState = nnView.nn.getState();
+				for (Entry<String, String> ent : nnState.entrySet())
+					// TODO: display state
+					add(JLabelFactory.doBluishJLabel("label1"));
+			}
+
+		}).start();
 	}
 
 	private Component generateResetButton() {
