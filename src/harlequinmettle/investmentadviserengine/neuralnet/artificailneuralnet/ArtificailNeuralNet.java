@@ -1,6 +1,7 @@
 // Oct 15, 2015 10:39:33 AM
 package harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet;
 
+import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetConnection;
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetLayer;
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
@@ -18,17 +19,24 @@ public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements
 
 	@Override
 	public String toString() {
-		String net = "                                                           ArtificailNeuralNet :" + System.lineSeparator();
-		net += " input layer: " + System.lineSeparator();
+
+		String net = "-----------------------------ARTIFICIAL NEURAL NET ------------------------------" + System.lineSeparator();
+		net += "                                                           ArtificailNeuralNet :" + System.lineSeparator();
+		net += "[Input Layer] : " + System.lineSeparator();
 		net += inputLayer.toString() + System.lineSeparator();
 		int counter = 1;
 		for (ArtificialNeuralNetLayer hidden : hiddenLayers) {
-			net += "  hidden layer " + counter++ + System.lineSeparator();
+			net += "[Hidden Layer] : " + counter++ + System.lineSeparator();
 			net += hidden.toString() + System.lineSeparator();
 
 		}
-		net += " output layer: " + System.lineSeparator();
-		return net + outputLayer.toString() + System.lineSeparator();
+		net += "[Output Layer] : " + System.lineSeparator();
+		net += outputLayer.toString() + System.lineSeparator();
+		net += biasNeuron.toString() + System.lineSeparator();
+		for (ArtificialNeuralNetConnection connection : biasNeuron.outputConnections)
+			net += "     " + connection.toString() + System.lineSeparator();
+		net += "---------------------------------------------------------------------------------" + System.lineSeparator();
+		return net;
 	}
 
 	// Oct 17, 2015 10:24:51 AM
@@ -41,7 +49,7 @@ public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements
 	}
 
 	// Oct 19, 2015 9:57:50 AM
-	protected void feedforward(float[] inputPattern) {
+	public void feedforward(float[] inputPattern) {
 
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();

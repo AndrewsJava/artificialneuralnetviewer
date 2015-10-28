@@ -10,6 +10,7 @@ import harlequinmettle.utils.guitools.JFrameFactory;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -35,16 +36,15 @@ public class NeuralNetViewer {
 				showGui();
 			}
 		});
-		nn.establishOutput();
-		setEstablishedOutputInDataSet();
+		setEstaablishedOutputInDataSet();
 		nn.learningDamper = 0.9999f;
 		startGuiThread();
 	}
 
 	// Oct 28, 2015 10:55:47 AM
-	private void setEstablishedOutputInDataSet() {
+	private void setEstaablishedOutputInDataSet() {
 		for (int i = 0; i < testData.numberDataSets; i++) {
-
+			System.out.println("CURRENT OUTPUT: " + Arrays.toString(nn.getCurrentOutputArray()));
 			testData.outputs.put(i, nn.getCurrentOutputArray());
 		}
 	}
@@ -142,7 +142,5 @@ public class NeuralNetViewer {
 		testData = new DataSetNoisyInputsNoisyTargetsSin();
 		nn = new FeedForwardWithBackPropagation(testData, defaultHiddenLayerNeuronCount);
 
-		nn.establishOutput();
-		setEstablishedOutputInDataSet();
 	}
 }

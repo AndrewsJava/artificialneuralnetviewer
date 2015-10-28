@@ -50,9 +50,9 @@ public class ArtificialNeuron implements Serializable {
 		return error;
 	}
 
-	public void setError(float error) {
-		this.error = error;
-	}
+	// public void setError(float error) {
+	// this.error = error;
+	// }
 
 	public ArtificialNeuron() {
 		artificialNeuralNetComponentLabel += neuronCounter.addAndGet(1);
@@ -115,7 +115,7 @@ public class ArtificialNeuron implements Serializable {
 
 		output = neuronTransferFunction.calculateOutput(sum);
 		derivative = neuronTransferFunction.getDerivative(sum);
-		// derivative = sigmoidTransferFunction.getDerivative(output);
+
 		return output;
 	}
 
@@ -158,8 +158,4 @@ public class ArtificialNeuron implements Serializable {
 		error = derivative * differenceExtrapolation;
 	}
 
-	// Oct 18, 2015 2:15:45 PM
-	public void establishWeightChangesForHiddenLayerConnections() {
-
-	}
 }

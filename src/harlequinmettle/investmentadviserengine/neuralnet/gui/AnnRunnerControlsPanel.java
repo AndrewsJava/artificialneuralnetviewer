@@ -21,6 +21,7 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		this.nnView = nnView;
 
 		add(generateResetButton());
+		add(generateSingleTrainingSetIterationButton());
 		add(generateStartButton());
 		add(generateStopButton());
 		add(generateLearningRateBumperButton());
@@ -29,67 +30,57 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		// startStateLabelUpdateThread();
 	}
 
-	private void startStateLabelUpdateThread() {
-		// Oct 28, 2015 11:24:41 AM
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				// Oct 28, 2015 11:25:27 AM
-
-				ConcurrentSkipListMap<String, String> nnState = nnView.nn.getState();
-				for (Entry<String, String> ent : nnState.entrySet())
-					// TODO: display state
-					add(JLabelFactory.doBluishJLabel("label1"));
-			}
-
-		}).start();
-	}
-
 	private Component generateResetButton() {
 
-		JButton trainStartButton = new JButton("Reset");
-		trainStartButton.addActionListener(getResetActionListner());
-		return trainStartButton;
+		JButton button = new JButton("Reset");
+		button.addActionListener(getResetActionListner());
+		return button;
+	}
+
+	private Component generateSingleTrainingSetIterationButton() {
+
+		JButton button = new JButton("Single Full Patter Training");
+		button.addActionListener(getSingleIterationActionListner());
+		return button;
 	}
 
 	private Component generatePrintNNButton() {
 
-		JButton trainStartButton = new JButton("Display Neural Net");
-		trainStartButton.addActionListener(getPrintNNActionListner());
-		return trainStartButton;
+		JButton button = new JButton("Display Neural Net");
+		button.addActionListener(getPrintNNActionListner());
+		return button;
 	}
 
 	private Component generateRandomizeWeightsButton() {
 
-		JButton trainStartButton = new JButton("Randomize Weights");
-		trainStartButton.addActionListener(getWeightRandomizerActionListner());
-		return trainStartButton;
+		JButton button = new JButton("Randomize Weights");
+		button.addActionListener(getWeightRandomizerActionListner());
+		return button;
 	}
 
 	// Oct 27, 2015 10:48:27 AM
 	private Component generateLearningRateBumperButton() {
 
-		JButton trainStartButton = new JButton("Boost Learning Rate");
-		trainStartButton.addActionListener(getLearningRateBoosterActionListner());
-		return trainStartButton;
+		JButton button = new JButton("Boost Learning Rate");
+		button.addActionListener(getLearningRateBoosterActionListner());
+		return button;
 	}
 
 	private Component generateStartButton() {
 		// Oct 27, 2015 10:50:19 AM
 
-		JButton trainStartButton = new JButton("Start Training");
-		trainStartButton.addActionListener(getStartActionListner());
-		return trainStartButton;
+		JButton button = new JButton("Start Training");
+		button.addActionListener(getStartActionListner());
+		return button;
 	}
 
 	// Oct 27, 2015 10:48:27 AM
 	private Component generateStopButton() {
 		// Oct 27, 2015 10:50:19 AM
 
-		JButton trainStartButton = new JButton("Stop Training");
-		trainStartButton.addActionListener(getStopActionListner());
-		return trainStartButton;
+		JButton button = new JButton("Stop Training");
+		button.addActionListener(getStopActionListner());
+		return button;
 	}
 
 	private ActionListener getStartActionListner() {
@@ -156,6 +147,19 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		};
 	}
 
+	private ActionListener getSingleIterationActionListner() {
+
+		return new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent paramActionEvent) {
+
+				nnView.nn.trainOneFullIteration();
+			}
+
+		};
+	}
+
 	private ActionListener getPrintNNActionListner() {
 		// Oct 27, 2015 12:12:39 PM
 		return new ActionListener() {
@@ -168,4 +172,22 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 
 		};
 	}
+
+	private void startStateLabelUpdateThread() {
+		// Oct 28, 2015 11:24:41 AM
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// Oct 28, 2015 11:25:27 AM
+
+				ConcurrentSkipListMap<String, String> nnState = nnView.nn.getState();
+				for (Entry<String, String> ent : nnState.entrySet())
+					// TODO: display state
+					add(JLabelFactory.doBluishJLabel("label1"));
+			}
+
+		}).start();
+	}
+
 }

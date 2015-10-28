@@ -13,7 +13,7 @@ public class TanHTransferFunctionTable extends TanHTransferFunction {
 	public TanHTransferFunctionTable() {
 		float min = -100;
 		float max = 100;
-		float tableSize = 5000;
+		float tableSize = 500000;
 		float increment = (max - min) / tableSize;
 		for (float input = min; input < max; input += increment) {
 			tanhFunctionTable.put(input, calculateOutput(input));

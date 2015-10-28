@@ -60,7 +60,7 @@ public class ArtificailNeuralNetFramework implements Serializable {
 
 			ArtificialNeuralNetConnection connection = new ArtificialNeuralNetConnection(biasNeuron, toNeuron);
 
-			// biasNeuron.biasConnections.add(connection);
+			biasNeuron.outputConnections.add(connection);
 			toNeuron.inputConnections.add(connection);
 		}
 	}
