@@ -20,11 +20,13 @@ import javax.swing.SwingUtilities;
 public class NeuralNetViewer {
 	private String appTitle = "Neural Net Training";
 
-	int defaultHiddenLayerNeuronCount = 4;
+	int defaultHiddenLayerNeuronCount = 14;
 	// DataSettestData = new DataSetXOR();
 	// DataSet testData = new DataSetNoisyTargetsSin();
-	DataSet testData = new DataSetNoisyInputsNoisyTargetsSin();
-	FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(testData, defaultHiddenLayerNeuronCount);
+	DataSet testData;// = new DataSetNoisyInputsNoisyTargetsSin();
+	FeedForwardWithBackPropagation nn;// = new
+										// FeedForwardWithBackPropagation(testData,
+										// defaultHiddenLayerNeuronCount);
 	DataGrapher dataDisplayer;
 
 	// ConcurrentSkipListMap<JPanel, JPanel> application = new
@@ -36,13 +38,14 @@ public class NeuralNetViewer {
 				showGui();
 			}
 		});
-		setEstaablishedOutputInDataSet();
+		resetNN();
+		// setEstaablishedOutputInDataSet();
 		nn.learningDamper = 0.9999f;
 		startGuiThread();
 	}
 
 	// Oct 28, 2015 10:55:47 AM
-	private void setEstaablishedOutputInDataSet() {
+	private void setEstacablishedOutputInDataSet() {
 		for (int i = 0; i < testData.numberDataSets; i++) {
 			System.out.println("CURRENT OUTPUT: " + Arrays.toString(nn.getCurrentOutputArray()));
 			testData.outputs.put(i, nn.getCurrentOutputArray());
@@ -62,15 +65,18 @@ public class NeuralNetViewer {
 	private void countinuousNeuralNetDataUpdater() {
 		// String inputTitle = "inputs";
 		String targetTitle = "target";
+		String outputTitle = "output";
 		ArrayList<Float> inputs = getInputPointsAsArray();
 		ArrayList<Float> targets = getTargetPointsAsArray();
 		while (dataDisplayer == null)
 			SystemTool.takeABreak(100);
 		dataDisplayer.addData(targetTitle, inputs, targets);
+		ArrayList<Float> output = getOutputPointsAsArray();
+		dataDisplayer.addData(outputTitle, inputs, output);
+		System.out.println("CURRENT OUTPUT: " + output);
 		while (true) {
 			SystemTool.takeABreak(300);
-			String outputTitle = "output";
-			ArrayList<Float> output = getOutputPointsAsArray();
+			output = getOutputPointsAsArray();
 			// if (dataDisplayer == null)
 			// SystemTool.takeABreak(500);
 			dataDisplayer.addData(outputTitle, inputs, output);

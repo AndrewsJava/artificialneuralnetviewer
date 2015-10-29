@@ -19,6 +19,8 @@ public class TanHTransferFunction {
 			tanhCache = (float) Math.tanh(sum);
 		// Oct 25, 2015 1:34:23 PM
 		float derivativeTanh = 1 - tanhCache * tanhCache;
+		if (derivativeTanh == 0)
+			derivativeTanh += 0.05f;
 		tanhCache = Float.NaN;
 		return derivativeTanh;
 	}

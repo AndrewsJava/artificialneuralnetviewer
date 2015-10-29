@@ -21,6 +21,7 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		this.nnView = nnView;
 
 		add(generateResetButton());
+		add(generateSingleTrainingIterationButton());
 		add(generateSingleTrainingSetIterationButton());
 		add(generateStartButton());
 		add(generateStopButton());
@@ -37,9 +38,16 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		return button;
 	}
 
+	private Component generateSingleTrainingIterationButton() {
+
+		JButton button = new JButton("Single Patter Training");
+		button.addActionListener(getTrainOneDataPointActionListner());
+		return button;
+	}
+
 	private Component generateSingleTrainingSetIterationButton() {
 
-		JButton button = new JButton("Single Full Patter Training");
+		JButton button = new JButton("Single Full Set Training");
 		button.addActionListener(getSingleIterationActionListner());
 		return button;
 	}
@@ -58,7 +66,6 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		return button;
 	}
 
-	// Oct 27, 2015 10:48:27 AM
 	private Component generateLearningRateBumperButton() {
 
 		JButton button = new JButton("Boost Learning Rate");
@@ -67,16 +74,13 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 	}
 
 	private Component generateStartButton() {
-		// Oct 27, 2015 10:50:19 AM
 
 		JButton button = new JButton("Start Training");
 		button.addActionListener(getStartActionListner());
 		return button;
 	}
 
-	// Oct 27, 2015 10:48:27 AM
 	private Component generateStopButton() {
-		// Oct 27, 2015 10:50:19 AM
 
 		JButton button = new JButton("Stop Training");
 		button.addActionListener(getStopActionListner());
@@ -84,12 +88,10 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 	}
 
 	private ActionListener getStartActionListner() {
-		// Oct 27, 2015 12:12:39 PM
 		return new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
-				// Oct 27, 2015 12:13:00 PM
 				nnView.nn.startNNTrainingThread();
 			}
 
@@ -97,12 +99,10 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 	}
 
 	private ActionListener getStopActionListner() {
-		// Oct 27, 2015 12:12:39 PM
 		return new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
-				// Oct 27, 2015 12:13:00 PM
 				nnView.nn.stopRequested.set(true);
 
 			}
@@ -122,25 +122,21 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 	}
 
 	private ActionListener getLearningRateBoosterActionListner() {
-		// Oct 27, 2015 12:12:39 PM
 		return new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
-				// Oct 27, 2015 12:13:00 PM
-				ArtificialNeuron.learningRate += 0.15;
+				ArtificialNeuron.learningRate += 0.05;
 			}
 
 		};
 	}
 
 	private ActionListener getWeightRandomizerActionListner() {
-		// Oct 27, 2015 12:12:39 PM
 		return new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
-				// Oct 27, 2015 12:13:00 PM
 				nnView.nn.randomizeAllWeights();
 			}
 
@@ -161,25 +157,36 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 	}
 
 	private ActionListener getPrintNNActionListner() {
-		// Oct 27, 2015 12:12:39 PM
 		return new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
-				// Oct 27, 2015 12:13:00 PM
+
 				System.out.println(nnView.nn);
 			}
 
 		};
 	}
 
+	private ActionListener getTrainOneDataPointActionListner() {
+
+		return new ActionListener() {
+			int trainingPatternIndex = 0;
+
+			@Override
+			public void actionPerformed(ActionEvent paramActionEvent) {
+
+				nnView.nn.trainPattern(trainingPatternIndex++);
+			}
+
+		};
+	}
+
 	private void startStateLabelUpdateThread() {
-		// Oct 28, 2015 11:24:41 AM
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				// Oct 28, 2015 11:25:27 AM
 
 				ConcurrentSkipListMap<String, String> nnState = nnView.nn.getState();
 				for (Entry<String, String> ent : nnState.entrySet())

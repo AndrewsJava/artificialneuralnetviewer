@@ -1,9 +1,7 @@
 // Oct 16, 2015 9:45:32 AM
 package harlequinmettle.investmentadviserengine.neuralnet;
 
-import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.ArtificailNeuralNet;
 import harlequinmettle.investmentadviserengine.neuralnet.transferfunction.TanHTransferFunction;
-import harlequinmettle.utils.reflection.RuntimeDetails;
 
 import java.io.Serializable;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -14,7 +12,7 @@ public class ArtificialNeuron implements Serializable {
 	String artificialNeuralNetComponentLabel = "ArtificialNeuron_";
 	static AtomicInteger neuronCounter = new AtomicInteger(100000);
 	private static final long serialVersionUID = -5609553171004488643L;
-	volatile public static float learningRate = 0.51F;
+	volatile public static float learningRate = 0.1F;
 	public static final int INPUT_NEURON_BUILDER_ID = 1005002;
 	public static final int BIAS_NEURON_BUILDER_ID = 2002008;
 	public boolean isBiasNeuron = false;
@@ -56,18 +54,19 @@ public class ArtificialNeuron implements Serializable {
 
 	public ArtificialNeuron() {
 		artificialNeuralNetComponentLabel += neuronCounter.addAndGet(1);
+		learningRate = 0.1F;
 	}
 
 	// Oct 17, 2015 12:48:16 PM
 	public ArtificialNeuron(int neuronBuildType) {
+		learningRate = 0.1F;
 
 		if (neuronBuildType == BIAS_NEURON_BUILDER_ID)
 			buildNeuronAsBias();
 		if (neuronBuildType == INPUT_NEURON_BUILDER_ID)
 			buildNeuronAsInput();
 		artificialNeuralNetComponentLabel += neuronCounter.addAndGet(1);
-		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
-			RuntimeDetails.getPrintClassInfo(this);
+
 	}
 
 	private void buildNeuronAsInput() {
@@ -87,16 +86,12 @@ public class ArtificialNeuron implements Serializable {
 
 	// Oct 17, 2015 9:57:09 AM
 	public float getEstablishedOutputValue() {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 		return output;
 	}
 
 	// Oct 17, 2015 10:54:18 AM
 	public float establishNeuronOutputFromConnections() {
 
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 		if (isInputNeuron) {
 			output = input;// move to initialization
 			return output;
@@ -127,16 +122,12 @@ public class ArtificialNeuron implements Serializable {
 
 	// Oct 18, 2015 12:20:05 PM
 	public void establishOutputNeuronError(float target) {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 		error = derivative * (target - output);
 		// error = derivative * (output - target);
 	}
 
 	// Oct 18, 2015 12:26:29 PM
 	public void establishWeightChangesByErrorBackpropagation() {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 		for (ArtificialNeuralNetConnection connection : inputConnections) {
 			float incommingSignal = connection.fromNeuron.getEstablishedOutputValue();
 			float weightChange = incommingSignal * error * learningRate;
@@ -149,8 +140,6 @@ public class ArtificialNeuron implements Serializable {
 	// ERRORoutC W_hiddenConnectOUTC)
 	// Oct 18, 2015 2:12:13 PM
 	public void establishHiddenNeuronError() {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 		float differenceExtrapolation = 0f;
 		for (ArtificialNeuralNetConnection connection : outputConnections) {
 			differenceExtrapolation += connection.toNeuron.error * connection.weight.weight;

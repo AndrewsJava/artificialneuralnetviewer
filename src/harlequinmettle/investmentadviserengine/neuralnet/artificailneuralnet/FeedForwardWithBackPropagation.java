@@ -182,7 +182,8 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	}
 
 	// Oct 19, 2015 9:33:39 AM
-	private void trainPattern(int i) {
+	public void trainPattern(int i) {
+		i = i % dataSet.numberDataSets;
 		if (ArtificailNeuralNet.debugMethodsWithReflection)
 			RuntimeDetails.getPrintMethodInfo();
 		float[] inputPattern = dataSet.inputs.get(i);
