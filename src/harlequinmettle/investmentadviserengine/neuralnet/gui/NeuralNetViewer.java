@@ -10,7 +10,6 @@ import harlequinmettle.utils.guitools.JFrameFactory;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,7 +19,7 @@ import javax.swing.SwingUtilities;
 public class NeuralNetViewer {
 	private String appTitle = "Neural Net Training";
 
-	int defaultHiddenLayerNeuronCount = 14;
+	int defaultHiddenLayerNeuronCount = 4;
 	// DataSettestData = new DataSetXOR();
 	// DataSet testData = new DataSetNoisyTargetsSin();
 	DataSet testData;// = new DataSetNoisyInputsNoisyTargetsSin();
@@ -44,14 +43,6 @@ public class NeuralNetViewer {
 		startGuiThread();
 	}
 
-	// Oct 28, 2015 10:55:47 AM
-	private void setEstacablishedOutputInDataSet() {
-		for (int i = 0; i < testData.numberDataSets; i++) {
-			System.out.println("CURRENT OUTPUT: " + Arrays.toString(nn.getCurrentOutputArray()));
-			testData.outputs.put(i, nn.getCurrentOutputArray());
-		}
-	}
-
 	// Oct 21, 2015 12:07:07 PM
 	private void startGuiThread() {
 
@@ -64,52 +55,79 @@ public class NeuralNetViewer {
 
 	private void countinuousNeuralNetDataUpdater() {
 		// String inputTitle = "inputs";
+		String testingPointsTitle = "testing";
 		String targetTitle = "target";
 		String outputTitle = "output";
 		ArrayList<Float> inputs = getInputPointsAsArray();
+		ArrayList<Float> testingInputs = getTestingPointsInputAsArray();
 		ArrayList<Float> targets = getTargetPointsAsArray();
 		while (dataDisplayer == null)
 			SystemTool.takeABreak(100);
 		dataDisplayer.addData(targetTitle, inputs, targets);
-		ArrayList<Float> output = getOutputPointsAsArray();
-		dataDisplayer.addData(outputTitle, inputs, output);
-		System.out.println("CURRENT OUTPUT: " + output);
+		dataDisplayer.addData(outputTitle, inputs, getOutputPointsAsArray());
+		dataDisplayer.addData(testingPointsTitle, testingInputs, getTestingDataOutputPointsAsArray());
+		float lastError = Float.NEGATIVE_INFINITY;
 		while (true) {
 			SystemTool.takeABreak(300);
-			output = getOutputPointsAsArray();
-			// if (dataDisplayer == null)
-			// SystemTool.takeABreak(500);
-			dataDisplayer.addData(outputTitle, inputs, output);
+			dataDisplayer.addData(outputTitle, inputs, getOutputPointsAsArray());
+			dataDisplayer.addData(testingPointsTitle, testingInputs, getTestingDataOutputPointsAsArray());
 			if (testData.ssqError == testData.ssqError)
-				dataDisplayer.addErrorPoint(testData.ssqError);
+				if (testData.ssqError != lastError)
+					dataDisplayer.addErrorPoint(testData.ssqError);
+			lastError = testData.ssqError;
 			dataDisplayer.repaint();
-			// System.exit(0);
 		}
 	}
 
-	private ArrayList<Float> getInputPointsAsArray() {
-
+	private ArrayList<Float> getTestingPointsInputAsArray() {
+		// TODO: USE ALL INPUT POINTS
 		ArrayList<Float> inputs = new ArrayList<Float>();
-		for (float[] data : testData.inputs)
+
+		for (float[] data : testData.testingInputs)
 			inputs.add(data[0]);
+
+		return inputs;
+	}
+
+	private ArrayList<Float> getInputPointsAsArray() {
+		// TODO: USE ALL INPUT POINTS
+		ArrayList<Float> inputs = new ArrayList<Float>();
+
+		for (float[] data : testData.trainingInputs)
+			inputs.add(data[0]);
+
 		return inputs;
 	}
 
 	// Oct 22, 2015 8:33:21 AM
 	private ArrayList<Float> getOutputPointsAsArray() {
+		// TODO: USE ALL OUTPUTS
 		ArrayList<Float> outputs = new ArrayList<Float>();
 
-		for (float[] data : testData.outputs.values())
+		for (float[] data : testData.trainingOutputs.values())
 			outputs.add(data[0]);
+
+		return outputs;
+	}
+
+	private ArrayList<Float> getTestingDataOutputPointsAsArray() {
+		// TODO: USE ALL OUTPUTS
+		ArrayList<Float> outputs = new ArrayList<Float>();
+
+		for (float[] data : testData.testingOutputs.values())
+			outputs.add(data[0]);
+
 		return outputs;
 	}
 
 	// Oct 22, 2015 8:33:15 AM
 	private ArrayList<Float> getTargetPointsAsArray() {
+
 		ArrayList<Float> targets = new ArrayList<Float>();
 
 		for (float[] data : testData.targets)
 			targets.add(data[0]);
+
 		return targets;
 	}
 

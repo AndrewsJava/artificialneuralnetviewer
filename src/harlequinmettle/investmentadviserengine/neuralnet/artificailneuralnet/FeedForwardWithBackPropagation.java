@@ -8,7 +8,6 @@ import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetXOR;
 import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.investmentadviserengine.util.TimeDateTool;
-import harlequinmettle.utils.reflection.RuntimeDetails;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -50,32 +49,37 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	public FeedForwardWithBackPropagation(DataSet data, int... hiddenLayerNeuronCounts) {
 		super(data, hiddenLayerNeuronCounts);
-		establishInitialOutputs();
-		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
-			RuntimeDetails.getPrintClassInfo(this);
+		establishTrainingOutputs();
+		establishTestingOuputs();
+
 	}
 
 	public FeedForwardWithBackPropagation(DataSet data) {
 		super(data);
-		establishInitialOutputs();
-		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
-			RuntimeDetails.getPrintClassInfo(this);
+		establishTrainingOutputs();
+		establishTestingOuputs();
 	}
 
 	// Oct 28, 2015 1:58:32 PM
-	private void establishInitialOutputs() {
+	private void establishTrainingOutputs() {
 		for (int i = 0; i < dataSet.numberDataSets; i++) {
 
-			float[] inputPattern = dataSet.inputs.get(i);
+			float[] inputPattern = dataSet.trainingInputs.get(i);
 			feedforward(inputPattern);
-			dataSet.outputs.put(i, getCurrentOutputArray());
+			dataSet.trainingOutputs.put(i, getCurrentOutputArray());
+		}
+	}
+
+	private void establishTestingOuputs() {
+		for (int i = 0; i < dataSet.numberTestDataSets; i++) {
+
+			float[] inputPattern = dataSet.testingInputs.get(i);
+			feedforward(inputPattern);
+			dataSet.testingOutputs.put(i, getCurrentOutputArray());
 		}
 	}
 
 	public void trainArtificialNeuralNet() {
-
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 
 		while (errorIsTooLargeToStop.get()) {
 
@@ -86,6 +90,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 			fullDataSetTrainingIterations++;
 			trainOneFullIteration();
+			establishTestingOuputs();
 			ArtificialNeuron.learningRate *= learningDamper;
 			checkTotalError();
 
@@ -103,8 +108,6 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	// Oct 19, 2015 11:56:19 AM
 	private void storeCurrentIterationOutputError_s_(int i) {
 
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 		// float outputLayerError = 0f;
 		int j = 0;
 		float[] outputErrors = new float[outputLayer.neuronsInLayer.size()];
@@ -136,8 +139,6 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	// Oct 19, 2015 11:56:12 AM
 	public void checkTotalError() {
 
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 		float totalError = new SumSquare().calculateSumSquare(currentFullTrainingSetOutputErrors.values());
 		if (totalError != totalError)
 			return;
@@ -160,9 +161,9 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 			return;
 		}
 		for (int i = 0; i < dataSet.numberDataSets; i++) {
-			float[] inputPattern = dataSet.inputs.get(i);
+			float[] inputPattern = dataSet.trainingInputs.get(i);
 			float[] targetOutput = dataSet.targets.get(i);
-			float[] actualOutput = dataSet.outputs.get(i);
+			float[] actualOutput = dataSet.trainingOutputs.get(i);
 			String STRING_NUMBER_FORMAT = "%1$-15s|  %2$-10.2f\n ";
 			// for (float f : inputPattern)
 			// System.out.format(STRING_NUMBER_FORMAT, "input: ", f);
@@ -184,13 +185,12 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	// Oct 19, 2015 9:33:39 AM
 	public void trainPattern(int i) {
 		i = i % dataSet.numberDataSets;
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
-		float[] inputPattern = dataSet.inputs.get(i);
+
+		float[] inputPattern = dataSet.trainingInputs.get(i);
 		float[] targetOutput = dataSet.targets.get(i);
 		// set inputs and establish outputs
 		feedforward(inputPattern);
-		dataSet.outputs.put(i, getCurrentOutputArray());
+		dataSet.trainingOutputs.put(i, getCurrentOutputArray());
 		backProagate(targetOutput);
 		storeCurrentIterationOutputError_s_(i);
 		applyWeightChanges();
@@ -207,9 +207,6 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	// Oct 19, 2015 1:23:56 PM
 	public float[] getCurrentOutputArray() {
 
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
-
 		float[] currentOutput = new float[outputLayer.neuronsInLayer.size()];
 		int i = 0;
 		for (ArtificialNeuron neuron : outputLayer.neuronsInLayer)
@@ -219,8 +216,6 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	// Oct 18, 2015 11:49:32 AM
 	public void backProagate(float[] targets) {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 
 		backpropagateOutoputLayer(targets);
 		backpropagateHidden();
@@ -233,8 +228,6 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	private void backpropagateHidden() {
 		// ErrorA = OutputA (1 - OutputA)(ErrorB WAB + ErrorC WAC)
 
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 		for (int i = hiddenLayers.size() - 1; i >= 0; i--) {
 			ArtificialNeuralNetLayer hiddenLayer = hiddenLayers.get(i);
 
@@ -249,8 +242,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	// Oct 18, 2015 1:48:20 PM
 	private void backpropagateOutoputLayer(float[] targets) {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
+
 		int i = 0;
 		for (ArtificialNeuron neuron : outputLayer.neuronsInLayer) {
 			neuron.establishOutputNeuronError(targets[i]);
@@ -278,8 +270,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 
 	// Oct 18, 2015 1:49:53 PM
 	private void applyWeightChanges() {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
+
 		for (ArtificialNeuron neuron : outputLayer.neuronsInLayer) {
 			for (ArtificialNeuralNetConnection connection : neuron.inputConnections) {
 				connection.weight.applyWeightChange();

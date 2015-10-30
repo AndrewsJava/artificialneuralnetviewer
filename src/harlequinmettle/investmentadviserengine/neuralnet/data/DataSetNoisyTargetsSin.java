@@ -1,8 +1,6 @@
 // Oct 21, 2015 8:08:08 AM
 package harlequinmettle.investmentadviserengine.neuralnet.data;
 
-import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.ArtificailNeuralNet;
-import harlequinmettle.utils.reflection.RuntimeDetails;
 
 public class DataSetNoisyTargetsSin extends DataSet {
 	// Oct 21, 2015 8:08:08 AM
@@ -14,8 +12,6 @@ public class DataSetNoisyTargetsSin extends DataSet {
 	public DataSetNoisyTargetsSin() {
 		// Oct 16, 2015 10:39:47 AM
 		buildNoisySinTargetTrainingSet();
-		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
-			RuntimeDetails.getPrintClassInfo(this);
 	}
 
 	private void buildNoisySinTargetTrainingSet() {

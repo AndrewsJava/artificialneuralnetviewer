@@ -5,15 +5,14 @@ import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetConn
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetLayer;
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
-import harlequinmettle.utils.reflection.RuntimeDetails;
 
 import java.io.Serializable;
 
 public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements Serializable {
 
 	private static final long serialVersionUID = -490681777238384428L;
-	public static boolean debugMethodsWithReflection = false;
-	public static boolean debugObjectConstructionWithReflection = false;
+	// public static boolean debugMethodsWithReflection = false;
+	// public static boolean debugObjectConstructionWithReflection = false;
 	protected static boolean overrideOutput = false;
 	MinError minError = new MinError();
 
@@ -51,17 +50,12 @@ public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements
 	// Oct 19, 2015 9:57:50 AM
 	public void feedforward(float[] inputPattern) {
 
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 		setInputs(inputPattern);
 		establishOutput();
 
 	}
 
 	private void setInputs(float[] input) {
-		// Oct 17, 2015 10:51:43 AM
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 		if (input.length != inputLayer.neuronsInLayer.size()) {
 			System.out.println("Input vector size does not match network input dimension!");
 			return;
@@ -76,8 +70,6 @@ public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements
 
 	// Oct 17, 2015 11:57:49 AM
 	public float[] establishOutput() {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
 
 		float[] output = new float[outputLayer.neuronsInLayer.size()];
 		for (ArtificialNeuron neuron : inputLayer.neuronsInLayer) {

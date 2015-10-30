@@ -67,7 +67,7 @@ public class ArtificailNeuralNetFramework implements Serializable {
 
 	// Oct 16, 2015 11:10:28 AM
 	private void createInputOutputLayers() {
-		int inputLayerSize = dataSet.inputs.get(0).length;
+		int inputLayerSize = dataSet.trainingInputs.get(0).length;
 		int outputLayerSize = dataSet.targets.get(0).length;
 		inputLayer = new ArtificialNeuralNetLayer(inputLayerSize, MAKE_INPUT_LAYER);
 		outputLayer = new ArtificialNeuralNetLayer(outputLayerSize);

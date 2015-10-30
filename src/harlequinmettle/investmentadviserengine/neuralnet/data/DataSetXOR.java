@@ -21,7 +21,7 @@ public class DataSetXOR extends DataSet {
 	private void addXORDataMappingToTrainingSet(int in1, int in2, int out) {
 		float[] input = { in1, in2 };
 		float[] output = { out };
-		inputs.add(input);
+		trainingInputs.add(input);
 		targets.add(output);
 		numberDataSets++;
 	}

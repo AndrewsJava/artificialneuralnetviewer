@@ -1,9 +1,6 @@
 // Oct 16, 2015 9:44:43 AM
 package harlequinmettle.investmentadviserengine.neuralnet;
 
-import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.ArtificailNeuralNet;
-import harlequinmettle.utils.reflection.RuntimeDetails;
-
 import java.io.Serializable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -31,15 +28,11 @@ public class ArtificialNeuralNetLayer implements Serializable {
 				neuronsInLayer.add(new ArtificialNeuron(ArtificialNeuron.INPUT_NEURON_BUILDER_ID));
 			else
 				neuronsInLayer.add(new ArtificialNeuron());
-		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
-			RuntimeDetails.getPrintClassInfo(this);
 	}
 
 	public ArtificialNeuralNetLayer(int initialHiddenLayerNeuronCount) {
 		// Oct 16, 2015 10:16:45 AM
 		for (int i = 0; i < initialHiddenLayerNeuronCount; i++)
 			neuronsInLayer.add(new ArtificialNeuron());
-		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
-			RuntimeDetails.getPrintClassInfo(this);
 	}
 }

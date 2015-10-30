@@ -1,9 +1,6 @@
 // Oct 17, 2015 9:00:41 AM
 package harlequinmettle.investmentadviserengine.neuralnet;
 
-import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.ArtificailNeuralNet;
-import harlequinmettle.utils.reflection.RuntimeDetails;
-
 import java.io.Serializable;
 
 public class ArtificialNeuralNetWeight implements Serializable {
@@ -19,25 +16,19 @@ public class ArtificialNeuralNetWeight implements Serializable {
 		// randomizeToPositive();
 		randomize();
 		this.weightChange = 0;
-		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
-			RuntimeDetails.getPrintClassInfo(this);
 	}
 
 	public ArtificialNeuralNetWeight(float value) {
 		this.weight = value;
-		if (ArtificailNeuralNet.debugObjectConstructionWithReflection)
-			RuntimeDetails.getPrintClassInfo(this);
 	}
 
 	public void setWeightChange(float change) {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
+
 		weightChange = change;
 	}
 
 	public void applyWeightChange() {
-		if (ArtificailNeuralNet.debugMethodsWithReflection)
-			RuntimeDetails.getPrintMethodInfo();
+
 		weight += weightChange;
 		weightChange = 0;
 	}
