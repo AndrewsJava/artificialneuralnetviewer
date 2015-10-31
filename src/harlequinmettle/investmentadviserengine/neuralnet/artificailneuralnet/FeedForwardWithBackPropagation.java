@@ -70,7 +70,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		}
 	}
 
-	private void establishTestingOuputs() {
+	public void establishTestingOuputs() {
 		for (int i = 0; i < dataSet.numberTestDataSets; i++) {
 
 			float[] inputPattern = dataSet.testingInputs.get(i);

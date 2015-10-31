@@ -10,6 +10,7 @@ import harlequinmettle.utils.guitools.JFrameFactory;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,16 +21,10 @@ public class NeuralNetViewer {
 	private String appTitle = "Neural Net Training";
 
 	int defaultHiddenLayerNeuronCount = 4;
-	// DataSettestData = new DataSetXOR();
-	// DataSet testData = new DataSetNoisyTargetsSin();
-	DataSet testData;// = new DataSetNoisyInputsNoisyTargetsSin();
-	FeedForwardWithBackPropagation nn;// = new
-										// FeedForwardWithBackPropagation(testData,
-										// defaultHiddenLayerNeuronCount);
+	DataSet nnData;
+	FeedForwardWithBackPropagation nn;
 	DataGrapher dataDisplayer;
-
-	// ConcurrentSkipListMap<JPanel, JPanel> application = new
-	// ConcurrentSkipListMap<JPanel, JPanel>();
+	TreeSet<String> lineOptions = new TreeSet<String>();
 
 	public NeuralNetViewer() {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -58,6 +53,9 @@ public class NeuralNetViewer {
 		String testingPointsTitle = "testing";
 		String targetTitle = "target";
 		String outputTitle = "output";
+		lineOptions.add(testingPointsTitle);
+		lineOptions.add(targetTitle);
+		lineOptions.add(outputTitle);
 		ArrayList<Float> inputs = getInputPointsAsArray();
 		ArrayList<Float> testingInputs = getTestingPointsInputAsArray();
 		ArrayList<Float> targets = getTargetPointsAsArray();
@@ -71,10 +69,10 @@ public class NeuralNetViewer {
 			SystemTool.takeABreak(300);
 			dataDisplayer.addData(outputTitle, inputs, getOutputPointsAsArray());
 			dataDisplayer.addData(testingPointsTitle, testingInputs, getTestingDataOutputPointsAsArray());
-			if (testData.ssqError == testData.ssqError)
-				if (testData.ssqError != lastError)
-					dataDisplayer.addErrorPoint(testData.ssqError);
-			lastError = testData.ssqError;
+			if (nnData.ssqError == nnData.ssqError)
+				if (nnData.ssqError != lastError)
+					dataDisplayer.addErrorPoint(nnData.ssqError);
+			lastError = nnData.ssqError;
 			dataDisplayer.repaint();
 		}
 	}
@@ -83,7 +81,7 @@ public class NeuralNetViewer {
 		// TODO: USE ALL INPUT POINTS
 		ArrayList<Float> inputs = new ArrayList<Float>();
 
-		for (float[] data : testData.testingInputs)
+		for (float[] data : nnData.testingInputs)
 			inputs.add(data[0]);
 
 		return inputs;
@@ -93,7 +91,7 @@ public class NeuralNetViewer {
 		// TODO: USE ALL INPUT POINTS
 		ArrayList<Float> inputs = new ArrayList<Float>();
 
-		for (float[] data : testData.trainingInputs)
+		for (float[] data : nnData.trainingInputs)
 			inputs.add(data[0]);
 
 		return inputs;
@@ -104,7 +102,7 @@ public class NeuralNetViewer {
 		// TODO: USE ALL OUTPUTS
 		ArrayList<Float> outputs = new ArrayList<Float>();
 
-		for (float[] data : testData.trainingOutputs.values())
+		for (float[] data : nnData.trainingOutputs.values())
 			outputs.add(data[0]);
 
 		return outputs;
@@ -114,7 +112,7 @@ public class NeuralNetViewer {
 		// TODO: USE ALL OUTPUTS
 		ArrayList<Float> outputs = new ArrayList<Float>();
 
-		for (float[] data : testData.testingOutputs.values())
+		for (float[] data : nnData.testingOutputs.values())
 			outputs.add(data[0]);
 
 		return outputs;
@@ -125,7 +123,7 @@ public class NeuralNetViewer {
 
 		ArrayList<Float> targets = new ArrayList<Float>();
 
-		for (float[] data : testData.targets)
+		for (float[] data : nnData.targets)
 			targets.add(data[0]);
 
 		return targets;
@@ -162,9 +160,15 @@ public class NeuralNetViewer {
 
 	// Oct 21, 2015 10:56:51 AM
 
+	public void resetNN(DataSet dataSet, FeedForwardWithBackPropagation nn) {
+		this.nnData = dataSet;
+		this.nn = nn;
+
+	}
+
 	public void resetNN() {
-		testData = new DataSetNoisyInputsNoisyTargetsSin();
-		nn = new FeedForwardWithBackPropagation(testData, defaultHiddenLayerNeuronCount);
+		nnData = new DataSetNoisyInputsNoisyTargetsSin(1, 15, 60);
+		nn = new FeedForwardWithBackPropagation(nnData, defaultHiddenLayerNeuronCount);
 
 	}
 }

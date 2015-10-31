@@ -8,10 +8,13 @@ import harlequinmettle.utils.guitools.VerticalJPanel;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 
 public class AnnRunnerControlsPanel extends VerticalJPanel {
 	NeuralNetViewer nnView;
@@ -21,6 +24,7 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		this.nnView = nnView;
 
 		add(generateResetButton());
+		addCheckboxesForDrawTypes();
 		add(generateSingleTrainingIterationButton());
 		add(generateSingleTrainingSetIterationButton());
 		add(generateStartButton());
@@ -29,6 +33,34 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		add(generateRandomizeWeightsButton());
 		add(generatePrintNNButton());
 		// startStateLabelUpdateThread();
+	}
+
+	private void addCheckboxesForDrawTypes() {
+		// Oct 31, 2015 11:30:29 AM
+		for (String title : nnView.lineOptions)
+			add(generateCheckbox(title, true));
+	}
+
+	// Oct 31, 2015 11:34:01 AM
+	private Component generateCheckbox(String type, Boolean value) {
+		JCheckBox drawline = new JCheckBox(type, value.booleanValue());
+		drawline.addItemListener(getLinePreferencesDrawingItemlistener());
+		return drawline;
+	}
+
+	private ItemListener getLinePreferencesDrawingItemlistener() {
+		return new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				// Oct 31, 2015 11:37:54 AM
+				JCheckBox source = ((JCheckBox) (arg0.getItem()));
+				String key = source.getActionCommand();
+				boolean value = source.isSelected();
+				nnView.dataDisplayer.drawLines.put(key, value);
+			}
+
+		};
 	}
 
 	private Component generateResetButton() {
@@ -126,7 +158,7 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
-				ArtificialNeuron.learningRate += 0.05;
+				ArtificialNeuron.learningRate *= 1.02;
 			}
 
 		};
@@ -151,6 +183,7 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 			public void actionPerformed(ActionEvent paramActionEvent) {
 
 				nnView.nn.trainOneFullIteration();
+				nnView.nn.establishTestingOuputs();
 			}
 
 		};
@@ -177,6 +210,7 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 			public void actionPerformed(ActionEvent paramActionEvent) {
 
 				nnView.nn.trainPattern(trainingPatternIndex++);
+				nnView.nn.establishTestingOuputs();
 			}
 
 		};
