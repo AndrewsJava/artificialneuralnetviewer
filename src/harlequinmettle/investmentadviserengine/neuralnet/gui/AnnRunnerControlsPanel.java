@@ -170,6 +170,8 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				nnView.nn.randomizeAllWeights();
+				nnView.nn.establishTestingOuputs();
+				nnView.nn.establishTrainingOutputs();
 			}
 
 		};
@@ -184,6 +186,7 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 
 				nnView.nn.trainOneFullIteration();
 				nnView.nn.establishTestingOuputs();
+				nnView.nn.establishTrainingOutputs();
 			}
 
 		};
@@ -211,6 +214,7 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 
 				nnView.nn.trainPattern(trainingPatternIndex++);
 				nnView.nn.establishTestingOuputs();
+				nnView.nn.establishTrainingOutputs();
 			}
 
 		};

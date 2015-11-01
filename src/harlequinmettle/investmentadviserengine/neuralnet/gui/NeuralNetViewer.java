@@ -18,6 +18,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 public class NeuralNetViewer {
+
 	private String appTitle = "Neural Net Training";
 
 	int defaultHiddenLayerNeuronCount = 4;
@@ -26,13 +27,20 @@ public class NeuralNetViewer {
 	DataGrapher dataDisplayer;
 	TreeSet<String> lineOptions = new TreeSet<String>();
 
+	String testingPointsTitle = "testing";
+	String targetTitle = "target";
+	String outputTitle = "output";
+	String errorLine = "error";
+
 	public NeuralNetViewer() {
+
+		resetNN();
+
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				showGui();
 			}
 		});
-		resetNN();
 		// setEstaablishedOutputInDataSet();
 		nn.learningDamper = 0.9999f;
 		startGuiThread();
@@ -49,10 +57,7 @@ public class NeuralNetViewer {
 	}
 
 	private void countinuousNeuralNetDataUpdater() {
-		// String inputTitle = "inputs";
-		String testingPointsTitle = "testing";
-		String targetTitle = "target";
-		String outputTitle = "output";
+		lineOptions.add(errorLine);
 		lineOptions.add(testingPointsTitle);
 		lineOptions.add(targetTitle);
 		lineOptions.add(outputTitle);
@@ -167,8 +172,8 @@ public class NeuralNetViewer {
 	}
 
 	public void resetNN() {
-		nnData = new DataSetNoisyInputsNoisyTargetsSin(1, 15, 60);
-		nn = new FeedForwardWithBackPropagation(nnData, defaultHiddenLayerNeuronCount);
+		nnData = new DataSetNoisyInputsNoisyTargetsSin(-10, 10, 60);
+		nn = new FeedForwardWithBackPropagation(nnData, 9);
 
 	}
 }

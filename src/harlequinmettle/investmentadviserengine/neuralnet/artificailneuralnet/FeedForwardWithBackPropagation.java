@@ -61,7 +61,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	}
 
 	// Oct 28, 2015 1:58:32 PM
-	private void establishTrainingOutputs() {
+	public void establishTrainingOutputs() {
 		for (int i = 0; i < dataSet.numberDataSets; i++) {
 
 			float[] inputPattern = dataSet.trainingInputs.get(i);
@@ -103,6 +103,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		for (int i = 0; i < dataSet.numberDataSets; i++) {
 			trainPattern(i);
 		}
+		establishTrainingOutputs();
 	}
 
 	// Oct 19, 2015 11:56:19 AM
@@ -191,6 +192,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		// set inputs and establish outputs
 		feedforward(inputPattern);
 		dataSet.trainingOutputs.put(i, getCurrentOutputArray());
+
 		backProagate(targetOutput);
 		storeCurrentIterationOutputError_s_(i);
 		applyWeightChanges();

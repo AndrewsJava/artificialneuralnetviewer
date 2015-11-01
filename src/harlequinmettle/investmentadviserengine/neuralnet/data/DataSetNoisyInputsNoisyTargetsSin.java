@@ -43,12 +43,45 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet {
 	private void buildNoisySinTargetTrainingSetWithNoiseInputs(float start, float end, float pointsCount) {
 		float increment = (end - start) / pointsCount;
 
-		float magnitude = 1;
+		float magnitude = 0.01f;
 		for (float f = start; f < end; f += increment) {
+			addPointsVeryNearForTest(f, increment);
 			float noise = (float) (-magnitude + 2 * Math.random() * magnitude);
 			Float targetOut = new Float((float) (Math.sin(f) + noise));
 			float[] inputPattern = generateInputPattern(f);
 			addTargetOutputWithOptionalNumberInputs(targetOut, inputPattern);
 		}
+	}
+
+	// Nov 1, 2015 7:39:20 AM
+	private void addPointsVeryNearForTest(float f, float increment) {
+		float pointCount = 20;
+		float interval = 0.48e-6f;// Float.MIN_VALUE * 1e12f;
+		float start = f - pointCount / 2 * interval;
+		float end = f + pointCount / 2 * interval;
+
+		for (float near = start; near < end; near += interval) {
+
+			float[] inputPattern = generateInputPattern(near);
+			addTestInput(inputPattern);
+
+		}
+
+	}
+
+	// Nov 1, 2015 7:39:20 AM
+	private void addPointsVeryNearForTesta(float f, float increment) {
+		float pointCount = 20;
+		float start = f - increment / 10000;
+		float end = f + increment / 10000;
+		float range = end - start;
+		float interval = range / pointCount;
+		for (float near = start; near < end; near += interval) {
+
+			float[] inputPattern = generateInputPattern(near);
+			addTestInput(inputPattern);
+
+		}
+
 	}
 }

@@ -15,7 +15,7 @@ public class ArtificialneuralNetBuilderPanel extends JPanel {
 		this.neuralNetViewer = neuralNetViewer;
 		setLayout(new BorderLayout());
 
-		add(controlls.vpanel, BorderLayout.WEST);
+		add(controlls.view, BorderLayout.WEST);
 		add(nnview, BorderLayout.CENTER);
 	}
 
