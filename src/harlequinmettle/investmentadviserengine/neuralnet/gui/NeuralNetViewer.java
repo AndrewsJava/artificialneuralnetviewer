@@ -136,18 +136,21 @@ public class NeuralNetViewer {
 
 	// Oct 21, 2015 11:48:20 AM
 	private void showGui() {
-		// JFrame fullScreen = JFrameFactory.displayFullScreenJFrame(appTitle);
+
 		JFrame fullScreen = JFrameFactory.displayFullScreenPrimaryApplicationJFrame(appTitle);
 		JTabbedPane tabs = new JTabbedPane();
-		dataDisplayer = new DataGrapher();
+		fullScreen.add(tabs);
+
 		JPanel annRunner = new JPanel(new BorderLayout());
+		tabs.addTab("ANN Runner", annRunner);
+
+		ArtificialneuralNetBuilderPanel annControlTab = new ArtificialneuralNetBuilderPanel(this);
+		tabs.addTab("ANN Builder", annControlTab);
+
+		dataDisplayer = new DataGrapher();
 		annRunner.add(dataDisplayer, BorderLayout.CENTER);
 		annRunner.add(generateAnnRunnerPanel(), BorderLayout.WEST);
-		tabs.addTab("ANN Runner", annRunner);
-		ArtificialneuralNetBuilderPanel annControlTab = new ArtificialneuralNetBuilderPanel(this);
-		// tabs.setTabPlacement(JTabbedPane.RIGHT);
-		tabs.addTab("ANN Builder", annControlTab);
-		fullScreen.add(tabs);
+
 		fullScreen.pack();
 	}
 
@@ -166,14 +169,16 @@ public class NeuralNetViewer {
 	// Oct 21, 2015 10:56:51 AM
 
 	public void resetNN(DataSet dataSet, FeedForwardWithBackPropagation nn) {
+		System.out.println("RESETTING NN...");
 		this.nnData = dataSet;
 		this.nn = nn;
-
+		// this.nn.establishTrainingOutputs();
+		// this.nn.establishTestingOuputs();
 	}
 
 	public void resetNN() {
 		nnData = new DataSetNoisyInputsNoisyTargetsSin(-10, 10, 60);
-		nn = new FeedForwardWithBackPropagation(nnData, 9);
+		nn = new FeedForwardWithBackPropagation(nnData, 8, 0, 0);
 
 	}
 }

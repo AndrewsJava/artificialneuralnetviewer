@@ -155,6 +155,8 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	}
 
 	private void display(float error) {
+		if (true)
+			return;
 		// Oct 19, 2015 1:11:58 PM
 		if (overrideOutput) {
 			System.out.println("AVG ERROR: " + error);

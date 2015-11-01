@@ -109,7 +109,10 @@ public class ArtificailNeuralNetFramework implements Serializable {
 	private void buildHiddenLayers(int[] hiddenLayerNeuronCounts) {
 		// Oct 16, 2015 11:19:42 AM
 		for (int layerCount : hiddenLayerNeuronCounts)
-			addHiddenLayer(layerCount);
+			if (layerCount <= 0)
+				continue;
+			else
+				addHiddenLayer(layerCount);
 	}
 
 	// Oct 16, 2015 11:23:43 AM
