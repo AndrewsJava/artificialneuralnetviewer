@@ -1,6 +1,7 @@
 // Oct 21, 2015 10:56:51 AM
 package harlequinmettle.investmentadviserengine.neuralnet.gui;
 
+import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
 import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.FeedForwardWithBackPropagation;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetNoisyInputsNoisyTargetsSin;
@@ -75,8 +76,13 @@ public class NeuralNetViewer {
 			dataDisplayer.addData(outputTitle, inputs, getOutputPointsAsArray());
 			dataDisplayer.addData(testingPointsTitle, testingInputs, getTestingDataOutputPointsAsArray());
 			if (nnData.ssqError == nnData.ssqError)
-				if (nnData.ssqError != lastError)
+				if (nnData.ssqError != lastError) {
 					dataDisplayer.addErrorPoint(nnData.ssqError);
+
+					dataDisplayer.addDisplayText("error: ", "" + String.format("%1$-10.2f", nnData.ssqError));
+
+				}
+			dataDisplayer.addDisplayText("learn rt: ", "" + String.format("%1$-10.2f", ArtificialNeuron.learningRate));
 			lastError = nnData.ssqError;
 			dataDisplayer.repaint();
 		}
@@ -178,7 +184,7 @@ public class NeuralNetViewer {
 
 	public void resetNN() {
 		nnData = new DataSetNoisyInputsNoisyTargetsSin(-10, 10, 60);
-		nn = new FeedForwardWithBackPropagation(nnData, 8, 0, 0);
+		nn = new FeedForwardWithBackPropagation(nnData, 24, 14, 4);
 
 	}
 }

@@ -148,6 +148,7 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				nnView.resetNN();
+				nnView.dataDisplayer.colors.clear();
 			}
 
 		};

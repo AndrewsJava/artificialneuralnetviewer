@@ -122,7 +122,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		try {
 			nnTrainingThread.join();
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		stopRequested.set(false);
 		nnTrainingThread = new Thread(new Runnable() {
