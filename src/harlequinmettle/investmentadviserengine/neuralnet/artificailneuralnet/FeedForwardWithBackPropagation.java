@@ -3,6 +3,7 @@ package harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet;
 
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetConnection;
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetLayer;
+import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetWeight;
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetXOR;
@@ -91,6 +92,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 			fullDataSetTrainingIterations++;
 			trainOneFullIteration();
 			establishTestingOuputs();
+			ArtificialNeuralNetWeight.momentum *= (learningDamper);
 			ArtificialNeuron.learningRate *= learningDamper;
 			checkTotalError();
 
@@ -155,12 +157,12 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 	}
 
 	private void display(float error) {
-		if (true)
-			return;
+
 		// Oct 19, 2015 1:11:58 PM
 		if (overrideOutput) {
-			System.out.println("AVG ERROR: " + error);
-			System.out.println(fullDataSetTrainingIterations + "\n----------------\n ");
+			// System.out.println("AVG ERROR: " + error);
+			// System.out.println(fullDataSetTrainingIterations +
+			// "\n----------------\n ");
 			return;
 		}
 		for (int i = 0; i < dataSet.numberDataSets; i++) {

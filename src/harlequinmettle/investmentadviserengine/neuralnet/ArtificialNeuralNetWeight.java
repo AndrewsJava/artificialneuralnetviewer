@@ -12,6 +12,10 @@ public class ArtificialNeuralNetWeight implements Serializable {
 
 	public float weightChange;
 
+	public static float momentum = 0.9f;
+
+	public float lastWeightChange = 0;
+
 	public ArtificialNeuralNetWeight() {
 		// randomizeToPositive();
 		randomize();
@@ -30,6 +34,8 @@ public class ArtificialNeuralNetWeight implements Serializable {
 	public void applyWeightChange() {
 
 		weight += weightChange;
+		weight += momentum * lastWeightChange;
+		lastWeightChange = weightChange;
 		weightChange = 0;
 	}
 

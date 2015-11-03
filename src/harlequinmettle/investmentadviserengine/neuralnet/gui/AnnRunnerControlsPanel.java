@@ -2,7 +2,6 @@
 package harlequinmettle.investmentadviserengine.neuralnet.gui;
 
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
-import harlequinmettle.utils.guitools.JLabelFactory;
 import harlequinmettle.utils.guitools.VerticalJPanel;
 
 import java.awt.Component;
@@ -10,8 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentSkipListMap;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,8 +24,8 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		addCheckboxesForDrawTypes();
 		add(generateSingleTrainingIterationButton());
 		add(generateSingleTrainingSetIterationButton());
-		add(generateStartButton());
-		add(generateStopButton());
+		add(generateStartStopButton());
+		// add(generateStopButton());
 		add(generateLearningRateBumperButton());
 		add(generateRandomizeWeightsButton());
 		add(generatePrintNNButton());
@@ -105,38 +102,22 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		return button;
 	}
 
-	private Component generateStartButton() {
+	private Component generateStartStopButton() {
 
-		JButton button = new JButton("Start Training");
-		button.addActionListener(getStartActionListner());
+		JButton button = new JButton("Start/Stop Training");
+		button.addActionListener(getStartStopActionListner());
 		return button;
 	}
 
-	private Component generateStopButton() {
-
-		JButton button = new JButton("Stop Training");
-		button.addActionListener(getStopActionListner());
-		return button;
-	}
-
-	private ActionListener getStartActionListner() {
+	private ActionListener getStartStopActionListner() {
 		return new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
-				nnView.nn.startNNTrainingThread();
-			}
-
-		};
-	}
-
-	private ActionListener getStopActionListner() {
-		return new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent paramActionEvent) {
-				nnView.nn.stopRequested.set(true);
-
+				if (nnView.nn.nnTrainingThread != null && nnView.nn.nnTrainingThread.isAlive())
+					nnView.nn.stopRequested.set(true);
+				else
+					nnView.nn.startNNTrainingThread();
 			}
 
 		};
@@ -219,21 +200,6 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 			}
 
 		};
-	}
-
-	private void startStateLabelUpdateThread() {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-
-				ConcurrentSkipListMap<String, String> nnState = nnView.nn.getState();
-				for (Entry<String, String> ent : nnState.entrySet())
-					// TODO: display state
-					add(JLabelFactory.doBluishJLabel("label1"));
-			}
-
-		}).start();
 	}
 
 }
