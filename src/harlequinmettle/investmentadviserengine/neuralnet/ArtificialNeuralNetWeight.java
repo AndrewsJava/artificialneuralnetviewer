@@ -35,16 +35,24 @@ public class ArtificialNeuralNetWeight implements Serializable {
 
 		weight += weightChange;
 		weight += momentum * lastWeightChange;
+	}
+
+	public void revertWeightChange() {
+
+		weight -= weightChange;
+		weight -= momentum * lastWeightChange;
+		weightChange = lastWeightChange;
+		// lastWeightChange = savedLastWeightChange
+	}
+
+	public void commitWeightChange() {
+
 		lastWeightChange = weightChange;
 		weightChange = 0;
 	}
 
-	public void randomizeToPositive() {
-		weight = (float) (Math.random());
-	}
-
 	public void randomize() {
-		weight = (float) (2 * Math.random() - 1);
+		weight = (float) (2 * Math.random() - 1) * 0.5f;
 	}
 
 	public void randomize(float min, float max) {

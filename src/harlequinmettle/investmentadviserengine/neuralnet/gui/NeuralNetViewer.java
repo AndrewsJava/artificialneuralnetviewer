@@ -20,7 +20,15 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 public class NeuralNetViewer {
-
+	// / TODO: ADAPTIVE NEURONS AND LAYERS
+	// / TODO: NOT FULLY CONNECTED IE MERGED SMALL NN
+	// / TODO: RECURSIVE INPUT AS OUTPUT ESP TIME SERIES
+	// / TODO: batch vs online learning
+	// / TODO:
+	// / TODO:
+	// / TODO:
+	// / TODO:
+	// / TODO:
 	private String appTitle = "Neural Net Training";
 
 	int defaultHiddenLayerNeuronCount = 4;
@@ -43,7 +51,6 @@ public class NeuralNetViewer {
 				showGui();
 			}
 		});
-		// setEstaablishedOutputInDataSet();
 		nn.learningDamper = 0.9999f;
 		startGuiThread();
 	}
@@ -77,16 +84,14 @@ public class NeuralNetViewer {
 			SystemTool.takeABreak(300);
 			dataDisplayer.addData(outputTitle, inputs, getOutputPointsAsArray());
 			dataDisplayer.addData(testingPointsTitle, testingInputs, getTestingDataOutputPointsAsArray());
-			if (nnData.ssqError == nnData.ssqError)
-				if (nnData.ssqError != lastError) {
-					dataDisplayer.addErrorPoint(nnData.ssqError);
-
-					dataDisplayer.addDisplayText("error: ", "" + String.format("%1$-10.2f", nnData.ssqError));
+			if (nnData.avgError == nnData.avgError)
+				if (nnData.avgError != lastError) {
+					dataDisplayer.addDisplayText("error: ", "" + String.format("%1$-10.2f", nnData.avgError));
 
 				}
 			dataDisplayer.addDisplayText("learn rt: ", "" + String.format("%1$-10.2f", ArtificialNeuron.learningRate));
 			dataDisplayer.addDisplayText("mtm: ", "" + String.format("%1$-10.2f", ArtificialNeuralNetWeight.momentum));
-			lastError = nnData.ssqError;
+			lastError = nnData.avgError;
 			dataDisplayer.repaint();
 		}
 	}
@@ -158,16 +163,10 @@ public class NeuralNetViewer {
 
 		dataDisplayer = new DataGrapher();
 		annRunner.add(dataDisplayer, BorderLayout.CENTER);
-		annRunner.add(generateAnnRunnerPanel(), BorderLayout.WEST);
+
+		annRunner.add(new AnnRunnerControlsPanel(this), BorderLayout.WEST);
 
 		fullScreen.pack();
-	}
-
-	private JPanel generateAnnRunnerPanel() {
-		// Oct 27, 2015 10:45:39 AM
-		JPanel annRunnerControlsPanel = new AnnRunnerControlsPanel(this);
-
-		return annRunnerControlsPanel;
 	}
 
 	public static void main(String[] args) {
@@ -178,16 +177,16 @@ public class NeuralNetViewer {
 	// Oct 21, 2015 10:56:51 AM
 
 	public void resetNN(DataSet dataSet, FeedForwardWithBackPropagation nn) {
-		System.out.println("RESETTING NN...");
+
 		this.nnData = dataSet;
 		this.nn = nn;
-		// this.nn.establishTrainingOutputs();
-		// this.nn.establishTestingOuputs();
+		this.nn.establishTrainingOutputs();
+		this.nn.establishTestingOuputs();
 	}
 
 	public void resetNN() {
 		nnData = new DataSetNoisyInputsNoisyTargetsSin(-10, 10, 60);
-		nn = new FeedForwardWithBackPropagation(nnData, 14, 5);
+		nn = new FeedForwardWithBackPropagation(nnData, 18, 14);
 
 	}
 }

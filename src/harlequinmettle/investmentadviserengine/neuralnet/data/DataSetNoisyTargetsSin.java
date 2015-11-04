@@ -1,10 +1,12 @@
 // Oct 21, 2015 8:08:08 AM
 package harlequinmettle.investmentadviserengine.neuralnet.data;
 
+import java.io.Serializable;
 
-public class DataSetNoisyTargetsSin extends DataSet {
+public class DataSetNoisyTargetsSin extends DataSet implements Serializable {
 	// Oct 21, 2015 8:08:08 AM
 
+	private static final long serialVersionUID = 6716381762817300831L;
 	float start = -4;
 	float end = 4;
 	float pointsCount = 60;

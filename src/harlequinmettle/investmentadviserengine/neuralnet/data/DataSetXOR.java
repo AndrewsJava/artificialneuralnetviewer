@@ -1,8 +1,12 @@
 // Oct 16, 2015 10:51:12 AM
 package harlequinmettle.investmentadviserengine.neuralnet.data;
 
-public class DataSetXOR extends DataSet {
+import java.io.Serializable;
+
+public class DataSetXOR extends DataSet implements Serializable {
 	// Oct 16, 2015 10:51:12 AM
+
+	private static final long serialVersionUID = -7221331957032760710L;
 
 	public DataSetXOR() {
 		// Oct 16, 2015 10:39:47 AM

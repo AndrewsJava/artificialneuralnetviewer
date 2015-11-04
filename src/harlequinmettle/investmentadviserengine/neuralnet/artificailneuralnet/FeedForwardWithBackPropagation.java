@@ -147,8 +147,9 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 			return;
 		dataSet.ssqError = totalError;
 		float avgError = totalError / currentFullTrainingSetOutputErrors.size();
-		minError.checkMinError(avgError);
-		if (minError.wasLastCheckMinError) {
+
+		dataSet.avgError = avgError;
+		if (minError.isSetMinError(avgError)) {
 			display(avgError);
 		}
 		// if (totalError < 0.1 && totalError > 0.02)
@@ -156,13 +157,9 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		errorIsTooLargeToStop.set(avgError > acceptibleAverageError || fullDataSetTrainingIterations < 2);
 	}
 
+	// Oct 19, 2015 1:11:58 PM
 	private void display(float error) {
-
-		// Oct 19, 2015 1:11:58 PM
 		if (overrideOutput) {
-			// System.out.println("AVG ERROR: " + error);
-			// System.out.println(fullDataSetTrainingIterations +
-			// "\n----------------\n ");
 			return;
 		}
 		for (int i = 0; i < dataSet.numberDataSets; i++) {
@@ -170,8 +167,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 			float[] targetOutput = dataSet.targets.get(i);
 			float[] actualOutput = dataSet.trainingOutputs.get(i);
 			String STRING_NUMBER_FORMAT = "%1$-15s|  %2$-10.2f\n ";
-			// for (float f : inputPattern)
-			// System.out.format(STRING_NUMBER_FORMAT, "input: ", f);
+
 			System.out.println("input: " + Arrays.toString(inputPattern));
 			for (float f : targetOutput)
 				System.out.format(STRING_NUMBER_FORMAT, "target:                                    ", f);
@@ -200,14 +196,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		backProagate(targetOutput);
 		storeCurrentIterationOutputError_s_(i);
 		applyWeightChanges();
-		setCurrentNNState();
-	}
 
-	private void setCurrentNNState() {
-		// Oct 28, 2015 11:22:30 AM
-
-		float avgError = dataSet.ssqError / currentFullTrainingSetOutputErrors.size();
-		nnState.put("avgError", "" + avgError);
 	}
 
 	// Oct 19, 2015 1:23:56 PM
@@ -291,9 +280,40 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		}
 	}
 
-	public ConcurrentSkipListMap<String, String> getState() {
-		// Oct 28, 2015 11:15:58 AM
-		return nnState;
+	private void commitWeightChanges() {
+
+		for (ArtificialNeuron neuron : outputLayer.neuronsInLayer) {
+			for (ArtificialNeuralNetConnection connection : neuron.inputConnections) {
+
+				connection.weight.commitWeightChange();
+			}
+		}
+		for (ArtificialNeuralNetLayer layer : hiddenLayers) {
+			for (ArtificialNeuron neuron : layer.neuronsInLayer) {
+				for (ArtificialNeuralNetConnection connection : neuron.inputConnections) {
+
+					connection.weight.commitWeightChange();
+				}
+			}
+		}
+	}
+
+	private void revertWeightChanges() {
+
+		for (ArtificialNeuron neuron : outputLayer.neuronsInLayer) {
+			for (ArtificialNeuralNetConnection connection : neuron.inputConnections) {
+
+				connection.weight.revertWeightChange();
+			}
+		}
+		for (ArtificialNeuralNetLayer layer : hiddenLayers) {
+			for (ArtificialNeuron neuron : layer.neuronsInLayer) {
+				for (ArtificialNeuralNetConnection connection : neuron.inputConnections) {
+
+					connection.weight.revertWeightChange();
+				}
+			}
+		}
 	}
 
 }

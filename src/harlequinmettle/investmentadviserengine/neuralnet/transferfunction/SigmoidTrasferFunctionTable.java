@@ -1,23 +1,28 @@
 // Oct 25, 2015 8:56:43 AM
 package harlequinmettle.investmentadviserengine.neuralnet.transferfunction;
 
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-public class SigmoidTrasferFunctionTable extends SigmoidTransferFunction {
+public class SigmoidTrasferFunctionTable implements Serializable {
 
+	private static final long serialVersionUID = -6752691464343565057L;
 	private static final ConcurrentSkipListMap<Float, Float> sigmoidFunctionTable = new ConcurrentSkipListMap<Float, Float>();
 	private static final ConcurrentSkipListMap<Float, Float> sigmoidDerivativeFunctionTable = new ConcurrentSkipListMap<Float, Float>();
-
-	// Oct 25, 2015 8:57:58 AM
-	public SigmoidTrasferFunctionTable() {
+	static {
+		SigmoidTransferFunction fn = new SigmoidTransferFunction();
 		float min = -100;
 		float max = 100;
 		float tableSize = 5000;
 		float increment = (max - min) / tableSize;
 		for (float input = min; input < max; input += increment) {
-			sigmoidFunctionTable.put(input, calculateOutput(input));
-			sigmoidDerivativeFunctionTable.put(input, super.getDerivative(input));
+			sigmoidFunctionTable.put(input, fn.calculateOutput(input));
+			sigmoidDerivativeFunctionTable.put(input, fn.getDerivative(input));
 		}
+	}
+
+	// Oct 25, 2015 8:57:58 AM
+	public SigmoidTrasferFunctionTable() {
 	}
 
 	public float getOutput(float input) {

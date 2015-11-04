@@ -1,8 +1,11 @@
 // Oct 27, 2015 11:51:45 AM
 package harlequinmettle.investmentadviserengine.neuralnet.data;
 
-public class DataSetNoisyInputsNoisyTargetsSin extends DataSet {
+import java.io.Serializable;
 
+public class DataSetNoisyInputsNoisyTargetsSin extends DataSet implements Serializable {
+
+	private static final long serialVersionUID = -2795220404710467533L;
 	float start = -4;
 	float end = 4;
 	float pointsCount = 30;
@@ -35,11 +38,11 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet {
 	}
 
 	private void buildNoisySinTestingSet() {
-		// extend the range and double the points count for test set
-		float range = end - start;
-		start = start - 0.45f * range;
-		end = end + 0.45f * range;
-		pointsCount *= 80f;
+		float start, end, pointsCount;
+		float range = this.end - this.start;
+		start = this.start - 0.35f * range;
+		end = this.end + 0.35f * range;
+		pointsCount = this.pointsCount * 20f;
 		float increment = (end - start) / pointsCount;
 
 		for (float f = start; f < end; f += increment) {
@@ -48,9 +51,9 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet {
 		}
 	}
 
+	// Oct 31, 2015 9:40:05 AM
 	private float[] generateInputPattern(float f) {
-		// Oct 31, 2015 9:40:05 AM
-		float[] input = { f, (float) (2.2 * Math.random()) };
+		float[] input = { f, (float) (0.2 * Math.random()) };
 		return input;
 	}
 

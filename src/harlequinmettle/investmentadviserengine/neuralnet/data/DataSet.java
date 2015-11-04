@@ -1,11 +1,14 @@
 // Oct 16, 2015 10:39:02 AM
 package harlequinmettle.investmentadviserengine.neuralnet.data;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class DataSet {
+public class DataSet implements Serializable {
+
+	private static final long serialVersionUID = -317418868477704016L;
 	// TODO : DATA NORMALIZATION
 	public int numberDataSets = 0;
 	public int numberTestDataSets = 0;
@@ -16,6 +19,7 @@ public class DataSet {
 	public ConcurrentSkipListMap<Integer, float[]> trainingOutputs = new ConcurrentSkipListMap<Integer, float[]>();
 	public CopyOnWriteArrayList<float[]> targets = new CopyOnWriteArrayList<float[]>();
 	public float ssqError = Float.NaN;
+	public float avgError = Float.NaN;
 
 	// Oct 21, 2015 9:34:20 AM
 	@Override

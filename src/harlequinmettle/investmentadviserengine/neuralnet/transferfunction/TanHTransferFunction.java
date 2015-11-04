@@ -1,7 +1,11 @@
 // Oct 25, 2015 1:33:53 PM
 package harlequinmettle.investmentadviserengine.neuralnet.transferfunction;
 
-public class TanHTransferFunction {
+import java.io.Serializable;
+
+public class TanHTransferFunction implements Serializable {
+
+	private static final long serialVersionUID = -468693869937826047L;
 	private float lastInput = Float.NaN;
 	private float tanhCache = Float.NaN;
 
