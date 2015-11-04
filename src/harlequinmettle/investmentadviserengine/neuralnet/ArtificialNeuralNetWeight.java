@@ -8,18 +8,21 @@ public class ArtificialNeuralNetWeight implements Serializable {
 
 	private static final long serialVersionUID = -4968994540746410966L;
 
-	public float weight;
+	volatile public float weight;
 
-	public float weightChange;
+	volatile public float weightChange;
 
-	public static float momentum = 0.9f;
+	volatile public static float momentum = 0.9f;
 
-	public float lastWeightChange = 0;
+	volatile public float lastWeightChange = 0;
 
 	public ArtificialNeuralNetWeight() {
-		// randomizeToPositive();
 		randomize();
 		this.weightChange = 0;
+	}
+
+	public ArtificialNeuralNetWeight(int incommingLayerSize) {
+		randomize((float) (1f / Math.sqrt(incommingLayerSize)));
 	}
 
 	public ArtificialNeuralNetWeight(float value) {
@@ -53,6 +56,14 @@ public class ArtificialNeuralNetWeight implements Serializable {
 
 	public void randomize() {
 		weight = (float) (2 * Math.random() - 1) * 0.5f;
+	}
+
+	public void randomize(float oneOverSqrtConnectionCount) {
+		weight = (float) (2 * oneOverSqrtConnectionCount * Math.random() - oneOverSqrtConnectionCount);
+	}
+
+	public void randomizeRelativeToExisting(float magnitude) {
+		weight += (float) (2 * Math.random() - 1) * magnitude * weight;
 	}
 
 	public void randomize(float min, float max) {

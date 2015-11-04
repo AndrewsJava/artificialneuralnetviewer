@@ -21,8 +21,8 @@ public class ArtificialNeuralNetConnection extends ArtificialNeuralNetConnection
 		super(fromNeuron, toNeuron, wt);
 	}
 
-	public ArtificialNeuralNetConnection(ArtificialNeuron fromNeuron, ArtificialNeuron toNeuron, ArtificialNeuralNetWeight weight) {
-		super(fromNeuron, toNeuron, weight);
+	public ArtificialNeuralNetConnection(ArtificialNeuron fromNeuron, ArtificialNeuron toNeuron, int incommingLayerSize) {
+		super(fromNeuron, toNeuron, incommingLayerSize);
 	}
 
 	public float getWeightedInput() {

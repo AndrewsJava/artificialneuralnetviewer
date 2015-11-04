@@ -151,7 +151,7 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
-				nnView.nn.randomizeAllWeights();
+				nnView.nn.randomizeAllWeights(0.5f);
 				nnView.nn.establishTestingOuputs();
 				nnView.nn.establishTrainingOutputs();
 			}

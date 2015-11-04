@@ -14,6 +14,12 @@ public class ArtificialNeuralNetConnectionModel implements Serializable {
 		this.weight = new ArtificialNeuralNetWeight();
 	}
 
+	public ArtificialNeuralNetConnectionModel(ArtificialNeuron fromNeuron, ArtificialNeuron toNeuron, int incommingLayerSize) {
+		this.fromNeuron = fromNeuron;
+		this.toNeuron = toNeuron;
+		this.weight = new ArtificialNeuralNetWeight(incommingLayerSize);
+	}
+
 	public ArtificialNeuralNetConnectionModel(ArtificialNeuron fromNeuron, ArtificialNeuron toNeuron, float wt) {
 		this.fromNeuron = fromNeuron;
 		this.toNeuron = toNeuron;

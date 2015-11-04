@@ -11,11 +11,10 @@ import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.investmentadviserengine.util.TimeDateTool;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implements Serializable {
+public class FeedForwardWithBackPropagation extends ArtificailNeuralNetExtensions implements Serializable {
 
 	private static final long serialVersionUID = 2712275468608016163L;
 	public AtomicBoolean stopRequested = new AtomicBoolean(true);
@@ -157,30 +156,15 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		errorIsTooLargeToStop.set(avgError > acceptibleAverageError || fullDataSetTrainingIterations < 2);
 	}
 
-	// Oct 19, 2015 1:11:58 PM
-	private void display(float error) {
-		if (overrideOutput) {
-			return;
-		}
-		for (int i = 0; i < dataSet.numberDataSets; i++) {
-			float[] inputPattern = dataSet.trainingInputs.get(i);
-			float[] targetOutput = dataSet.targets.get(i);
-			float[] actualOutput = dataSet.trainingOutputs.get(i);
-			String STRING_NUMBER_FORMAT = "%1$-15s|  %2$-10.2f\n ";
+	public void trainBatch(int i) {
 
-			System.out.println("input: " + Arrays.toString(inputPattern));
-			for (float f : targetOutput)
-				System.out.format(STRING_NUMBER_FORMAT, "target:                                    ", f);
-			for (float f : actualOutput)
-				System.out.format(STRING_NUMBER_FORMAT, "actual:                                    ", f);
-		}
-		System.out.println("AVG ERROR: " + error);
-		System.out.println("errors: ");
-		for (float[] errors : currentFullTrainingSetOutputErrors.values())
-			System.out.print(" : " + Arrays.toString(errors));
-		System.out.println();
-		System.out.println(fullDataSetTrainingIterations + "\n----------------\n ");
+		i = i % dataSet.numberDataSets;
 
+		float[] inputPattern = dataSet.trainingInputs.get(i);
+		// set inputs and establish outputs
+		feedforward(inputPattern);
+		dataSet.trainingOutputs.put(i, getCurrentOutputArray());
+		storeCurrentIterationOutputError_s_(i);
 	}
 
 	// Oct 19, 2015 9:33:39 AM
@@ -247,18 +231,18 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		}
 	}
 
-	public void randomizeAllWeights() {
+	public void randomizeAllWeights(float magnitude) {
 		errorIsTooLargeToStop.set(true);
 		for (ArtificialNeuron neuron : outputLayer.neuronsInLayer) {
 			for (ArtificialNeuralNetConnection connection : neuron.inputConnections) {
-				connection.weight.randomize();
+				connection.weight.randomizeRelativeToExisting(magnitude);
 			}
 		}
 
 		for (ArtificialNeuralNetLayer layer : hiddenLayers) {
 			for (ArtificialNeuron neuron : layer.neuronsInLayer) {
 				for (ArtificialNeuralNetConnection connection : neuron.inputConnections) {
-					connection.weight.randomize();
+					connection.weight.randomizeRelativeToExisting(magnitude);
 				}
 			}
 		}

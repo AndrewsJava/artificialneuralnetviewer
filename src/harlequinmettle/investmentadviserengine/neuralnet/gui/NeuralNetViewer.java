@@ -13,10 +13,10 @@ import harlequinmettle.utils.guitools.JFrameFactory;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 public class NeuralNetViewer {
@@ -24,7 +24,7 @@ public class NeuralNetViewer {
 	// / TODO: NOT FULLY CONNECTED IE MERGED SMALL NN
 	// / TODO: RECURSIVE INPUT AS OUTPUT ESP TIME SERIES
 	// / TODO: batch vs online learning
-	// / TODO:
+	// / TODO: SAVE NN
 	// / TODO:
 	// / TODO:
 	// / TODO:
@@ -41,6 +41,7 @@ public class NeuralNetViewer {
 	String targetTitle = "target";
 	String outputTitle = "output";
 	String errorLine = "error";
+	AtomicBoolean displayThreadStopRequested = new AtomicBoolean(false);
 
 	public NeuralNetViewer() {
 
@@ -57,7 +58,9 @@ public class NeuralNetViewer {
 
 	// Oct 21, 2015 12:07:07 PM
 	private void startGuiThread() {
-
+		if (displayThreadStopRequested.get())
+			SystemTool.takeABreak(500);
+		displayThreadStopRequested.set(false);
 		new Thread(new Runnable() {
 			public void run() {
 				countinuousNeuralNetDataUpdater();
@@ -81,6 +84,8 @@ public class NeuralNetViewer {
 		dataDisplayer.addDisplayText("mtm: ", "" + String.format("%1$-10.2f", ArtificialNeuralNetWeight.momentum));
 		float lastError = Float.NEGATIVE_INFINITY;
 		while (true) {
+			if (displayThreadStopRequested.get())
+				break;
 			SystemTool.takeABreak(300);
 			dataDisplayer.addData(outputTitle, inputs, getOutputPointsAsArray());
 			dataDisplayer.addData(testingPointsTitle, testingInputs, getTestingDataOutputPointsAsArray());
@@ -152,19 +157,18 @@ public class NeuralNetViewer {
 	private void showGui() {
 
 		JFrame fullScreen = JFrameFactory.displayFullScreenPrimaryApplicationJFrame(appTitle);
-		JTabbedPane tabs = new JTabbedPane();
-		fullScreen.add(tabs);
 
 		JPanel annRunner = new JPanel(new BorderLayout());
-		tabs.addTab("ANN Runner", annRunner);
+		fullScreen.add(annRunner);
 
-		ArtificialneuralNetBuilderPanel annControlTab = new ArtificialneuralNetBuilderPanel(this);
-		tabs.addTab("ANN Builder", annControlTab);
+		NNBuilderInterfacePanel nnBuilder = new NNBuilderInterfacePanel(this);
+		annRunner.add(nnBuilder.vpanel, BorderLayout.NORTH);
+
+		AnnRunnerControlsPanel runnerControls = new AnnRunnerControlsPanel(this);
+		annRunner.add(runnerControls, BorderLayout.WEST);
 
 		dataDisplayer = new DataGrapher();
 		annRunner.add(dataDisplayer, BorderLayout.CENTER);
-
-		annRunner.add(new AnnRunnerControlsPanel(this), BorderLayout.WEST);
 
 		fullScreen.pack();
 	}
@@ -177,16 +181,17 @@ public class NeuralNetViewer {
 	// Oct 21, 2015 10:56:51 AM
 
 	public void resetNN(DataSet dataSet, FeedForwardWithBackPropagation nn) {
-
+		displayThreadStopRequested.set(true);
 		this.nnData = dataSet;
 		this.nn = nn;
-		this.nn.establishTrainingOutputs();
-		this.nn.establishTestingOuputs();
+		startGuiThread();
 	}
 
 	public void resetNN() {
+		displayThreadStopRequested.set(true);
 		nnData = new DataSetNoisyInputsNoisyTargetsSin(-10, 10, 60);
-		nn = new FeedForwardWithBackPropagation(nnData, 18, 14);
+		nn = new FeedForwardWithBackPropagation(nnData, 12, 2);
 
+		startGuiThread();
 	}
 }

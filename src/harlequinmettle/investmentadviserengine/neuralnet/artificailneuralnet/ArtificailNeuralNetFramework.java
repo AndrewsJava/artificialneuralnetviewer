@@ -19,7 +19,7 @@ public class ArtificailNeuralNetFramework implements Serializable {
 	CopyOnWriteArrayList<ArtificialNeuralNetLayer> hiddenLayers = new CopyOnWriteArrayList<ArtificialNeuralNetLayer>();
 	public static final boolean MAKE_INPUT_LAYER = true;
 	protected static int defaultHiddenLayerNeuronCount = 4;
-	protected DataSet dataSet;
+	public DataSet dataSet;
 
 	// protected TrainingAlgorithm trainingMechanism;
 
@@ -97,7 +97,7 @@ public class ArtificailNeuralNetFramework implements Serializable {
 		for (ArtificialNeuron fromNeuron : layer1.neuronsInLayer) {
 			for (ArtificialNeuron toNeuron : layer2.neuronsInLayer) {
 
-				ArtificialNeuralNetConnection connection = new ArtificialNeuralNetConnection(fromNeuron, toNeuron);
+				ArtificialNeuralNetConnection connection = new ArtificialNeuralNetConnection(fromNeuron, toNeuron, layer1.neuronsInLayer.size());
 
 				toNeuron.inputConnections.add(connection);
 				fromNeuron.outputConnections.add(connection);
