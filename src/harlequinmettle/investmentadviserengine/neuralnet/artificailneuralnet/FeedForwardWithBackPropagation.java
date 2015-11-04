@@ -196,6 +196,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNet implemen
 		backProagate(targetOutput);
 		storeCurrentIterationOutputError_s_(i);
 		applyWeightChanges();
+		commitWeightChanges();
 
 	}
 
