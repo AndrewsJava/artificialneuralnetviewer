@@ -25,8 +25,9 @@ public class DataSetNoisyTargetsSin extends DataSet implements Serializable {
 		for (float f = start; f < end; f += increment) {
 			// addNoisySinDataMappingToTrainingSet(f, (float) (Math.sin(f) +
 			// Global.random() * 0.2));
-
-			addTargetOutputWithOptionalNumberInputs((float) (Math.sin(f) + Global.random() * 0.2), f);
+			float[] t = { (float) (Math.sin(f) + Global.random() * 0.2) };
+			float[] ff = { f };
+			addTargetWithInputs(t, ff);
 		}
 	}
 

@@ -15,13 +15,22 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet implements Serial
 	private float sinNormalizationOffset = Float.NaN;
 
 	public DataSetNoisyInputsNoisyTargetsSin(float start, float end, float pointsCount) {
-		// Oct 27, 2015 11:54:13 AM
 		this.start = start;
 		this.end = end;
 		this.pointsCount = pointsCount;
+		constructDataSet();
+	}
+
+	public DataSetNoisyInputsNoisyTargetsSin() {
+		constructDataSet();
+	}
+
+	private void constructDataSet() {
 		normalizeInput();
 		buildNoisySinTargetTrainingSetWithNoiseInputs();
 		buildNoisySinTestingSet();
+		// normalizeInputs();
+		// normalizeTargets();
 	}
 
 	private void normalizeInput() {
@@ -30,13 +39,6 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet implements Serial
 		sinNormalizationOffset = 0;// start * 0.5f;
 		start = -1;
 		end = 1;
-	}
-
-	public DataSetNoisyInputsNoisyTargetsSin() {
-		// Oct 27, 2015 11:54:13 AM
-		normalizeInput();
-		buildNoisySinTargetTrainingSetWithNoiseInputs();
-		buildNoisySinTestingSet();
 	}
 
 	private void buildNoisySinTestingSet() {
@@ -67,8 +69,9 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet implements Serial
 		for (float f = start; f < end; f += increment) {
 			addPointsVeryNearForTest(f, increment);
 			Float targetOut = getTargetOutput(f);
+			float[] t = { targetOut };
 			float[] inputPattern = generateInputPattern(f);
-			addTargetOutputWithOptionalNumberInputs(targetOut, inputPattern);
+			addTargetWithInputs(t, inputPattern);
 		}
 	}
 

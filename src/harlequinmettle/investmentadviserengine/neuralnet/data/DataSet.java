@@ -41,10 +41,10 @@ public class DataSet implements Serializable {
 
 		testingInputs.add(in);
 		numberTestDataSets++;
-		addToNormalizationSets(in, inputNormalizationMinMax);
+		calculateForNormalization(in, inputNormalizationMinMax);
 	}
 
-	private void addToNormalizationSets(float[] data, ConcurrentSkipListMap<Integer, MinMax> normalizationSets) {
+	private void calculateForNormalization(float[] data, ConcurrentSkipListMap<Integer, MinMax> normalizationSets) {
 		// Nov 5, 2015 11:45:47 AM
 		for (int i = 0; i < data.length; i++) {
 			if (normalizationSets.containsKey(i)) {
@@ -57,27 +57,20 @@ public class DataSet implements Serializable {
 		}
 	}
 
-	protected void addTargetOutputWithOptionalNumberInputs(float[] out, float[] in) {
+	protected void addTargetWithInputs(float[] out, float[] in) {
 		trainingInputs.add(in);
 		targets.add(out);
 		numberDataSets++;
-		addToNormalizationSets(in, inputNormalizationMinMax);
-		addToNormalizationSets(out, targetNormalizationMinMax);
-	}
-
-	protected void addTargetOutputWithOptionalNumberInputs(Float out, float... in) {
-		float[] input = in;
-		float[] output = { out };
-		trainingInputs.add(input);
-		targets.add(output);
-		numberDataSets++;
+		calculateForNormalization(in, inputNormalizationMinMax);
+		calculateForNormalization(out, targetNormalizationMinMax);
 	}
 
 	public void normalizeInputs() {
-
+		normalize(inputNormalizationMinMax, trainingInputs);
 	}
 
 	public void normalizeTargets() {
+		normalize(targetNormalizationMinMax, targets);
 
 	}
 
