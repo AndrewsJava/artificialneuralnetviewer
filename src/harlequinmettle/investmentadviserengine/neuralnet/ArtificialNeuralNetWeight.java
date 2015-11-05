@@ -12,8 +12,6 @@ public class ArtificialNeuralNetWeight implements Serializable {
 
 	volatile public float weightChange;
 
-	volatile public static float momentum = 0.9f;
-
 	volatile public float lastWeightChange = 0;
 
 	public ArtificialNeuralNetWeight() {
@@ -37,13 +35,13 @@ public class ArtificialNeuralNetWeight implements Serializable {
 	public void applyWeightChange() {
 
 		weight += weightChange;
-		weight += momentum * lastWeightChange;
+		weight += Global.momentum * lastWeightChange;
 	}
 
 	public void revertWeightChange() {
 
 		weight -= weightChange;
-		weight -= momentum * lastWeightChange;
+		weight -= Global.momentum * lastWeightChange;
 		weightChange = lastWeightChange;
 		// lastWeightChange = savedLastWeightChange
 	}
@@ -55,18 +53,18 @@ public class ArtificialNeuralNetWeight implements Serializable {
 	}
 
 	public void randomize() {
-		weight = (float) (2 * Math.random() - 1) * 0.5f;
+		weight = (float) (2 * Global.random() - 1) * 0.5f;
 	}
 
 	public void randomize(float oneOverSqrtConnectionCount) {
-		weight = (float) (2 * oneOverSqrtConnectionCount * Math.random() - oneOverSqrtConnectionCount);
+		weight = (float) (2 * oneOverSqrtConnectionCount * Global.random() - oneOverSqrtConnectionCount);
 	}
 
 	public void randomizeRelativeToExisting(float magnitude) {
-		weight += (float) (2 * Math.random() - 1) * magnitude * weight;
+		weight += (float) (2 * Global.random() - 1) * magnitude * weight;
 	}
 
 	public void randomize(float min, float max) {
-		weight = (float) (min + Math.random() * (max - min));
+		weight = (float) (min + Global.random() * (max - min));
 	}
 }

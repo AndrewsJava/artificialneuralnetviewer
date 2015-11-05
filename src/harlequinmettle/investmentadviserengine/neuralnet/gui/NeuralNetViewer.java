@@ -1,8 +1,7 @@
 // Oct 21, 2015 10:56:51 AM
 package harlequinmettle.investmentadviserengine.neuralnet.gui;
 
-import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetWeight;
-import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
+import harlequinmettle.investmentadviserengine.neuralnet.Global;
 import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.FeedForwardWithBackPropagation;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetNoisyInputsNoisyTargetsSin;
@@ -24,7 +23,7 @@ public class NeuralNetViewer {
 	// / TODO: NOT FULLY CONNECTED IE MERGED SMALL NN
 	// / TODO: RECURSIVE INPUT AS OUTPUT ESP TIME SERIES
 	// / TODO: batch vs online learning
-	// / TODO: SAVE NN
+	// / TODO: SAVE/restore NN
 	// / TODO:
 	// / TODO:
 	// / TODO:
@@ -52,7 +51,6 @@ public class NeuralNetViewer {
 				showGui();
 			}
 		});
-		nn.learningDamper = 0.9999f;
 		startGuiThread();
 	}
 
@@ -81,7 +79,7 @@ public class NeuralNetViewer {
 		dataDisplayer.addData(targetTitle, inputs, targets);
 		dataDisplayer.addData(outputTitle, inputs, getOutputPointsAsArray());
 		dataDisplayer.addData(testingPointsTitle, testingInputs, getTestingDataOutputPointsAsArray());
-		dataDisplayer.addDisplayText("mtm: ", "" + String.format("%1$-10.2f", ArtificialNeuralNetWeight.momentum));
+		dataDisplayer.addDisplayText("mtm: ", "" + String.format("%1$-10.2f", Global.momentum));
 		float lastError = Float.NEGATIVE_INFINITY;
 		while (true) {
 			if (displayThreadStopRequested.get())
@@ -94,8 +92,8 @@ public class NeuralNetViewer {
 					dataDisplayer.addDisplayText("error: ", "" + String.format("%1$-10.2f", nnData.avgError));
 
 				}
-			dataDisplayer.addDisplayText("learn rt: ", "" + String.format("%1$-10.2f", ArtificialNeuron.learningRate));
-			dataDisplayer.addDisplayText("mtm: ", "" + String.format("%1$-10.2f", ArtificialNeuralNetWeight.momentum));
+			dataDisplayer.addDisplayText("learn rt: ", "" + String.format("%1$-10.2f", Global.learningRate));
+			dataDisplayer.addDisplayText("mtm: ", "" + String.format("%1$-10.2f", Global.momentum));
 			lastError = nnData.avgError;
 			dataDisplayer.repaint();
 		}
@@ -182,16 +180,15 @@ public class NeuralNetViewer {
 
 	public void resetNN(DataSet dataSet, FeedForwardWithBackPropagation nn) {
 		displayThreadStopRequested.set(true);
+		Global.resetGlobals();
 		this.nnData = dataSet;
 		this.nn = nn;
 		startGuiThread();
 	}
 
 	public void resetNN() {
-		displayThreadStopRequested.set(true);
-		nnData = new DataSetNoisyInputsNoisyTargetsSin(-10, 10, 60);
-		nn = new FeedForwardWithBackPropagation(nnData, 12, 2);
-
-		startGuiThread();
+		DataSetNoisyInputsNoisyTargetsSin dataSet = new DataSetNoisyInputsNoisyTargetsSin(-10, 10, 60);
+		FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(dataSet, 8, 4);
+		resetNN(dataSet, nn);
 	}
 }

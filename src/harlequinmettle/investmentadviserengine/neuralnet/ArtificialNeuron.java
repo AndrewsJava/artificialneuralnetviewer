@@ -12,22 +12,17 @@ public class ArtificialNeuron implements Serializable {
 	String artificialNeuralNetComponentLabel = "ArtificialNeuron_";
 	static AtomicInteger neuronCounter = new AtomicInteger(100000);
 	private static final long serialVersionUID = -5609553171004488643L;
-	volatile public static float learningRate = 0.1F;
 	public static final int INPUT_NEURON_BUILDER_ID = 1005002;
 	public static final int BIAS_NEURON_BUILDER_ID = 2002008;
 	public boolean isBiasNeuron = false;
 	public boolean isInputNeuron = false;
-	// includes BIAS CONNECTION
+
 	public CopyOnWriteArrayList<ArtificialNeuralNetConnection> inputConnections = new CopyOnWriteArrayList<ArtificialNeuralNetConnection>();
 	public CopyOnWriteArrayList<ArtificialNeuralNetConnection> outputConnections = new CopyOnWriteArrayList<ArtificialNeuralNetConnection>();
-	// public ArrayList<ArtificialNeuralNetConnection> biasConnections = new
-	// ArrayList<ArtificialNeuralNetConnection>();
+
 	private ArtificialNeuralNetWeight biasNeuronWeight;
-	// private SigmoidTransferFunction sigmoidTransferFunction = new
-	// SigmoidTransferFunction();
+
 	private TanHTransferFunction neuronTransferFunction = new TanHTransferFunction();
-	// private TanHTransferFunction neuronTransferFunction = new
-	// TanHTransferFunctionTable();
 
 	private float input = Float.NaN;
 	private float output = Float.NaN;
@@ -54,12 +49,11 @@ public class ArtificialNeuron implements Serializable {
 
 	public ArtificialNeuron() {
 		artificialNeuralNetComponentLabel += neuronCounter.addAndGet(1);
-		learningRate = 0.1F;
+
 	}
 
 	// Oct 17, 2015 12:48:16 PM
 	public ArtificialNeuron(int neuronBuildType) {
-		learningRate = 0.1F;
 
 		if (neuronBuildType == BIAS_NEURON_BUILDER_ID)
 			buildNeuronAsBias();
@@ -130,7 +124,7 @@ public class ArtificialNeuron implements Serializable {
 	public void establishWeightChangesByErrorBackpropagation() {
 		for (ArtificialNeuralNetConnection connection : inputConnections) {
 			float incommingSignal = connection.fromNeuron.getEstablishedOutputValue();
-			float weightChange = incommingSignal * error * learningRate;
+			float weightChange = incommingSignal * error * Global.learningRate;
 			connection.weight.setWeightChange(weightChange);
 		}
 	}

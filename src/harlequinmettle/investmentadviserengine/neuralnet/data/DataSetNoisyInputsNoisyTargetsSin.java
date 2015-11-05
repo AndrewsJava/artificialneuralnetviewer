@@ -1,6 +1,8 @@
 // Oct 27, 2015 11:51:45 AM
 package harlequinmettle.investmentadviserengine.neuralnet.data;
 
+import harlequinmettle.investmentadviserengine.neuralnet.Global;
+
 import java.io.Serializable;
 
 public class DataSetNoisyInputsNoisyTargetsSin extends DataSet implements Serializable {
@@ -53,7 +55,7 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet implements Serial
 
 	// Oct 31, 2015 9:40:05 AM
 	private float[] generateInputPattern(float f) {
-		float[] input = { f, (float) (0.2 * Math.random()) };
+		float[] input = { f, (float) (0.2 * Global.random()) };
 		return input;
 	}
 
@@ -72,7 +74,7 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet implements Serial
 	private Float getTargetOutput(float f) {
 		// Nov 2, 2015 8:48:43 AM
 		float magnitude = 0.01f;
-		float noise = (float) (-magnitude + 2 * Math.random() * magnitude);
+		float noise = (float) (-magnitude + 2 * Global.random() * magnitude);
 		Float targetOut = new Float((float) (Math.sin(sinNormalizationFactor * f + sinNormalizationOffset) + noise));
 		return targetOut;
 	}

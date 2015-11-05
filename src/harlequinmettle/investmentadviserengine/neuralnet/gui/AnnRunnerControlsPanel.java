@@ -1,7 +1,7 @@
 // Oct 27, 2015 10:48:27 AM
 package harlequinmettle.investmentadviserengine.neuralnet.gui;
 
-import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
+import harlequinmettle.investmentadviserengine.neuralnet.Global;
 import harlequinmettle.utils.guitools.VerticalJPanel;
 
 import java.awt.Component;
@@ -140,7 +140,7 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
-				ArtificialNeuron.learningRate *= 1.02;
+				Global.boostLearningRate();
 			}
 
 		};
