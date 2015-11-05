@@ -10,7 +10,7 @@ public class TanHTransferFunction implements Serializable {
 	private float tanhCache = Float.NaN;
 
 	public float calculateOutput(float sum) {
-		System.out.println(sum);
+
 		lastInput = sum;
 		tanhCache = (float) Math.tanh(sum);
 		return tanhCache;

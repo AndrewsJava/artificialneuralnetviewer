@@ -91,6 +91,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNetExtension
 			establishTestingOuputs();
 			Global.reduceLearningRate();
 			Global.reduceMomentum();
+
 			checkTotalError();
 
 		}
@@ -146,6 +147,8 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNetExtension
 		float avgError = totalError / currentFullTrainingSetOutputErrors.size();
 
 		dataSet.avgError = avgError;
+		if (Global.learningRate < 0.01 && dataSet.avgError > 0.1)
+			Global.resetGlobals();
 		if (minError.isSetMinError(avgError)) {
 			display(avgError);
 		}

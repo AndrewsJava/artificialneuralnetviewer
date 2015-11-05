@@ -87,7 +87,7 @@ public class ArtificialNeuron implements Serializable {
 	public float establishNeuronOutputFromConnections() {
 
 		if (isInputNeuron) {
-			output = input;// move to initialization
+			output = (float) Math.atan(input);// move to initialization
 			return output;
 		}
 

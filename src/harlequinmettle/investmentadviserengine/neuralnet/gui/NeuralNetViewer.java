@@ -21,6 +21,7 @@ import javax.swing.SwingUtilities;
 public class NeuralNetViewer {
 	// / TODO: ADAPTIVE NEURONS AND LAYERS
 	// / TODO: NOT FULLY CONNECTED IE MERGED SMALL NN
+	// / TODO: variable connections
 	// / TODO: RECURSIVE INPUT AS OUTPUT ESP TIME SERIES
 	// / TODO: batch vs online learning
 	// / TODO: SAVE/restore NN

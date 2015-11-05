@@ -55,7 +55,8 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet implements Serial
 
 	// Oct 31, 2015 9:40:05 AM
 	private float[] generateInputPattern(float f) {
-		float[] input = { f, (float) (0.2 * Global.random()) };
+		// float[] input = { f + (float) (f + 0.052 * Global.random()) };
+		float[] input = { f, (float) (2.2 * Global.random()) };
 		return input;
 	}
 
