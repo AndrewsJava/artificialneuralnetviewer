@@ -20,16 +20,13 @@ public class AnnRunnerControlsPanel extends VerticalJPanel {
 		// Oct 27, 2015 10:48:38 AM
 		this.nnView = nnView;
 
-		add(generateResetButton());
-		addCheckboxesForDrawTypes();
 		add(generateSingleTrainingIterationButton());
 		add(generateSingleTrainingSetIterationButton());
 		add(generateStartStopButton());
-		// add(generateStopButton());
 		add(generateLearningRateBumperButton());
 		add(generateRandomizeWeightsButton());
 		add(generatePrintNNButton());
-		// startStateLabelUpdateThread();
+		addCheckboxesForDrawTypes();
 	}
 
 	private void addCheckboxesForDrawTypes() {

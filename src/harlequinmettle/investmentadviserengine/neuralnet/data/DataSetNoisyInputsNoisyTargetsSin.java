@@ -11,8 +11,8 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet implements Serial
 	float start = -4;
 	float end = 4;
 	float pointsCount = 30;
-	private float sinNormalizationFactor = Float.NaN;
-	private float sinNormalizationOffset = Float.NaN;
+	private float sinNormalizationFactor = 1;
+	private float sinNormalizationOffset = 0;
 
 	public DataSetNoisyInputsNoisyTargetsSin(float start, float end, float pointsCount) {
 		this.start = start;
@@ -26,26 +26,48 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet implements Serial
 	}
 
 	private void constructDataSet() {
-		normalizeInput();
+		// normalizeInput();
 		buildNoisySinTargetTrainingSetWithNoiseInputs();
 		buildNoisySinTestingSet();
-		// normalizeInputs();
-		// normalizeTargets();
+		normalizeInputs();
+		normalizeTargets();
+		normalizeTesting();
 	}
 
-	private void normalizeInput() {
-		// Nov 2, 2015 8:38:25 AM
-		sinNormalizationFactor = 0.5f * (end - start);
-		sinNormalizationOffset = 0;// start * 0.5f;
-		start = -1;
-		end = 1;
+	// Oct 27, 2015 11:51:45 AM
+	private void buildNoisySinTargetTrainingSetWithNoiseInputs() {
+		float increment = (end - start) / pointsCount;
+
+		for (float f = start; f < end; f += increment) {
+			// addPointsVeryNearForTest(f, increment);
+			float targetOut = getTargetOutput(f);
+			float[] t = { 5 * targetOut };
+			float[] inputPattern = generateInputPattern(f);
+			addTargetWithInputs(inputPattern, t);
+		}
+	}
+
+	// Nov 2, 2015 8:48:43 AM
+	private float getTargetOutput(float f) {
+		float magnitude = 0.01f;
+		float noise = (float) (-magnitude + 2 * Global.random() * magnitude);
+		float targetOut = ((float) (Math.sin(sinNormalizationFactor * f + sinNormalizationOffset) + noise));
+		return targetOut;
+	}
+
+	// Oct 31, 2015 9:40:05 AM
+	private float[] generateInputPattern(float f) {
+		float[] input = { f + (float) (f + 0.052 * Global.random()) };
+		// float[] input = { f, (float) (2.0 * Global.random()) };
+		// float[] input = { f };
+		return input;
 	}
 
 	private void buildNoisySinTestingSet() {
 		float start, end, pointsCount;
 		float range = this.end - this.start;
-		start = this.start - 0.35f * range;
-		end = this.end + 0.35f * range;
+		start = this.start - 0.15f * range;
+		end = this.end + 0.15f * range;
 		pointsCount = this.pointsCount * 20f;
 		float increment = (end - start) / pointsCount;
 
@@ -55,38 +77,10 @@ public class DataSetNoisyInputsNoisyTargetsSin extends DataSet implements Serial
 		}
 	}
 
-	// Oct 31, 2015 9:40:05 AM
-	private float[] generateInputPattern(float f) {
-		// float[] input = { f + (float) (f + 0.052 * Global.random()) };
-		float[] input = { f, (float) (2.2 * Global.random()) };
-		return input;
-	}
-
-	// Oct 27, 2015 11:51:45 AM
-	private void buildNoisySinTargetTrainingSetWithNoiseInputs() {
-		float increment = (end - start) / pointsCount;
-
-		for (float f = start; f < end; f += increment) {
-			addPointsVeryNearForTest(f, increment);
-			Float targetOut = getTargetOutput(f);
-			float[] t = { targetOut };
-			float[] inputPattern = generateInputPattern(f);
-			addTargetWithInputs(t, inputPattern);
-		}
-	}
-
-	private Float getTargetOutput(float f) {
-		// Nov 2, 2015 8:48:43 AM
-		float magnitude = 0.01f;
-		float noise = (float) (-magnitude + 2 * Global.random() * magnitude);
-		Float targetOut = new Float((float) (Math.sin(sinNormalizationFactor * f + sinNormalizationOffset) + noise));
-		return targetOut;
-	}
-
 	// Nov 1, 2015 7:39:20 AM
 	private void addPointsVeryNearForTest(float f, float increment) {
 		float pointCount = 20;
-		float interval = 0.48e-6f;// Float.MIN_VALUE * 1e12f;
+		float interval = 0.48e-6f;
 		float start = f - pointCount / 2 * interval;
 		float end = f + pointCount / 2 * interval;
 

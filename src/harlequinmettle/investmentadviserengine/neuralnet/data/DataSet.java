@@ -41,7 +41,7 @@ public class DataSet implements Serializable {
 
 		testingInputs.add(in);
 		numberTestDataSets++;
-		calculateForNormalization(in, inputNormalizationMinMax);
+		// calculateForNormalization(in, inputNormalizationMinMax);
 	}
 
 	private void calculateForNormalization(float[] data, ConcurrentSkipListMap<Integer, MinMax> normalizationSets) {
@@ -57,7 +57,7 @@ public class DataSet implements Serializable {
 		}
 	}
 
-	protected void addTargetWithInputs(float[] out, float[] in) {
+	protected void addTargetWithInputs(float[] in, float[] out) {
 		trainingInputs.add(in);
 		targets.add(out);
 		numberDataSets++;
@@ -65,17 +65,23 @@ public class DataSet implements Serializable {
 		calculateForNormalization(out, targetNormalizationMinMax);
 	}
 
+	public void normalizeTesting() {
+		normalize(inputNormalizationMinMax, testingInputs);
+	}
+
 	public void normalizeInputs() {
 		normalize(inputNormalizationMinMax, trainingInputs);
 	}
 
 	public void normalizeTargets() {
+
 		normalize(targetNormalizationMinMax, targets);
 
 	}
 
 	public static void normalize(ConcurrentSkipListMap<Integer, MinMax> dataDistributions, CopyOnWriteArrayList<float[]> dataToNormalize) {
 
+		System.out.println(dataDistributions);
 		float low = -1;// a
 		float high = 1;// b
 
@@ -85,7 +91,9 @@ public class DataSet implements Serializable {
 			float max = ent.getValue().max;
 			for (float[] originalInput : dataToNormalize) {
 				float originalFeautreInput = originalInput[featureIndex];
+				System.out.print(originalFeautreInput + " ---> ");
 				float normalizedInput = low + ((originalFeautreInput - min) * (high - low) / (max - min));
+				System.out.println(normalizedInput);
 				originalInput[featureIndex] = normalizedInput;
 			}
 		}

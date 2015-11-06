@@ -16,7 +16,7 @@ public class ArtificailNeuralNetFramework implements Serializable {
 	ArtificialNeuron biasNeuron;
 	ArtificialNeuralNetLayer inputLayer;
 	ArtificialNeuralNetLayer outputLayer;
-	CopyOnWriteArrayList<ArtificialNeuralNetLayer> hiddenLayers = new CopyOnWriteArrayList<ArtificialNeuralNetLayer>();
+	public CopyOnWriteArrayList<ArtificialNeuralNetLayer> hiddenLayers = new CopyOnWriteArrayList<ArtificialNeuralNetLayer>();
 	public static final boolean MAKE_INPUT_LAYER = true;
 	protected static int defaultHiddenLayerNeuronCount = 4;
 	public DataSet dataSet;
