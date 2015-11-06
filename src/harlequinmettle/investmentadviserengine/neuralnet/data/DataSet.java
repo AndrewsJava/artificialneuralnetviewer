@@ -5,6 +5,7 @@ import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.Min
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -26,6 +27,11 @@ public class DataSet implements Serializable {
 
 	public ConcurrentSkipListMap<Integer, MinMax> inputNormalizationMinMax = new ConcurrentSkipListMap<Integer, MinMax>();
 	public ConcurrentSkipListMap<Integer, MinMax> targetNormalizationMinMax = new ConcurrentSkipListMap<Integer, MinMax>();
+	public ConcurrentSkipListMap<Integer, CopyOnWriteArrayList<Float>> inputNormalizationSets = new ConcurrentSkipListMap<Integer, CopyOnWriteArrayList<Float>>();
+
+	// public ConcurrentSkipListMap<Integer, CopyOnWriteArrayList<Float>>
+	// targetNormalizationSets = new ConcurrentSkipListMap<Integer,
+	// CopyOnWriteArrayList<Float>>();
 
 	// Oct 21, 2015 9:34:20 AM
 	@Override
@@ -63,6 +69,20 @@ public class DataSet implements Serializable {
 		numberDataSets++;
 		calculateForNormalization(in, inputNormalizationMinMax);
 		calculateForNormalization(out, targetNormalizationMinMax);
+		addToNormalizationSets(in, inputNormalizationSets);
+	}
+
+	private void addToNormalizationSets(float[] data, ConcurrentSkipListMap<Integer, CopyOnWriteArrayList<Float>> normalizationSets) {
+		// Nov 5, 2015 11:45:47 AM
+		for (int i = 0; i < data.length; i++) {
+			if (normalizationSets.containsKey(i)) {
+				normalizationSets.get(i).add(data[i]);
+			} else {
+				CopyOnWriteArrayList<Float> normalizationSet = new CopyOnWriteArrayList<Float>();
+				normalizationSet.add(data[i]);
+				normalizationSets.put(i, normalizationSet);
+			}
+		}
 	}
 
 	public void normalizeTesting() {
@@ -71,12 +91,19 @@ public class DataSet implements Serializable {
 
 	public void normalizeInputs() {
 		normalize(inputNormalizationMinMax, trainingInputs);
+		// / normalizeToStandardDeviation(inputNormalizationSets,
+		// trainingInputs);
 	}
 
 	public void normalizeTargets() {
 
 		normalize(targetNormalizationMinMax, targets);
 
+	}
+
+	public static void normalizeToStandardDeviation(ConcurrentSkipListMap<Integer, CopyOnWriteArrayList<Float>> dataDistributions,
+			Collection<float[]> dataToNormalize) {
+		// TODO: ...
 	}
 
 	public static void normalize(ConcurrentSkipListMap<Integer, MinMax> dataDistributions, CopyOnWriteArrayList<float[]> dataToNormalize) {

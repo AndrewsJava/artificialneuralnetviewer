@@ -25,8 +25,8 @@ public class NeuralNetViewer {
 	// / TODO: RECURSIVE INPUT AS OUTPUT ESP TIME SERIES
 	// / TODO: batch vs online learning
 	// / TODO: SAVE/restore NN
-	// / TODO:
-	// / TODO:
+	// / TODO: purge connections; purge neurons
+	// / TODO: spawn neurons
 	// / TODO:
 	// / TODO:
 	private String appTitle = "Neural Net Training";
