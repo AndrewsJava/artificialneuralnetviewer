@@ -77,6 +77,7 @@ public class NeuralNetViewer {
 		ArrayList<Float> targets = getTargetPointsAsArray();
 		while (dataDisplayer == null)
 			SystemTool.takeABreak(100);
+		dataDisplayer.colors.clear();
 		dataDisplayer.addData(targetTitle, inputs, targets);
 		dataDisplayer.addData(outputTitle, inputs, getOutputPointsAsArray());
 		dataDisplayer.addData(testingPointsTitle, testingInputs, getTestingDataOutputPointsAsArray());
@@ -185,6 +186,7 @@ public class NeuralNetViewer {
 		this.nnData = dataSet;
 		this.nn = nn;
 		startGuiThread();
+
 	}
 
 	public void resetNN() {

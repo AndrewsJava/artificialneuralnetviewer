@@ -108,6 +108,7 @@ public class NNBuilderInterfacePanel {
 		JButtonWithEnterKeyAction create = new JButtonWithEnterKeyAction("Apply");
 		create.addActionListener(getNNCreator());
 		nnLayerCountsPanel.add(create);
+
 	}
 
 	private ActionListener getNNCreator() {

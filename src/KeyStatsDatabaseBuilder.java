@@ -21,6 +21,7 @@ public class KeyStatsDatabaseBuilder {
 	static String alternateFiles = "/home/andrew/Desktop/programming";
 
 	static TreeMap<String, HashMap<String, Float>> database = new TreeMap<String, HashMap<String, Float>>();
+	static TreeMap<String, float[]> inputs = new TreeMap<String, float[]>();
 
 	public static void main(String[] args) {
 		// Oct 29, 2015 9:27:19 AM
@@ -29,8 +30,38 @@ public class KeyStatsDatabaseBuilder {
 
 		// new DownloadKeyStats().extractTableData();
 		// extractDataFromTables();
-		buildDatabaseFromExtractedTables();
-		testDatabaseValues();
+		// buildDatabaseFromExtractedTables();
+		// testDatabaseValues();
+		testKeyStatsData();
+	}
+
+	private static void testKeyStatsData() {
+		database = SerializationTool.deserializeObject(database.getClass(), "obj_database_key_stats");
+		int success = 0;
+		for (Entry<String, HashMap<String, Float>> ent : database.entrySet()) {
+			float[] input = new float[keysToUse.length];
+			Arrays.fill(input, Float.NaN);
+			String ticker = ent.getKey();
+			HashMap<String, Float> data = ent.getValue();
+			int i = 0;
+			for (String key : keysToUse) {
+				System.out.println("\"" + key + "\",//      " + i);
+				Float dataPoint = data.get(key);
+				if (dataPoint == null)
+					continue;
+				input[i++] = data.get(key);
+			}
+			float sum = 0;
+			for (float f : input)
+				sum += f;
+			if (sum == sum)
+				success++;
+			inputs.put(ticker, input);
+		}
+
+		System.out.println();
+		System.out.println();
+
 	}
 
 	// Nov 7, 2015 9:24:33 AM
@@ -47,11 +78,12 @@ public class KeyStatsDatabaseBuilder {
 				dataQuaalitycounter.add(keystats.getValue());
 			}
 		}
-		for (Entry<Float, Integer> ent : dataQuantitycounter.FLOAT_COUNTER.entrySet()) {
-			System.out.println(ent.getKey() + "      " + ent.getValue());
-		}
+		// for (Entry<Float, Integer> ent :
+		// dataQuantitycounter.FLOAT_COUNTER.entrySet()) {
+		// System.out.println(ent.getKey() + "      " + ent.getValue());
+		// }
 		for (Entry<String, Integer> ent : dataQuantitycounter.STRING_COUNTER.entrySet()) {
-			System.out.println(ent.getKey() + "      " + ent.getValue());
+			System.out.println("\"" + ent.getKey() + "\",//      " + ent.getValue());
 		}
 		System.out.println();
 		System.out.println();
@@ -227,4 +259,65 @@ public class KeyStatsDatabaseBuilder {
 			FileTools.tryToWriteCollectionToFileLines(keyStatsFile, lines);
 		}
 	}
+
+	final static String[] keysToUse = {//
+	// "% Held by Insiders :",// 4611
+	// "% Held by Institutions :",// 4624
+	// "Forward P/E  :",// 3174
+	// "Gross Profit (ttm):",// 4190
+	// "Operating Cash Flow (ttm):",// 4348
+	// "Qtrly Earnings Growth (yoy):",// 3179
+	// "Short % of Float  :",// 4216
+	// "EBITDA (ttm) :",// 4148
+	// "Enterprise Value/EBITDA (ttm) :",// 4125
+			"200-Day Moving Average :",// 5233
+			"50-Day Moving Average :",// 5233
+			"52-Week Change :",// 4924
+			"52-Week High  :",// 5241
+			"52-Week Low  :",// 5241
+			"Avg Vol (10 day) :",// 5233
+			"Avg Vol (3 month) :",// 5233
+			"Beta:",// 4545
+			"Book Value Per Share (mrq):",// 5254
+			"Current Ratio (mrq):",// 4623
+			"Diluted EPS (ttm):",// 5211
+			"Enterprise Value  :",// 5188
+			"Enterprise Value/Revenue (ttm) :",// 5024
+			"Fiscal Year Ends:",// 5215
+			"Float:",// 4755
+			"Market Cap (intraday) :",// 5219
+			"Most Recent Quarter (mrq):",// 5223
+			"Net Income Avl to Common (ttm):",// 5215
+			"Operating Margin (ttm):",// 5056
+			"Price/Book (mrq):",// 4948
+			"Price/Sales (ttm):",// 4991
+			"Profit Margin (ttm):",// 4821
+			"Qtrly Revenue Growth (yoy):",// 4918
+			"Return on Assets (ttm):",// 4925
+			"Return on Equity (ttm):",// 4798
+			"Revenue (ttm):",// 5060
+			"Revenue Per Share (ttm):",// 5019
+			"S P500 52-Week Change :",// 5233
+			"Shares Outstanding :",// 5219
+			"Shares Short  :",// 5088
+			"Shares Short (prior month) :",// 5074
+			"Short Ratio  :",// 4786
+			"Total Cash (mrq):",// 5076
+			"Total Cash Per Share (mrq):",// 5054
+			"Total Debt (mrq):",// 5208
+	// "5 Year Average Dividend Yield :",// 8
+	// "Dividend Date :",// 3021
+	// "Ex-Dividend Date :",// 3046
+	// "Forward Annual Dividend Rate :",// 2618
+	// "Forward Annual Dividend Yield :",// 2618
+	// "Forward P/E (fye ) :",// 2
+	// "Last Split Date :",// 2293
+	// "Last Split Factor (new per old) :",// 2293
+	// "Levered Free Cash Flow (ttm):",// 3893
+	// "PEG Ratio (5 yr expected) :",// 3366
+	// "Payout Ratio :",// 1978
+	// "Total Debt/Equity (mrq):",// 3709
+	// "Trailing Annual Dividend Yield :",// 2738
+	// "Trailing P/E :",// 3595
+	};
 }
