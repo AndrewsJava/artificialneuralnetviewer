@@ -6,9 +6,9 @@ import java.util.Random;
 public class Global {
 	// Nov 5, 2015 8:42:04 AM
 	public static final Random random = new Random();
-	private static final float ILR = 0.1F;
+	private static final float ILR = 0.251F;
 	volatile public static float learningRate = 0.1F;
-	private static float learningRateReductionFactor = 0.9999F;
+	private static float learningRateReductionFactor = 0.9995F;
 	private static float learningRateIncreaseFactor = 1.02F;
 
 	private static final float IM = 0.9F;
