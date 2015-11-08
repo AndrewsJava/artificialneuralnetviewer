@@ -28,12 +28,12 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 
 		int success = 0;
 		for (Entry<String, HashMap<String, Float>> ent : database.entrySet()) {
-			float[] input = new float[keysToUse.length];
+			float[] input = new float[KeyStatsDatabaseBuilder.keysToUse.length];
 			Arrays.fill(input, Float.NaN);
 			String ticker = ent.getKey();
 			HashMap<String, Float> data = ent.getValue();
 			int i = 0;
-			for (String key : keysToUse) {
+			for (String key : KeyStatsDatabaseBuilder.keysToUse) {
 				Float dataPoint = data.get(key);
 				if (dataPoint == null)
 					continue;
@@ -47,7 +47,7 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 			inputs.put(ticker, input);
 		}
 		int i = 0;
-		for (String key : keysToUse)
+		for (String key : KeyStatsDatabaseBuilder.keysToUse)
 			System.out.println("\"" + key + "\",//      " + i++);
 		System.out.println(success);
 		System.out.println(inputs.size());
@@ -255,43 +255,6 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 		}
 	}
 
-	final static String[] keysToUse = {//
-	"200-Day Moving Average",// 5233
-			"50-Day Moving Average",// 5233
-			"52-Week Change",// 4924
-			"52-Week High",// 5241
-			"52-Week Low",// 5241
-			"Avg Vol 10 day",// 5233
-			"Avg Vol 3 month",// 5233
-			"Beta",// 4545
-			"Book Value Per Share mrq",// 5254
-			"Diluted EPS ttm",// 5211
-			"Enterprise Value",// 5188
-			"Enterprise Value/Revenue ttm",// 5024
-			"Fiscal Year Ends",// 5215
-			"Float",// 4755
-			"Market Cap intraday",// 5219
-			"Most Recent Quarter mrq",// 5223
-			"Net Income Avl to Common ttm",// 5215
-			"Operating Cash Flow ttm",// 4348
-			"Operating Margin ttm",// 5056
-			"Price/Book mrq",// 4948
-			"Price/Sales ttm",// 4991
-			"Profit Margin ttm",// 4821
-			"Qtrly Revenue Growth yoy",// 4918
-			"Return on Assets ttm",// 4925
-			"Return on Equity ttm",// 4798
-			"Revenue Per Share ttm",// 5019
-			"Revenue ttm",// 5060
-			"S P500 52-Week Change",// 5233
-			"Shares Outstanding",// 5219
-			"Shares Short",// 5088
-			"Shares Short prior month",// 5074
-			"Short Ratio",// 4786
-			"Total Cash Per Share mrq",// 5054
-			"Total Cash mrq",// 5076
-			"Total Debt mrq",// 5208
-	};
 	// "% Held by Insiders",// 4611
 	// "% Held by Institutions",// 4624
 	// "5 Year Average Dividend Yield",// 8
