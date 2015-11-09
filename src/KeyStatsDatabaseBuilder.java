@@ -30,17 +30,21 @@ public class KeyStatsDatabaseBuilder extends KeyStatsDatabaseDownloadAndTableExt
 		inputs = SerializationTool.deserializeObject(inputs.getClass(), "obj_database_inputs_key_stats");
 
 		System.out.println(keysToUse.length + " , ");
-		TreeSet<Integer> useKeys = new TreeSet<Integer>();
+		HashSet<HashSet<Integer>> useKeys = new HashSet<HashSet<Integer>>();
 		TreeMap<Double, Set<Integer>> optimum = new TreeMap<Double, Set<Integer>>();
-		for (int i = 0; i < keysToUse.length; i++) {
-			useKeys.add(i);
+		for (int i = 0; i < keysToUse.length - 1; i++) {
+			for (int j = 1 + i; j < keysToUse.length; j++) {
+				HashSet<Integer> subset = new HashSet<Integer>();
+				subset.add(i);
+				subset.add(j);
+				useKeys.add(subset);
+			}
+
 		}
-		Set<Set<Integer>> powerSet = new TreeSet<Set<Integer>>();
-		buildComboSet(powerSet, useKeys, 10);
-		for (Set<Integer> set : powerSet) {
+		for (Set<Integer> set : useKeys) {
 
 			for (int i : set)
-				System.out.print(keysToUse[i] + " , ");
+				System.out.print("[" + keysToUse[i] + "] ");
 			System.out.println();
 			TreeSet<String> quailityData = new TreeSet<String>();
 			for (Entry<String, float[]> keystats : inputs.entrySet()) {
@@ -50,19 +54,15 @@ public class KeyStatsDatabaseBuilder extends KeyStatsDatabaseDownloadAndTableExt
 					continue;
 				quailityData.add(keystats.getKey());
 			}
-			Double key = quailityData.size() + 5 * set.size() + Math.random() / 100;
+			Double key = quailityData.size() + Math.random() / 100;
 			optimum.put(key, set);
 		}
-		for (Set<Integer> subset : optimum.values()) {
-			for (int i : subset)
-				System.out.print("  " + keysToUse[i]);
+		for (Entry<Double, Set<Integer>> subset : optimum.entrySet()) {
+			System.out.print("  " + subset.getKey().intValue());
+			for (int i : subset.getValue())
+				System.out.print("  [" + keysToUse[i] + "] ");
 			System.out.println();
 		}
-
-	}
-
-	private static void buildComboSet(Set<Set<Integer>> powerSet, TreeSet<Integer> useKeys, int i) {
-		// Nov 8, 2015 12:09:22 PM
 
 	}
 
@@ -176,12 +176,12 @@ public class KeyStatsDatabaseBuilder extends KeyStatsDatabaseDownloadAndTableExt
 			"Diluted EPS ttm",// 5211
 			"Enterprise Value",// 5188
 			"Enterprise Value/Revenue ttm",// 5024
-			"Fiscal Year Ends",// 5215
+			// "Fiscal Year Ends",// 5215
 			"Float",// 4755
 			"Market Cap intraday",// 5219
-			"Most Recent Quarter mrq",// 5223
+			// "Most Recent Quarter mrq",// 5223
 			"Net Income Avl to Common ttm",// 5215
-			"Operating Cash Flow ttm",// 4348
+			// "Operating Cash Flow ttm",// 4348
 			"Operating Margin ttm",// 5056
 			"Price/Book mrq",// 4948
 			"Price/Sales ttm",// 4991

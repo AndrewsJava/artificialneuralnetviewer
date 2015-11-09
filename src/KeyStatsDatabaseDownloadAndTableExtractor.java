@@ -17,6 +17,16 @@ import java.util.TreeSet;
 // Nov 8, 2015 12:13:03 PM
 
 public class KeyStatsDatabaseDownloadAndTableExtractor {
+	public static void main(String[] args) {
+		// Oct 29, 2015 9:27:19 AM
+
+		// extractDataFromTables();
+		// buildDatabaseFromExtractedTables();
+		// testDatabaseValues();
+		buildInputDataFromKeyStats();
+
+	}
+
 	static String alternateFiles = "/home/andrew/Desktop/programming";
 
 	static TreeMap<String, HashMap<String, Float>> database = new TreeMap<String, HashMap<String, Float>>();
@@ -36,8 +46,9 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 			for (String key : KeyStatsDatabaseBuilder.keysToUse) {
 				Float dataPoint = data.get(key);
 				if (dataPoint == null)
-					continue;
-				input[i++] = data.get(key);
+					i++;
+				else
+					input[i++] = data.get(key);
 			}
 			float sum = 0;
 			for (float f : input)
@@ -118,7 +129,7 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 				if (f != f) {
 					continue;
 				}
-				float dataValue = (float) (NumberTool.roundToSignificantFigures2(f, f));
+				float dataValue = (float) (NumberTool.roundToSignificantFigures3(f, f));
 				addData(ticker, key, dataValue);
 			}
 		}
@@ -133,7 +144,8 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 			keyStats = new HashMap<String, Float>();
 		keyStats.put(key, value);
 		database.put(ticker, keyStats);
-
+		// System.out.println(ticker + "  :    " + key +
+		// "                          " + value);
 	}
 
 	private static void extractDataFromTables() {
