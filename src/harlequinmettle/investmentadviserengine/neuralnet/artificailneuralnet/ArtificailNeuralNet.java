@@ -46,9 +46,8 @@ public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements
 	}
 
 	// Oct 17, 2015 11:57:49 AM
-	public float[] establishOutput() {
+	public void establishOutput() {
 
-		float[] output = new float[outputLayer.neuronsInLayer.size()];
 		for (ArtificialNeuron neuron : inputLayer.neuronsInLayer) {
 			neuron.establishNeuronOutputFromConnections();
 		}
@@ -57,12 +56,10 @@ public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements
 				neuron.establishNeuronOutputFromConnections();
 			}
 		}
-		int i = 0;
 		for (ArtificialNeuron neuron : outputLayer.neuronsInLayer) {
-			output[i] = neuron.establishNeuronOutputFromConnections();
-			i++;
+			neuron.establishNeuronOutputFromConnections();
+
 		}
-		return output;
 	}
 
 }
