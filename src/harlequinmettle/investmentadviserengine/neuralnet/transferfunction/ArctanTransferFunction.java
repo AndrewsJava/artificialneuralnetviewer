@@ -1,9 +1,11 @@
 // Oct 30, 2015 9:09:14 AM
 package harlequinmettle.investmentadviserengine.neuralnet.transferfunction;
 
+import harlequinmettle.investmentadviserengine.neuralnet.TransferFunction;
+
 import java.io.Serializable;
 
-public class ArctanTransferFunction implements Serializable {
+public class ArctanTransferFunction implements Serializable, TransferFunction {
 
 	private static final long serialVersionUID = 2810048426071297534L;
 	// Oct 30, 2015 9:09:14 AM

@@ -1,9 +1,11 @@
 // Oct 17, 2015 11:00:58 AM
 package harlequinmettle.investmentadviserengine.neuralnet.transferfunction;
 
+import harlequinmettle.investmentadviserengine.neuralnet.TransferFunction;
+
 import java.io.Serializable;
 
-public class SigmoidTransferFunction implements Serializable {
+public class SigmoidTransferFunction implements Serializable, TransferFunction {
 
 	private static final long serialVersionUID = 310723662430627233L;
 

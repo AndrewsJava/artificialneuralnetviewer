@@ -35,7 +35,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNetExtension
 
 	public ConcurrentSkipListMap<String, String> nnState = new ConcurrentSkipListMap<String, String>();
 
-	AtomicBoolean errorIsTooLargeToStop = new AtomicBoolean(true);
+	AtomicBoolean isErrorTooLargeToStop = new AtomicBoolean(true);
 
 	private int fullDataSetTrainingIterations = 0;
 
@@ -79,7 +79,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNetExtension
 
 	public void trainArtificialNeuralNet() {
 
-		while (errorIsTooLargeToStop.get()) {
+		while (isErrorTooLargeToStop.get()) {
 
 			if (stopRequested.get())
 				break;
@@ -154,7 +154,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNetExtension
 		}
 		// if (totalError < 0.1 && totalError > 0.02)
 		// ArtificialNeuron.learningRate *= 0.995;
-		errorIsTooLargeToStop.set(avgError > acceptibleAverageError || fullDataSetTrainingIterations < 2);
+		isErrorTooLargeToStop.set(avgError > acceptibleAverageError || fullDataSetTrainingIterations < 2);
 	}
 
 	public void trainBatch(int i) {
@@ -233,7 +233,7 @@ public class FeedForwardWithBackPropagation extends ArtificailNeuralNetExtension
 	}
 
 	public void randomizeAllWeights(float magnitude) {
-		errorIsTooLargeToStop.set(true);
+		isErrorTooLargeToStop.set(true);
 		for (ArtificialNeuron neuron : outputLayer.neuronsInLayer) {
 			for (ArtificialNeuralNetConnection connection : neuron.inputConnections) {
 				connection.weight.randomizeRelativeToExisting(magnitude);

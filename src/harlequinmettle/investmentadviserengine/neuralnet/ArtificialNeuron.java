@@ -22,7 +22,7 @@ public class ArtificialNeuron implements Serializable {
 
 	private ArtificialNeuralNetWeight biasNeuronWeight;
 
-	private TanHTransferFunction neuronTransferFunction = new TanHTransferFunction();
+	private TransferFunction neuronTransferFunction = new TanHTransferFunction();
 
 	private float input = Float.NaN;
 	private float output = Float.NaN;

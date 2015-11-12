@@ -10,6 +10,7 @@ public class TanHTransferFunctionTable implements Serializable {
 	private static final long serialVersionUID = -3245545101423112337L;
 	private static final ConcurrentSkipListMap<Float, Float> tanhFunctionTable = new ConcurrentSkipListMap<Float, Float>();
 	private static final ConcurrentSkipListMap<Float, Float> tanhDerivativeFunctionTable = new ConcurrentSkipListMap<Float, Float>();
+
 	static {
 		TanHTransferFunction fn = new TanHTransferFunction();
 		float min = -100;
