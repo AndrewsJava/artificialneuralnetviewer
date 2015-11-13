@@ -1,71 +1,122 @@
 // Nov 11, 2015 10:26:53 AM
 package harlequinmettle.investmentadviserengine.neuralnet.som;
 
+import java.util.Arrays;
+
 public class SOM {
 
+	final static int trainingClearCategorie[][] = new int[][] { //
+	//
+			{//
+				// 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,//
+
+					1, 1, 0, 0,//
+					1, 1, 0, 0,//
+					0, 0, 0, 0,//
+					0, 0, 0, 0 //
+			},//
+			{//
+				//
+					0, 0, 1, 1,//
+					0, 0, 1, 1, //
+					0, 0, 0, 0,//
+					0, 0, 0, 0 //
+			},//
+			{//
+				//
+					0, 0, 0, 0,//
+					0, 0, 0, 0, //
+					1, 1, 0, 0,//
+					1, 1, 0, 0,//
+			},//
+			{//
+				//
+					0, 0, 0, 0,//
+					0, 0, 0, 0, //
+					0, 0, 1, 1,//
+					0, 0, 1, 1, //
+			},//
+
+	};
+
 	public static void main(String[] args) {
-		final int MAX_CLUSTERS = 2;
-		final int VECTORS = 4;
-		final int VEC_LEN = 4;
-		final double DECAY_RATE = 0.96;
-		final double MIN_ALPHA = 0.01;
 
-		final int Pattern[][] = new int[][] { { 1, 1, 0, 0 }, { 0, 0, 0, 1 }, { 1, 0, 0, 0 }, { 0, 0, 1, 1 } };
+		final int Pattern[][] = new int[][] { //
+		//
+				{ 1, 0, 0, 0 },//
+				{ 0, 0, 0, 1 }, //
+				{ 0, 1, 0, 0 }, //
+				{ 0, 0, 1, 0 } };
 
-		final int Tests[][] = new int[][] { { 1, 0, 0, 1 }, { 0, 1, 1, 0 }, { 1, 0, 1, 0 }, { 0, 1, 0, 1 } };
+		final int Tests[][] = new int[][] { //
+		//
+				{ 1, 0, 0, 1 }, //
+				{ 0, 1, 1, 0 }, //
+				{ 1, 0, 1, 0 },//
+				{ 0, 1, 0, 1 } };
 
-		double Alpha = 0.6;
+		SOM som = new SOM(trainingClearCategorie, trainingClearCategorie);
+		som.Train();
+		som.Test();
 
-		SOM som = new SOM(VECTORS, MAX_CLUSTERS, Alpha, MIN_ALPHA, DECAY_RATE, VEC_LEN);
-		som.Train(Pattern, Tests);
-		som.Test(Pattern, Tests);
-
-		System.out.println("Iterations: " + som.Iterations() + "\n");
+		System.out.println("Iterations: " + som.mIterations + "\n");
 	}
 
 	private int mVectors;
 	private int mVecLen;
-	private int maxClusters;
-	private double minAlpha;
-	private double mAlpha;
-	private double decayRate;
+	private int maxClusters = 4;
+	private double minAlpha = 0.01;
+	private double mAlpha = 0.96;
+	private double decayRate = 0.999;
 	private int mIterations;
-	private double D[];
+	private double euclidianDistances[];
 
-	private double w[][] = new double[][] { { 0.2, 0.6, 0.5, 0.9 }, { 0.8, 0.4, 0.7, 0.3 } };
+	private int pattern[][];
+	private int tests[][];
+	private double weights[][] = new double[][] { { 0.2, 0.6, 0.5, 0.9 }, { 0.8, 0.4, 0.7, 0.3 } };
 
-	public SOM(int numVectors, int Maximum_Clusters, double Alpha_Start, double Minimum_Alpha, double Decay_Rate, int Vector_Length) {
-		mVectors = numVectors;
-		mVecLen = Vector_Length;
-		mAlpha = Alpha_Start;
-		minAlpha = Minimum_Alpha;
-		decayRate = Decay_Rate;
+	public SOM(int[][] pattern, int[][] tests) {
+		this.pattern = pattern;
+		this.tests = tests;
+		mVectors = pattern.length;
+		mVecLen = pattern[0].length;
+		randomWeights();
 		mIterations = 0;
-		maxClusters = Maximum_Clusters;
-		D = new double[maxClusters];
-		return;
+		euclidianDistances = new double[maxClusters];
+
 	}
 
-	public void Train(int Patterns[][], int TrainingTests[][]) {
-		int Iterations = 0;
+	private void randomWeights() {
+		// Nov 13, 2015 8:41:48 AM
+		weights = new double[maxClusters][mVecLen];
+		for (int i = 0; i < maxClusters; i++) {
+			for (int j = 0; j < mVecLen; j++) {
+				weights[i][j] = Math.random();
+			}
+		}
+
+	}
+
+	public void Train() {
+
 		int i;
 		int VecNum;
 		int DMin;
 
 		while (mAlpha > minAlpha) {
-			Iterations += 1;
+			mIterations += 1;
 
 			for (VecNum = 0; VecNum < mVectors; VecNum++) {
 				// Compute input.
-				ComputeInput(VecNum, TrainingTests);
+				computeEuclideanDistances(VecNum);
 
 				// See which is smaller, D(0) or D(1)?
-				DMin = Minimum(D[0], D[1]);
+				DMin = indexOfMinDistance(euclidianDistances);
 				// System.out.println("Closest is D(" + DMin + ")");
 
 				// Update the weights on the winning unit.
 				for (i = 0; i < mVectors; i++) {
-					w[DMin][i] = w[DMin][i] + (mAlpha * (Patterns[VecNum][i] - w[DMin][i]));
+					weights[DMin][i] = weights[DMin][i] + (mAlpha * (pattern[VecNum][i] - weights[DMin][i]));
 					// System.out.println(" w(" + i + ")= " + w[DMin][i]);
 				}
 
@@ -78,7 +129,20 @@ public class SOM {
 		return;
 	}
 
-	public void Test(int Patterns[][], int TrainingTests[][]) {
+	private int indexOfMinDistance(double[] dist) {
+		// Nov 13, 2015 8:38:03 AM
+		int index = 0;
+		double min = Double.POSITIVE_INFINITY;
+		for (int i = 0; i < dist.length; i++) {
+			if (dist[i] < min) {
+				min = dist[i];
+				index = i;
+			}
+		}
+		return index;
+	}
+
+	public void Test() {
 		int i, j;
 		int VecNum;
 		int DMin;
@@ -89,14 +153,14 @@ public class SOM {
 
 		for (VecNum = 0; VecNum < mVectors; VecNum++) {
 			// Compute input.
-			ComputeInput(VecNum, TrainingTests);
+			computeEuclideanDistances(VecNum);
 
 			// See which is smaller, D(0) or D(1)?
-			DMin = Minimum(D[0], D[1]);
+			DMin = indexOfMinDistance(euclidianDistances);
 
 			System.out.print("\nVector ( ");
 			for (i = 0; i < mVectors; i++) {
-				System.out.print(Patterns[VecNum][i] + ", ");
+				System.out.print(pattern[VecNum][i] + ", ");
 			} // i
 			System.out.println(") fits into category " + DMin);
 		} // VecNum
@@ -106,7 +170,7 @@ public class SOM {
 		for (i = 0; i < maxClusters; i++) {
 			System.out.println("Weights for Node " + i + " connections:");
 			for (j = 0; j < mVecLen; j++) {
-				System.out.print(dfm.format(w[i][j]) + ", ");
+				System.out.print(dfm.format(weights[i][j]) + ", ");
 			} // j
 			System.out.println();
 		} // i
@@ -115,14 +179,14 @@ public class SOM {
 		System.out.println("Categorized test input:");
 		for (VecNum = 0; VecNum < mVectors; VecNum++) {
 			// Compute input.
-			ComputeInput(VecNum, TrainingTests);
+			computeEuclideanDistances(VecNum);
 
 			// See which is smaller, D(0) or D(1)?
-			DMin = Minimum(D[0], D[1]);
+			DMin = indexOfMinDistance(euclidianDistances);
 
 			System.out.print("\nVector ( ");
 			for (i = 0; i < mVectors; i++) {
-				System.out.print(TrainingTests[VecNum][i] + ", ");
+				System.out.print(tests[VecNum][i] + ", ");
 			} // i
 			System.out.println(") fits into category " + DMin);
 
@@ -130,30 +194,16 @@ public class SOM {
 		return;
 	}
 
-	private void ComputeInput(int VectorNumber, int Training_Tests[][]) {
+	private void computeEuclideanDistances(int testInputIndex) {
 		int i, j;
-
-		D[0] = 0.0;
-		D[1] = 0.0;
+		Arrays.fill(euclidianDistances, 0);
 		for (i = 0; i < maxClusters; i++) {
 			for (j = 0; j < mVectors; j++) {
-				D[i] += Math.pow((w[i][j] - Training_Tests[VectorNumber][j]), 2);
+				euclidianDistances[i] += Math.pow((weights[i][j] - tests[testInputIndex][j]), 2);
 				// System.out.println("D= " + D[i]);
-			} // j
-		} // i
-		return;
-	}
-
-	private int Minimum(double ValueA, double ValueB) {
-		if (ValueA > ValueB) {
-			return 1;
-		} else {
-			return 0;
+			}
 		}
-	}
-
-	public int Iterations() {
-		return mIterations;
+		return;
 	}
 
 }
