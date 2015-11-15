@@ -1,12 +1,12 @@
 // Oct 16, 2015 11:55:26 AM
-package harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet;
+package harlequinmettle.investmentadviserengine.neuralnet.feedforwardwithbackprop;
 
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetConnection;
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetLayer;
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
-import harlequinmettle.investmentadviserengine.neuralnet.Global;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetXOR;
+import harlequinmettle.investmentadviserengine.neuralnet.util.Global;
 import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.investmentadviserengine.util.TimeDateTool;
 

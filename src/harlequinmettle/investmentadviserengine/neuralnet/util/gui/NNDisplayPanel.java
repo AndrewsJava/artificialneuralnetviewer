@@ -1,5 +1,5 @@
 // Oct 31, 2015 10:48:53 AM
-package harlequinmettle.investmentadviserengine.neuralnet.gui;
+package harlequinmettle.investmentadviserengine.neuralnet.util.gui;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;

@@ -1,0 +1,15 @@
+// Nov 15, 2015 10:53:24 AM
+package harlequinmettle.investmentadviserengine.neuralnet.data;
+
+public class SimpleSelfOrganizingMapData extends DataSet {
+
+	private static final long serialVersionUID = -288520097661771137L;
+
+	public SimpleSelfOrganizingMapData() {
+		float[] input1 = { 1, 1, 1 };
+		addInputForSelfOrgainizingMap(input1);
+		float[] input2 = { -1, -1, -1 };
+		addInputForSelfOrgainizingMap(input2);
+	}
+
+}

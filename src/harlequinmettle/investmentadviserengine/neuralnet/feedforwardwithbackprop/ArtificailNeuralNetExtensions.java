@@ -1,5 +1,5 @@
 // Nov 4, 2015 10:01:33 AM
-package harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet;
+package harlequinmettle.investmentadviserengine.neuralnet.feedforwardwithbackprop;
 
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetConnection;
 import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetLayer;

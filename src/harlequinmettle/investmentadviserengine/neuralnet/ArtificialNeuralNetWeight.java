@@ -1,6 +1,8 @@
 // Oct 17, 2015 9:00:41 AM
 package harlequinmettle.investmentadviserengine.neuralnet;
 
+import harlequinmettle.investmentadviserengine.neuralnet.util.Global;
+
 import java.io.Serializable;
 
 public class ArtificialNeuralNetWeight implements Serializable {

@@ -1,5 +1,5 @@
 // Nov 11, 2015 11:04:01 AM
-package harlequinmettle.investmentadviserengine.neuralnet.som;
+package harlequinmettle.investmentadviserengine.neuralnet.util.prelim.som;
 
 public class SOM2 {
 	private static final int MAX_CLUSTERS = 5;

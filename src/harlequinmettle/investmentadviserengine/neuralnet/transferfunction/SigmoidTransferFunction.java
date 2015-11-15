@@ -1,7 +1,7 @@
 // Oct 17, 2015 11:00:58 AM
 package harlequinmettle.investmentadviserengine.neuralnet.transferfunction;
 
-import harlequinmettle.investmentadviserengine.neuralnet.TransferFunction;
+import harlequinmettle.investmentadviserengine.neuralnet.util.TransferFunction;
 
 import java.io.Serializable;
 

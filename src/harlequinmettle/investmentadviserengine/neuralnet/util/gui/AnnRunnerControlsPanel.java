@@ -1,7 +1,7 @@
 // Oct 27, 2015 10:48:27 AM
-package harlequinmettle.investmentadviserengine.neuralnet.gui;
+package harlequinmettle.investmentadviserengine.neuralnet.util.gui;
 
-import harlequinmettle.investmentadviserengine.neuralnet.Global;
+import harlequinmettle.investmentadviserengine.neuralnet.util.Global;
 import harlequinmettle.utils.guitools.VerticalJPanel;
 
 import java.awt.Component;

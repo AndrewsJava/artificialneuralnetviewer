@@ -1,7 +1,7 @@
 // Oct 21, 2015 8:08:08 AM
 package harlequinmettle.investmentadviserengine.neuralnet.data;
 
-import harlequinmettle.investmentadviserengine.neuralnet.Global;
+import harlequinmettle.investmentadviserengine.neuralnet.util.Global;
 
 import java.io.Serializable;
 
@@ -27,7 +27,7 @@ public class DataSetNoisyTargetsSin extends DataSet implements Serializable {
 			// Global.random() * 0.2));
 			float[] target = { (float) (Math.sin(f) + Global.random() * 0.2) };
 			float[] input = { f };
-			addTargetWithInputs(input, target);
+			addInputWithTargetOutput(input, target);
 		}
 	}
 

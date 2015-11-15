@@ -1,5 +1,5 @@
 // Oct 19, 2015 12:12:12 PM
-package harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet;
+package harlequinmettle.investmentadviserengine.neuralnet.feedforwardwithbackprop;
 
 import java.io.Serializable;
 

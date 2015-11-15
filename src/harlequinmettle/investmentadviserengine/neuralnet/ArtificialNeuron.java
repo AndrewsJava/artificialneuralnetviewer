@@ -2,6 +2,8 @@
 package harlequinmettle.investmentadviserengine.neuralnet;
 
 import harlequinmettle.investmentadviserengine.neuralnet.transferfunction.TanHTransferFunction;
+import harlequinmettle.investmentadviserengine.neuralnet.util.Global;
+import harlequinmettle.investmentadviserengine.neuralnet.util.TransferFunction;
 
 import java.io.Serializable;
 import java.util.concurrent.CopyOnWriteArrayList;

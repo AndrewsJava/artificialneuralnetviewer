@@ -1,5 +1,5 @@
 // Nov 12, 2015 11:25:55 AM
-package harlequinmettle.investmentadviserengine.neuralnet;
+package harlequinmettle.investmentadviserengine.neuralnet.util;
 
 public interface TransferFunction {
 

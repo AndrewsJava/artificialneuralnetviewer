@@ -1,5 +1,5 @@
 // Nov 11, 2015 11:29:07 AM
-package harlequinmettle.investmentadviserengine.neuralnet.som;
+package harlequinmettle.investmentadviserengine.neuralnet.util.prelim.som;
 
 import java.util.ArrayList;
 import java.util.Random;

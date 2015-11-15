@@ -1,5 +1,5 @@
 // Nov 5, 2015 8:42:04 AM
-package harlequinmettle.investmentadviserengine.neuralnet;
+package harlequinmettle.investmentadviserengine.neuralnet.util;
 
 import java.util.Random;
 

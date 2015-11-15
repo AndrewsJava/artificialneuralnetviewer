@@ -1,12 +1,10 @@
 // Oct 16, 2015 10:39:02 AM
 package harlequinmettle.investmentadviserengine.neuralnet.data;
 
-import harlequinmettle.investmentadviserengine.neuralnet.artificailneuralnet.MinMax;
+import harlequinmettle.investmentadviserengine.neuralnet.feedforwardwithbackprop.MinMax;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -28,20 +26,11 @@ public class DataSet implements Serializable {
 	public ConcurrentSkipListMap<Integer, MinMax> inputNormalizationMinMax = new ConcurrentSkipListMap<Integer, MinMax>();
 	public ConcurrentSkipListMap<Integer, MinMax> targetNormalizationMinMax = new ConcurrentSkipListMap<Integer, MinMax>();
 	public ConcurrentSkipListMap<Integer, CopyOnWriteArrayList<Float>> inputNormalizationSets = new ConcurrentSkipListMap<Integer, CopyOnWriteArrayList<Float>>();
+	public DataNormalizer normalizer = new DataNormalizer();
 
 	// public ConcurrentSkipListMap<Integer, CopyOnWriteArrayList<Float>>
 	// targetNormalizationSets = new ConcurrentSkipListMap<Integer,
 	// CopyOnWriteArrayList<Float>>();
-
-	// Oct 21, 2015 9:34:20 AM
-	@Override
-	public String toString() {
-		String response = "";
-		for (int i = 0; i < numberDataSets; i++) {
-			response += " {" + Arrays.toString(trainingInputs.get(i)) + " : " + Arrays.toString(targets.get(i)) + "} ";
-		}
-		return response;
-	}
 
 	protected void addTestInput(float... in) {
 
@@ -50,25 +39,19 @@ public class DataSet implements Serializable {
 		// calculateForNormalization(in, inputNormalizationMinMax);
 	}
 
-	private void calculateForNormalization(float[] data, ConcurrentSkipListMap<Integer, MinMax> normalizationSets) {
-		// Nov 5, 2015 11:45:47 AM
-		for (int i = 0; i < data.length; i++) {
-			if (normalizationSets.containsKey(i)) {
-				normalizationSets.get(i).isSetMinMax(data[i]);
-			} else {
-				MinMax normalizationMimMax = new MinMax();
-				normalizationMimMax.isSetMinMax(data[i]);
-				normalizationSets.put(i, normalizationMimMax);
-			}
-		}
+	protected void addInputForSelfOrgainizingMap(float[] in) {
+		trainingInputs.add(in);
+		numberDataSets++;
+		normalizer.calculateMinMaxForNormalization(in, inputNormalizationMinMax);
+		addToNormalizationSets(in, inputNormalizationSets);
 	}
 
-	protected void addTargetWithInputs(float[] in, float[] out) {
+	protected void addInputWithTargetOutput(float[] in, float[] out) {
 		trainingInputs.add(in);
 		targets.add(out);
 		numberDataSets++;
-		calculateForNormalization(in, inputNormalizationMinMax);
-		calculateForNormalization(out, targetNormalizationMinMax);
+		normalizer.calculateMinMaxForNormalization(in, inputNormalizationMinMax);
+		normalizer.calculateMinMaxForNormalization(out, targetNormalizationMinMax);
 		addToNormalizationSets(in, inputNormalizationSets);
 	}
 
@@ -86,43 +69,29 @@ public class DataSet implements Serializable {
 	}
 
 	public void normalizeTesting() {
-		normalize(inputNormalizationMinMax, testingInputs);
+		normalizer.normalize(inputNormalizationMinMax, testingInputs);
 	}
 
 	public void normalizeInputs() {
-		normalize(inputNormalizationMinMax, trainingInputs);
+		normalizer.normalize(inputNormalizationMinMax, trainingInputs);
 		// / normalizeToStandardDeviation(inputNormalizationSets,
 		// trainingInputs);
 	}
 
 	public void normalizeTargets() {
 
-		normalize(targetNormalizationMinMax, targets);
+		normalizer.normalize(targetNormalizationMinMax, targets);
 
 	}
 
-	public static void normalizeToStandardDeviation(ConcurrentSkipListMap<Integer, CopyOnWriteArrayList<Float>> dataDistributions,
-			Collection<float[]> dataToNormalize) {
-		// TODO: ...
-	}
-
-	public static void normalize(ConcurrentSkipListMap<Integer, MinMax> dataDistributions, CopyOnWriteArrayList<float[]> dataToNormalize) {
-
-		System.out.println(dataDistributions);
-		float low = -1;// a
-		float high = 1;// b
-
-		for (Entry<Integer, MinMax> ent : dataDistributions.entrySet()) {
-			int featureIndex = ent.getKey();
-			float min = ent.getValue().min;
-			float max = ent.getValue().max;
-			for (float[] originalInput : dataToNormalize) {
-				float originalFeautreInput = originalInput[featureIndex];
-				System.out.print(originalFeautreInput + " ---> ");
-				float normalizedInput = low + ((originalFeautreInput - min) * (high - low) / (max - min));
-				System.out.println(normalizedInput);
-				originalInput[featureIndex] = normalizedInput;
-			}
+	// Oct 21, 2015 9:34:20 AM
+	@Override
+	public String toString() {
+		String response = "";
+		for (int i = 0; i < numberDataSets; i++) {
+			response += " {" + Arrays.toString(trainingInputs.get(i)) + " : " + Arrays.toString(targets.get(i)) + "} ";
 		}
+		return response;
 	}
+
 }
