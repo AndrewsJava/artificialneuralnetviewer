@@ -120,7 +120,6 @@ public class ArtificialNeuron implements Serializable {
 	// Oct 18, 2015 12:20:05 PM
 	public void establishOutputNeuronError(float target) {
 		error = derivative * (target - output);
-		// error = derivative * (output - target);
 	}
 
 	// Oct 18, 2015 12:26:29 PM

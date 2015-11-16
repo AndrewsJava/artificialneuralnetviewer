@@ -9,6 +9,10 @@ public class MinError implements Serializable {
 	// Oct 19, 2015 12:12:12 PM
 	private float minError = Float.POSITIVE_INFINITY;
 
+	public float getMinError() {
+		return minError;
+	}
+
 	// Oct 19, 2015 12:11:17 PM
 	public boolean isSetMinError(float f) {
 		if (f < minError) {
