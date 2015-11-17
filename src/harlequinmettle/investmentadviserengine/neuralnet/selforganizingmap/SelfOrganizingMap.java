@@ -24,8 +24,8 @@ public class SelfOrganizingMap {
 	public static final boolean MAKE_INPUT_LAYER = true;
 
 	ArtificialNeuralNetLayer inputLayer;
-	ArtificialNeuralNetLayer outputLayer;
-	private long trainingSleepMilliseconds = 10;
+	public ArtificialNeuralNetLayer outputLayer;
+	private long trainingSleepMilliseconds = 1000;
 	int iterations = 0;
 
 	AtomicBoolean isErrorTooLargeToStop = new AtomicBoolean(true);
@@ -33,8 +33,8 @@ public class SelfOrganizingMap {
 
 	ConcurrentSkipListMap<Integer, Float> avgError = new ConcurrentSkipListMap<Integer, Float>();
 	ConcurrentSkipListMap<Double, ArtificialNeuron> distanceMap = new ConcurrentSkipListMap<Double, ArtificialNeuron>();
-	public float learningRate = 0.99996f;
-	float learningRateDecayFactor = 0.99999f;
+	public float learningRate = 0.96f;
+	float learningRateDecayFactor = 0.999f;
 
 	public SelfOrganizingMap(DataSet dataToMap, int neuronMappingCount) {
 		// Nov 15, 2015 11:03:54 AM
@@ -123,6 +123,8 @@ public class SelfOrganizingMap {
 			ArtificialNeuron classificationNeuron = ent.getValue();
 			farther++;
 			float distanceFactor = (float) Math.pow(Math.E, -(farther / 3));
+			if (farther > distanceMap.size() / 2)
+				break;
 			for (ArtificialNeuralNetConnection connection : classificationNeuron.inputConnections) {
 
 				float input = connection.fromNeuron.getEstablishedOutputValue();
@@ -173,7 +175,7 @@ public class SelfOrganizingMap {
 		}
 	}
 
-	private void startSelfOrganizationThread() {
+	public void startSelfOrganizationThread() {
 
 		stopRequested.set(true);
 		try {

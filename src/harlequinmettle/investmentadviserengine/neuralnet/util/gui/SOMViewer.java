@@ -1,6 +1,8 @@
 // Nov 16, 2015 9:22:59 AM
 package harlequinmettle.investmentadviserengine.neuralnet.util.gui;
 
+import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetConnection;
+import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
 import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
 import harlequinmettle.investmentadviserengine.neuralnet.data.SimpleSelfOrganizingMapData;
 import harlequinmettle.investmentadviserengine.neuralnet.selforganizingmap.SelfOrganizingMap;
@@ -32,7 +34,7 @@ public class SOMViewer {
 			}
 		});
 		startGuiThread();
-
+		map.startSelfOrganizationThread();
 	}
 
 	private void startGuiThread() {
@@ -71,14 +73,22 @@ public class SOMViewer {
 		}
 	}
 
-	private ArrayList<java.awt.geom.Point2D.Float> getAllOutputNeuronsInputConnectionWeights() {
-		// Nov 16, 2015 10:01:47 AM
-		return null;
+	private ArrayList<float[]> getAllOutputNeuronsInputConnectionWeights() {
+		ArrayList<float[]> weights = new ArrayList<float[]>();
+		for (ArtificialNeuron neuron : map.outputLayer.neuronsInLayer) {
+			float[] inputConnectionWeights = new float[neuron.inputConnections.size()];
+			weights.add(inputConnectionWeights);
+			int i = 0;
+			for (ArtificialNeuralNetConnection connection : neuron.inputConnections) {
+				inputConnectionWeights[i++] = connection.weight.weight;
+			}
+		}
+		return weights;
 	}
 
 	private void reset() {
 		dataToMap = new SimpleSelfOrganizingMapData();
-		map = new SelfOrganizingMap(dataToMap, 20);
+		map = new SelfOrganizingMap(dataToMap, 4);
 	}
 
 	private void showGui() {
