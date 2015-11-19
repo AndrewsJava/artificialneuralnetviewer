@@ -25,7 +25,7 @@ public class SelfOrganizingMap {
 
 	ArtificialNeuralNetLayer inputLayer;
 	public ArtificialNeuralNetLayer outputLayer;
-	private long trainingSleepMilliseconds = 1000;
+	private long trainingSleepMilliseconds = 500;
 	int iterations = 0;
 
 	AtomicBoolean isErrorTooLargeToStop = new AtomicBoolean(true);
@@ -33,8 +33,8 @@ public class SelfOrganizingMap {
 
 	ConcurrentSkipListMap<Integer, Float> avgError = new ConcurrentSkipListMap<Integer, Float>();
 	ConcurrentSkipListMap<Double, ArtificialNeuron> distanceMap = new ConcurrentSkipListMap<Double, ArtificialNeuron>();
-	public float learningRate = 0.96f;
-	float learningRateDecayFactor = 0.999f;
+	public float learningRate = 0.999f;
+	float learningRateDecayFactor = 1f;
 
 	public SelfOrganizingMap(DataSet dataToMap, int neuronMappingCount) {
 		// Nov 15, 2015 11:03:54 AM

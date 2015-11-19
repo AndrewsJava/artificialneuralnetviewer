@@ -88,7 +88,7 @@ public class SOMViewer {
 
 	private void reset() {
 		dataToMap = new SimpleSelfOrganizingMapData();
-		map = new SelfOrganizingMap(dataToMap, 4);
+		map = new SelfOrganizingMap(dataToMap, 52);
 	}
 
 	private void showGui() {

@@ -20,7 +20,10 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 	public static void main(String[] args) {
 		// Oct 29, 2015 9:27:19 AM
 
-		// extractDataFromTables();
+		// new KeyStatsDatabaseBuilder().downloadAll(1500);
+
+		new KeyStatsDatabaseBuilder().extractTableData();
+		extractDataFromTables();
 		// buildDatabaseFromExtractedTables();
 		// testDatabaseValues();
 		buildInputDataFromKeyStats();
@@ -196,7 +199,7 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 	}
 
 	// Oct 29, 2015 10:42:43 AM
-	private void extractTableData() {
+	protected void extractTableData() {
 		DatabaseCore tickerData = DatabaseCore.getDataCoreSingleton();
 		int counter = 0;
 		for (String ticker : tickerData.tickers.values()) {
@@ -249,7 +252,7 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 	}
 
 	// Oct 29, 2015 9:27:42 AM
-	private void downloadAll(int batch) {
+	protected void downloadAll(int batch) {
 		DatabaseCore tickerData = DatabaseCore.getDataCoreSingleton();
 		int counter = 0;
 		for (String ticker : tickerData.tickers.values()) {

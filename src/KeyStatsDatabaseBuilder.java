@@ -16,9 +16,6 @@ public class KeyStatsDatabaseBuilder extends KeyStatsDatabaseDownloadAndTableExt
 	public static void main(String[] args) {
 		// Oct 29, 2015 9:27:19 AM
 
-		// new DownloadKeyStats().downloadAll(1500);
-
-		// new DownloadKeyStats().extractTableData();
 		// extractDataFromTables();
 		// buildDatabaseFromExtractedTables();
 		// testDatabaseValues();

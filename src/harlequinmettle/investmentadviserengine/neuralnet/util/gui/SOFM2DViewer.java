@@ -42,7 +42,6 @@ public class SOFM2DViewer extends JPanel {
 	public TreeMap<String, Color> colors = new TreeMap<String, Color>();
 
 	public void addDisplayText(String key, String value) {
-
 		displayText.put(key, value);
 	}
 
@@ -227,26 +226,23 @@ public class SOFM2DViewer extends JPanel {
 			ArrayList<DataDrawPoint> pointsArray = ent.getValue();
 			if (pointsArray.isEmpty())
 				continue;
+
 			String index = ent.getKey();
 			Boolean lineDrawOption = drawLines.get(index);
 			if (lineDrawOption == null || !lineDrawOption)
 				continue;
-			DataDrawPoint firstPoint = pointsArray.get(0);
-			boolean first = true;
 
 			g2d.setColor(colors.get(ent.getKey()));
 			for (DataDrawPoint points : pointsArray) {
-				if (first) {
-					first = false;
-					continue;
-				}
+
 				float scaledX = points.x;
 				float scaledY = points.y;
 				int drawSize = (int) points.size;
-				if (index.contains("input"))
+				if (!index.contains("input")) {
 					g2d.fillOval((int) scaledX - drawSize / 2, (int) scaledY - drawSize / 2, drawSize, drawSize);
-				else
-					g2d.fillRect((int) scaledX - drawSize / 2, (int) scaledY - drawSize / 2, drawSize, drawSize);
+				} else {
+					g2d.fillRect((int) scaledX - drawSize / 2, (int) scaledY - drawSize / 2, drawSize + 2, drawSize + 2);
+				}
 			}
 		}
 		g2d.setColor(Color.green);
