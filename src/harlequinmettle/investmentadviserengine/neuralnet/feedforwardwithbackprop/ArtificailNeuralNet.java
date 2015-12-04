@@ -9,9 +9,7 @@ import java.io.Serializable;
 
 public class ArtificailNeuralNet extends ArtificailNeuralNetFramework implements Serializable {
 
-	private static final long serialVersionUID = -490681777238384428L;
-	// public static boolean debugMethodsWithReflection = false;
-	// public static boolean debugObjectConstructionWithReflection = false;
+	private static final long serialVersionUID = -490681777238384428L; 
 	protected static boolean overrideOutput = true;
 	MinError minError = new MinError();
 

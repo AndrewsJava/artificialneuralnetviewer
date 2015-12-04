@@ -24,7 +24,7 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 
 		new KeyStatsDatabaseBuilder().extractTableData();
 		extractDataFromTables();
-		// buildDatabaseFromExtractedTables();
+		buildDatabaseFromExtractedTables();
 		// testDatabaseValues();
 		buildInputDataFromKeyStats();
 
@@ -101,7 +101,7 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 	}
 
 	// Nov 7, 2015 8:59:55 AM
-	private static void buildDatabaseFromExtractedTables() {
+	protected static void buildDatabaseFromExtractedTables() {
 
 		DatabaseCore tickerData = DatabaseCore.getDataCoreSingleton();
 		TreeSet<String> keys = new TreeSet<String>();
@@ -151,7 +151,7 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 		// "                          " + value);
 	}
 
-	private static void extractDataFromTables() {
+	protected static void extractDataFromTables() {
 		int tdsuccess = 0;
 		int tdfail = 0;
 		TreeSet<String> keys = new TreeSet<String>();
@@ -175,7 +175,7 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 					continue;
 				}
 				String key = StringTools.replaceAllRegex(tds[0], "<.*?>", "");
-				key = StringTools.replaceAllRegex(tds[0], ":", "").trim();
+				key = StringTools.replaceAllRegex(key, ":", "").trim();
 				if (key.length() > 45)
 					continue;
 				key = key.replaceAll("\\(.*?,.*?\\)", "");
