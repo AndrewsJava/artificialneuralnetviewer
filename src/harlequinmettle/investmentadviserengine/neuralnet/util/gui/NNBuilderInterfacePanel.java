@@ -1,9 +1,6 @@
 // Oct 31, 2015 10:45:16 AM
 package harlequinmettle.investmentadviserengine.neuralnet.util.gui;
 
-import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetLayer;
-import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetNoisyInputsNoisyTargetsSin;
-import harlequinmettle.investmentadviserengine.neuralnet.feedforwardwithbackprop.FeedForwardWithBackPropagation;
 import harlequinmettle.utils.guitools.HorizontalJPanel;
 import harlequinmettle.utils.guitools.JButtonWithEnterKeyAction;
 import harlequinmettle.utils.guitools.VerticalJPanel;
@@ -23,6 +20,10 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import neuralnet.ArtificialNeuralNetLayer;
+import neuralnet.data.DataSetNoisyInputsNoisyTargetsSin;
+import neuralnet.feedforwardwithbackprop.FeedForwardWithBackPropagation;
 
 public class NNBuilderInterfacePanel {
 	private static final int MAX_LAYERS = 5;

@@ -1,11 +1,6 @@
 // Nov 16, 2015 9:22:59 AM
 package harlequinmettle.investmentadviserengine.neuralnet.util.gui;
 
-import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuralNetConnection;
-import harlequinmettle.investmentadviserengine.neuralnet.ArtificialNeuron;
-import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
-import harlequinmettle.investmentadviserengine.neuralnet.data.SimpleSelfOrganizingMapData;
-import harlequinmettle.investmentadviserengine.neuralnet.selforganizingmap.SelfOrganizingMap;
 import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.utils.guitools.JFrameFactory;
 
@@ -16,6 +11,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import neuralnet.ArtificialNeuralNetConnection;
+import neuralnet.ArtificialNeuron;
+import neuralnet.data.DataSet;
+import neuralnet.data.SimpleSelfOrganizingMapData;
+import neuralnet.selforganizingmap.SelfOrganizingMap;
 
 public class SOMViewer {
 

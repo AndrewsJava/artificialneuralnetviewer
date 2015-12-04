@@ -1,7 +1,6 @@
 // Oct 27, 2015 10:48:27 AM
 package harlequinmettle.investmentadviserengine.neuralnet.util.gui;
 
-import harlequinmettle.investmentadviserengine.neuralnet.util.Global;
 import harlequinmettle.utils.guitools.VerticalJPanel;
 
 import java.awt.Component;
@@ -12,6 +11,8 @@ import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+
+import neuralnet.util.Global;
 
 public class AnnRunnerControlsPanel extends VerticalJPanel {
 	NeuralNetViewer nnView;

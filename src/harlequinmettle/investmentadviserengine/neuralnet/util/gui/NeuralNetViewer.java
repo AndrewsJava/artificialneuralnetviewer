@@ -1,10 +1,6 @@
 // Oct 21, 2015 10:56:51 AM
 package harlequinmettle.investmentadviserengine.neuralnet.util.gui;
 
-import harlequinmettle.investmentadviserengine.neuralnet.data.DataSet;
-import harlequinmettle.investmentadviserengine.neuralnet.data.DataSetNoisyInputsNoisyTargetsSin;
-import harlequinmettle.investmentadviserengine.neuralnet.feedforwardwithbackprop.FeedForwardWithBackPropagation;
-import harlequinmettle.investmentadviserengine.neuralnet.util.Global;
 import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.utils.guitools.DataGrapher;
 import harlequinmettle.utils.guitools.JFrameFactory;
@@ -17,6 +13,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import neuralnet.data.DataSet;
+import neuralnet.data.DataSetNoisyInputsNoisyTargetsSin;
+import neuralnet.feedforwardwithbackprop.FeedForwardWithBackPropagation;
+import neuralnet.util.Global;
 
 public class NeuralNetViewer {
 	// / TODO: ADAPTIVE NEURONS AND LAYERS
