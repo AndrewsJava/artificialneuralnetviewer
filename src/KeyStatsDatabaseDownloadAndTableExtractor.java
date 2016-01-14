@@ -4,7 +4,7 @@ import harlequinmettle.utils.debugtools.InstanceCounter;
 import harlequinmettle.utils.filetools.FileTools;
 import harlequinmettle.utils.filetools.SerializationTool;
 import harlequinmettle.utils.finance.updatedtickerset.DatabaseCore;
-import harlequinmettle.utils.stringtools.StringTools;
+import harlequinmettle.utils.stringtools.StringTool;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -118,16 +118,16 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 				if (tds.length < 3) {
 					continue;
 				}
-				String key = StringTools.replaceAllRegex(tds[0], "<.*?>", "");
+				String key = StringTool.replaceAllRegex(tds[0], "<.*?>", "");
 				if (key.length() > 45)
 					continue;
 				key = key.replaceAll("\\(.*?,.*?\\)", "");
-				key = StringTools.replaceAllRegex(key, ":", "").trim();
-				key = StringTools.replaceAllRegex(key, "\\)", "").trim();
-				key = StringTools.replaceAllRegex(key, "\\(", "").trim();
-				key = StringTools.replaceAllRegex(key, "\\s+", " ").trim();
+				key = StringTool.replaceAllRegex(key, ":", "").trim();
+				key = StringTool.replaceAllRegex(key, "\\)", "").trim();
+				key = StringTool.replaceAllRegex(key, "\\(", "").trim();
+				key = StringTool.replaceAllRegex(key, "\\s+", " ").trim();
 				keys.add(key);
-				String value = StringTools.replaceAllRegex(tds[1], "<.*?>", "");
+				String value = StringTool.replaceAllRegex(tds[1], "<.*?>", "");
 				float f = NumberTool.stringNumberWithMBKtoFloat(value);
 				if (f != f) {
 					continue;
@@ -171,15 +171,15 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 				String[] tds = tr.split("</td>");
 				if (tds.length < 3) {
 					tdfail++;
-					failures.add(StringTools.replaceAllRegex(Arrays.toString(tds), "<.*?>", ""));
+					failures.add(StringTool.replaceAllRegex(Arrays.toString(tds), "<.*?>", ""));
 					continue;
 				}
-				String key = StringTools.replaceAllRegex(tds[0], "<.*?>", "");
-				key = StringTools.replaceAllRegex(key, ":", "").trim();
+				String key = StringTool.replaceAllRegex(tds[0], "<.*?>", "");
+				key = StringTool.replaceAllRegex(key, ":", "").trim();
 				if (key.length() > 45)
 					continue;
 				key = key.replaceAll("\\(.*?,.*?\\)", "");
-				String value = StringTools.replaceAllRegex(tds[1], "<.*?>", "");
+				String value = StringTool.replaceAllRegex(tds[1], "<.*?>", "");
 				float f = NumberTool.stringNumberWithMBKtoFloat(value);
 				if (f != f) {
 					numberfailures.add(value);
@@ -224,30 +224,30 @@ public class KeyStatsDatabaseDownloadAndTableExtractor {
 
 		// htmlText = htmlText.toLowerCase();
 
-		htmlText = StringTools.removeJavascript(htmlText);
-		htmlText = StringTools.clip(htmlText, "Get Key Statistics for:", "Currency in USD.", htmlText);
-		htmlText = StringTools.replaceAllRegex(htmlText, "<font.*?>", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "</font>", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "<span.*?>", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "</span>", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "<div.*?>", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "</div>", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "<!--.*?-->", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "<p.*?>", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "</p>", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "<a.*?>", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "</a>", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "<b.*?>", "");
-		htmlText = StringTools.replaceAllRegex(htmlText, "</b>", "");
+		htmlText = StringTool.removeJavascript(htmlText);
+		htmlText = StringTool.clip(htmlText, "Get Key Statistics for:", "Currency in USD.", htmlText);
+		htmlText = StringTool.replaceAllRegex(htmlText, "<font.*?>", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "</font>", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "<span.*?>", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "</span>", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "<div.*?>", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "</div>", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "<!--.*?-->", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "<p.*?>", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "</p>", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "<a.*?>", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "</a>", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "<b.*?>", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "</b>", "");
 
-		htmlText = StringTools.replaceAllRegex(htmlText, "&.*?;", " ");
-		htmlText = StringTools.replaceAllRegex(htmlText, "\\s+", " ");
+		htmlText = StringTool.replaceAllRegex(htmlText, "&.*?;", " ");
+		htmlText = StringTool.replaceAllRegex(htmlText, "\\s+", " ");
 
-		htmlText = StringTools.replaceAllRegex(htmlText, "<td.*?>", "<td>");
+		htmlText = StringTool.replaceAllRegex(htmlText, "<td.*?>", "<td>");
 
-		htmlText = StringTools.replaceAllRegex(htmlText, "<sup.*?sup>", " ");
-		htmlText = StringTools.replaceAllRegex(htmlText, "<tr.*?>", "<tr>");
-		htmlText = StringTools.replaceAllRegex(htmlText, "\\$", "");
+		htmlText = StringTool.replaceAllRegex(htmlText, "<sup.*?sup>", " ");
+		htmlText = StringTool.replaceAllRegex(htmlText, "<tr.*?>", "<tr>");
+		htmlText = StringTool.replaceAllRegex(htmlText, "\\$", "");
 		return htmlText;
 	}
 

@@ -193,6 +193,7 @@ public class NeuralNetViewer {
 	public void resetNN() {
 		DataSetNoisyInputsNoisyTargetsSin dataSet = new DataSetNoisyInputsNoisyTargetsSin(-10, 10, 60);
 		FeedForwardWithBackPropagation nn = new FeedForwardWithBackPropagation(dataSet, 8, 4);
+		nn.isProgramRunningInAppEngineEnvironment = false;
 		resetNN(dataSet, nn);
 	}
 }
