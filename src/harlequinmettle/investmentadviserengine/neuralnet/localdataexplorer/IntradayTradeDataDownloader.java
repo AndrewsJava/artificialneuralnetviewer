@@ -32,8 +32,7 @@ public class IntradayTradeDataDownloader {
 			storeDetailsIfAvailable(ticker);
 			System.out.println(ticker + " : " + counter);
 			workingTickerSet.remove(ticker);
-			// SerializationTool.serializeObject(workingTickerSet,
-			// "TickersQueueIntradayTradeDataCollectionProgressObject");
+			SerializationTool.serializeObject(workingTickerSet, "TickersQueueIntradayTradeDataCollectionProgressObject");
 			// if (counter++ > 1500)
 			// break;
 		}
