@@ -6,8 +6,10 @@ import harlequinmettle.investmentadviserengine.datamanagers.TickerTimeEconomicIn
 import harlequinmettle.investmentadviserengine.util.NetworkDownloadTool;
 import harlequinmettle.investmentadviserengine.util.NumberTool;
 import harlequinmettle.investorengine.util.StringTool;
+import harlequinmettle.utils.filetools.SerializationTool;
 import harlequinmettle.utils.finance.updatedtickerset.DatabaseCore;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,17 +17,24 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-public class LocalDataAssembler {
+public class KeyStatsDataDownloader {
+
 	static ConcurrentSkipListMap<String, ConcurrentSkipListSet<TickerTimeEconomicIndicator>> databaseKeyStats = new ConcurrentSkipListMap<String, ConcurrentSkipListSet<TickerTimeEconomicIndicator>>();
 
+	static ConcurrentSkipListSet<String> workingTickerSet;
 	static long timeOf = System.currentTimeMillis();
 
 	public static void main(String[] args) {
-		collectKeyStats();
+		new File("KeyStatsDataLocal").mkdir();
+		if (false)
+			collectKeyStats();
+
+		System.out.println((System.currentTimeMillis() - timeOf) / 1000);
 	}
 
 	private static void collectKeyStats() {
-		Collection<String> tickers = DatabaseCore.getDataCoreSingleton().tickers.values();
+		int counter = 0;
+		Collection<String> tickers = getTickers();
 
 		for (String ticker : tickers) {
 
@@ -33,21 +42,35 @@ public class LocalDataAssembler {
 
 			if (htmlData == null)
 				continue;
-			if (Math.random() < 0.1)
-				return;
 			ConcurrentSkipListMap<String, Float> keystats = extractDataAsMap(htmlData.toString());
 
-			System.out.println(ticker + " : " + keystats);
+			System.out.println(ticker + " : " + counter);
 			addDataToKeyStatsMaps(ticker, keystats);
+			workingTickerSet.remove(ticker);
+			if (counter++ > 1500)
+				break;
 		}
 
 		for (Entry<String, ConcurrentSkipListSet<TickerTimeEconomicIndicator>> entry : databaseKeyStats.entrySet()) {
 			String statLabel = entry.getKey();
-
+			ConcurrentSkipListSet<TickerTimeEconomicIndicator> update = entry.getValue();
+			ConcurrentSkipListSet<TickerTimeEconomicIndicator> existing = SerializationTool.deserializeObject(ConcurrentSkipListSet.class, statLabel);
+			if (existing != null)
+				update.addAll(existing);
+			SerializationTool.serializeObject(update, "IntradayTradeDataLocal" + File.separator + statLabel);
 			// CORE.DATASTORE_BLOB_DB_KEY_STATS_DATABASE.lockMergeSetWithDatastore(statLabel,
 			// entry.getValue());
 		}
 
+		SerializationTool.serializeObject(workingTickerSet, "tickersObject");
+	}
+
+	private static Collection<String> getTickers() {
+		// Jan 14, 2016 10:19:28 AM
+		workingTickerSet = SerializationTool.deserializeObject(ConcurrentSkipListSet.class, "tickersObject");
+		if (workingTickerSet == null)
+			workingTickerSet = new ConcurrentSkipListSet(DatabaseCore.getDataCoreSingleton().tickers.values());
+		return workingTickerSet;
 	}
 
 	private static void addDataToKeyStatsMaps(String ticker, ConcurrentSkipListMap<String, Float> keystats) {
