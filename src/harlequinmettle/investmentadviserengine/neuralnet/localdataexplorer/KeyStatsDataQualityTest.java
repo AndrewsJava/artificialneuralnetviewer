@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-public class DataQualityTest {
+public class KeyStatsDataQualityTest {
 
 	public static void main(String[] args) {
 		testKeyStatsDataQuality();

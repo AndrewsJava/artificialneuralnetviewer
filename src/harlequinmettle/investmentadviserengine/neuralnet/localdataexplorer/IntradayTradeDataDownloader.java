@@ -24,7 +24,7 @@ public class IntradayTradeDataDownloader {
 
 	private static void downloadIntradayTradeData() {
 
-		ConcurrentSkipListSet<String> tickers = getTickers();
+		ConcurrentSkipListSet<String> tickers = getTickers("TickersQueueIntradayTradeDataCollectionProgressObject");
 		int counter = 0;
 
 		for (String ticker : tickers) {
@@ -66,8 +66,8 @@ public class IntradayTradeDataDownloader {
 		return buildIntradayTradeMapAndStoreInDatastoreForNN(ticker, volVal, priceVal);
 	}
 
-	private static ConcurrentSkipListMap<Long, PriceVolTradeRecord> buildIntradayTradeMapAndStoreInDatastoreForNN(String ticker,
-			TreeMap<Long, Float> volVal, TreeMap<Long, Float> priceVal) {
+	static ConcurrentSkipListMap<Long, PriceVolTradeRecord> buildIntradayTradeMapAndStoreInDatastoreForNN(String ticker, TreeMap<Long, Float> volVal,
+			TreeMap<Long, Float> priceVal) {
 		ConcurrentSkipListMap<Long, PriceVolTradeRecord> dataMap = new ConcurrentSkipListMap<Long, PriceVolTradeRecord>();
 		for (Entry<Long, Float> entry : volVal.entrySet()) {
 			Long time = entry.getKey();
@@ -97,8 +97,8 @@ public class IntradayTradeDataDownloader {
 
 	}
 
-	private static ConcurrentSkipListSet<String> getTickers() {
-		workingTickerSet = SerializationTool.deserializeObject(ConcurrentSkipListSet.class, "TickersQueueIntradayTradeDataCollectionProgressObject");
+	protected static ConcurrentSkipListSet<String> getTickers(String queueObjectName) {
+		workingTickerSet = SerializationTool.deserializeObject(ConcurrentSkipListSet.class, queueObjectName);
 		if (workingTickerSet == null)
 			workingTickerSet = new ConcurrentSkipListSet(DatabaseCore.getDataCoreSingleton().tickers.values());
 		return workingTickerSet;
