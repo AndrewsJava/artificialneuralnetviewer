@@ -5,6 +5,8 @@ import harlequinmettle.investmentadviserengine.util.SystemTool;
 import harlequinmettle.utils.guitools.JFrameFactory;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -35,7 +37,7 @@ public class SOMViewer {
 			}
 		});
 		startGuiThread();
-		map.startSelfOrganizationThread();
+		// map.startSelfOrganizationThread();
 	}
 
 	private void startGuiThread() {
@@ -98,7 +100,44 @@ public class SOMViewer {
 
 		JPanel annRunner = new JPanel(new BorderLayout());
 		fullScreen.add(annRunner);
+		fullScreen.addMouseListener(new MouseListener() {
 
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// Jan 18, 2016 4:07:27 PM
+				if (!map.stopRequested.get()) {
+					map.stopRequested.set(true);
+				} else {
+					map.startSelfOrganizationThread();
+				}
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// Jan 18, 2016 4:07:27 PM
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// Jan 18, 2016 4:07:27 PM
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// Jan 18, 2016 4:07:27 PM
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// Jan 18, 2016 4:07:27 PM
+
+			}
+
+		});
 		// SOFMRunnerControlsPanel runnerControls = new
 		// SOFMRunnerControlsPanel(this);
 		// annRunner.add(runnerControls, BorderLayout.WEST);
